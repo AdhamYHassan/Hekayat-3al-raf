@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/app_router.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart'; // Uncomment when Firebase is configured
@@ -8,11 +10,19 @@ import 'package:hekayat_3al_raf/core/routing/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. EasyLocalization setup
+  // 1. Initialize JustAudioBackground for lockscreen and notification media controls
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.hekayat.audio.channel',
+    androidNotificationChannelName: 'حكايات على الرف - تشغيل الصوت',
+    androidNotificationOngoing: true,
+    androidStopForegroundOnPause: true,
+  );
+
+  // 2. EasyLocalization setup
   await EasyLocalization.ensureInitialized();
 
-  // 2. Dependency Injection (Service Locator)
-  // await initAppDependencies(); // Service locator function in core/di/
+  // 3. Dependency Injection (Service Locator)
+  setupDependencyInjection();
 
   // 3. Firebase (Commented until needed)
   /*
@@ -23,9 +33,12 @@ void main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ar')],
+      supportedLocales: const [Locale('ar'), Locale('en')],
       path: 'assets/translations',
+      startLocale: const Locale('ar'),
       fallbackLocale: const Locale('ar'),
+      saveLocale: true,
+      useOnlyLangCode: true,
       child: const MyApp(),
     ),
   );

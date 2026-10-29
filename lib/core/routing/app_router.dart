@@ -1,8 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
+import 'package:hekayat_3al_raf/core/media/audio/cubit/audio_playback_cubit.dart';
+import 'package:hekayat_3al_raf/core/routing/routes.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
 import 'package:hekayat_3al_raf/features/splash/presentation/splash_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hekayat_3al_raf/core/routing/routes.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/screens/story_details_screen.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
@@ -46,7 +51,21 @@ class AppRouter {
         pageBuilder: (context, state) => _buildPageWithTransition(
           context: context,
           state: state,
-          child: const MainScreen(),
+          child: BlocProvider<HomeCubit>(
+            create: (_) => getIt<HomeCubit>()..loadHomeData(),
+            child: const MainScreen(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.storyDetails,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: BlocProvider<AudioPlayerCubit>(
+            create: (_) => getIt<AudioPlayerCubit>(),
+            child: const StoryDetailsScreen(),
+          ),
         ),
       ),
     ],

@@ -25,13 +25,13 @@ class DynamicFloatingNavBar extends StatelessWidget {
       buildWhen: (prev, curr) => prev.isScrolled != curr.isScrolled,
       builder: (context, scrollState) {
         final isScrolled = scrollState.isScrolled;
-        final targetBlur = isScrolled ? 18.0 : 10.0;
-        final targetAlpha = isScrolled
-            ? (isDark ? 0.85 : 0.88)
-            : (isDark ? 0.95 : 0.92);
+        // Blur عميق وزجاجي راقي
+        final targetBlur = isScrolled ? 24.0 : 18.0;
+        // شفافية ناعمة لتمرير المحتوى والألوان من خلفه بانسيابية (Glassmorphic)
+        final targetAlpha = isScrolled ? 0.65 : 0.72;
         final targetBorderColor = isScrolled
-            ? ColorManager.gold.withValues(alpha: 0.40)
-            : ColorManager.gold.withValues(alpha: 0.25);
+            ? ColorManager.gold.withValues(alpha: 0.35)
+            : ColorManager.gold.withValues(alpha: 0.20);
 
         return RepaintBoundary(
           child: AnimatedContainer(

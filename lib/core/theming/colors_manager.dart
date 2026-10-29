@@ -1,66 +1,52 @@
 import 'package:flutter/material.dart';
 
-/// Centralized color palette matching the official "حكايات على الرف" design system.
-///
-/// Follows Single Responsibility Principle (SRP): purely defines brand color tokens
-/// and theme-mode resolution helpers. Kept strictly under 150 lines.
+/// Centralized color palette matching EXACTLY the prototype HTML/CSS.
 class ColorManager {
   ColorManager._();
 
-  // Primary Brand Colors (العنابي / الخمري التراثي والدرجات الدافئة)
-  static const Color primary = Color(0xFF4A0F20);
-  static const Color primaryDark = Color(0xFF220610);
-  static const Color primaryDeep = Color(0xFF330A16);
+  // Primary Maroon Brands (bg-maroon-dark, bg-maroon, bg-maroon-mid)
+  static const Color primaryDark = Color(0xFF220610); // #220610 bg-maroon-dark
+  static const Color primary = Color(0xFF330A16);     // #330A16 bg-maroon-mid
+  static const Color primaryLight = Color(0xFF4A0F20); // #4A0F20 bg-maroon
 
-  // Gold & Bronze Accent Colors (الذهب والبرونز)
-  static const Color gold = Color(0xFFC9A24B);
-  static const Color goldLight = Color(0xFFE8CB7D);
-  static const Color goldDark = Color(0xFF9A7627);
-  static const Color orange = gold; // Backward compatibility alias for secondary accent
+  // Gold Brands (text-gold, bg-gold, border-gold)
+  static const Color gold = Color(0xFFC9A24B);         // #C9A24B gold
+  static const Color goldLight = Color(0xFFE8CB7D);    // #E8CB7D text-gold-light
+  static const Color goldDark = Color(0xFF9A7627);     // #9A7627 gold-dark
+  static const Color orange = gold;                    // Alias
 
-  // Terracotta / Warm Accent (اللمسات الطينية الدافئة)
-  static const Color terracotta = Color(0xFFA9533A);
+  // Paper / Text Colors from HTML (text-paper-100, text-paper-200, text-paper-400)
+  static const Color paper100 = Color(0xFFFFFDF8);     // #FFFDF8 text-paper-100
+  static const Color paper200 = Color(0xFFF3DFD6);     // #F3DFD6 text-paper-200
+  static const Color paper400 = Color(0xFF9CA3AF);     // #9CA3AF text-paper-400
 
-  // Light Theme Neutrals (ورق قديم وخلفيات كريمية دافئة)
-  static const Color backgroundLight = Color(0xFFFAF7F2);
-  static const Color surfaceLight = Color(0xFFFFFDF8);
-  static const Color cardLight = Color(0xFFFBF6EC);
-  static const Color borderLight = Color(0xFFE4D8C6);
-  static const Color textLight = Color(0xFF220610);
-  static const Color textMutedLight = Color(0xFF513A44);
+  // Compatibility aliases
+  static const Color textLight = paper100;
+  static const Color textDark = paper100;
+  static const Color textMutedLight = paper400;
+  static const Color textMutedDark = paper400;
 
-  // Dark Theme Neutrals (الأسود العنابي الفاخر)
-  static const Color backgroundDark = Color(0xFF140308);
-  static const Color surfaceDark = Color(0xFF220610);
-  static const Color cardDark = Color(0xFF2E0914);
-  static const Color borderDark = Color(0xFF4A0F20);
-  static const Color textDark = Color(0xFFFFFDF8);
-  static const Color textMutedDark = Color(0xFFE4D8C6);
-
-  // Semantic Feedback Colors
+  // Semantic
   static const Color success = Color(0xFF2E7D32);
   static const Color error = Color(0xFFC62828);
   static const Color warning = Color(0xFFF57F17);
 
-  // Dynamic Theme Resolvers
-  static bool isDark(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+  // Backgrounds
+  static const Color backgroundLight = Color(0xFF220610);
+  static const Color backgroundDark = Color(0xFF220610);
+  static const Color surfaceLight = Color(0xFF330A16);
+  static const Color surfaceDark = Color(0xFF330A16);
+  static const Color cardLight = Color(0xFF4A0F20);
+  static const Color cardDark = Color(0xFF4A0F20);
+  static const Color borderLight = Color(0x33C9A24B);  // border-gold/20
+  static const Color borderDark = Color(0x33C9A24B);
 
-  static Color getBackground(BuildContext context) =>
-      isDark(context) ? backgroundDark : backgroundLight;
+  static bool isDark(BuildContext context) => true; // App design is deeply dark-themed
 
-  static Color getSurface(BuildContext context) =>
-      isDark(context) ? surfaceDark : surfaceLight;
-
-  static Color getCard(BuildContext context) =>
-      isDark(context) ? cardDark : cardLight;
-
-  static Color getBorder(BuildContext context) =>
-      isDark(context) ? borderDark : borderLight;
-
-  static Color getText(BuildContext context) =>
-      isDark(context) ? textDark : textLight;
-
-  static Color getTextMuted(BuildContext context) =>
-      isDark(context) ? textMutedDark : textMutedLight;
+  static Color getBackground(BuildContext context) => backgroundDark;
+  static Color getSurface(BuildContext context) => surfaceDark;
+  static Color getCard(BuildContext context) => cardDark;
+  static Color getBorder(BuildContext context) => borderDark;
+  static Color getText(BuildContext context) => paper100;
+  static Color getTextMuted(BuildContext context) => paper400;
 }

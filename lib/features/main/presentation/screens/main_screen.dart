@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/screens/home_feed_screen.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_state.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/nav_bar_scroll_cubit.dart';
@@ -26,13 +27,14 @@ class _MainScreenContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // يتيح للمحتوى والقوائم المرور بانسيابية خلف الـ Glass Floating Bar
+      extendBody:
+          true, // يتيح للمحتوى والقوائم المرور بانسيابية خلف الـ Glass Floating Bar
       body: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           if (notification.metrics.axis == Axis.vertical) {
-            context
-                .read<NavBarScrollCubit>()
-                .onScrollOffsetChanged(notification.metrics.pixels);
+            context.read<NavBarScrollCubit>().onScrollOffsetChanged(
+              notification.metrics.pixels,
+            );
           }
           return false;
         },
@@ -42,7 +44,7 @@ class _MainScreenContent extends StatelessWidget {
             return IndexedStack(
               index: state.selectedIndex,
               children: const [
-                _TabPlaceholder(title: 'الرئيسية'),
+                HomeFeedScreen(),
                 _TabPlaceholder(title: 'الحكايات'),
                 _TabPlaceholder(title: 'السفراء'),
                 _TabPlaceholder(title: 'احكي حكايتك'),
@@ -70,10 +72,11 @@ class _TabPlaceholder extends StatelessWidget {
       itemBuilder: (context, index) {
         return ListTile(
           title: Text('$title - عنصر تجريبي رقم #$index'),
-          subtitle: const Text('مرر الشاشة للأسفل لتجربة تصغير الـ Floating Bar'),
+          subtitle: const Text(
+            'مرر الشاشة للأسفل لتجربة تصغير الـ Floating Bar',
+          ),
         );
       },
     );
   }
 }
-
