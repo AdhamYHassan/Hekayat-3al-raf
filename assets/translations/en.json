@@ -1,0 +1,73 @@
+{
+  "app_name": "Base App",
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "done": "Done",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "retry": "Retry",
+    "search": "Search",
+    "loading": "Loading...",
+    "no_data": "No data available",
+    "see_all": "See All",
+    "close": "Close"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "sign_up": "Sign Up",
+    "sign_in": "Sign In",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "forgot_password": "Forgot Password?",
+    "phone_number": "Phone Number",
+    "full_name": "Full Name",
+    "already_have_account": "Already have an account? Log In",
+    "dont_have_account": "Don't have an account? Sign Up",
+    "welcome_back": "Welcome Back!",
+    "create_account": "Create an Account"
+  },
+  "home": {
+    "title": "Home",
+    "welcome": "Welcome",
+    "more": "More",
+    "profile": "Profile",
+    "settings": "Settings",
+    "notifications": "Notifications"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "arabic": "العربية",
+    "english": "English",
+    "theme": "Theme",
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode",
+    "privacy_policy": "Privacy Policy",
+    "terms_conditions": "Terms & Conditions",
+    "about_us": "About Us",
+    "contact_us": "Contact Us",
+    "change_password": "Change Password"
+  },
+  "validation": {
+    "required_field": "This field is required",
+    "invalid_email": "Please enter a valid email address",
+    "invalid_phone": "Please enter a valid phone number",
+    "password_too_short": "Password must be at least 6 characters",
+    "passwords_do_not_match": "Passwords do not match"
+  },
+  "errors": {
+    "something_went_wrong": "Something went wrong. Please try again.",
+    "no_internet_connection": "No internet connection. Please check your network.",
+    "server_error": "Server error. Please try again later.",
+    "timeout_error": "Request timed out. Please try again.",
+    "unauthorized": "Session expired. Please log in again."
+  }
+}

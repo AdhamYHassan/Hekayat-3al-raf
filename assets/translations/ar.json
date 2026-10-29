@@ -1,0 +1,73 @@
+{
+  "app_name": "تطبيق الأساس",
+  "common": {
+    "ok": "حسناً",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "done": "تم",
+    "confirm": "تأكيد",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "رجوع",
+    "next": "التالي",
+    "retry": "إعادة المحاولة",
+    "search": "بحث",
+    "loading": "جاري التحميل...",
+    "no_data": "لا توجد بيانات",
+    "see_all": "عرض الكل",
+    "close": "إغلاق"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "sign_up": "إنشاء حساب",
+    "sign_in": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور",
+    "forgot_password": "نسيت كلمة المرور؟",
+    "phone_number": "رقم الهاتف",
+    "full_name": "الاسم الكامل",
+    "already_have_account": "لديك حساب بالفعل؟ تسجيل الدخول",
+    "dont_have_account": "ليس لديك حساب؟ إنشاء حساب",
+    "welcome_back": "مرحباً بعودتك!",
+    "create_account": "إنشاء حساب جديد"
+  },
+  "home": {
+    "title": "الرئيسية",
+    "welcome": "مرحباً",
+    "more": "المزيد",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "notifications": "الإشعارات"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "arabic": "العربية",
+    "english": "English",
+    "theme": "المظهر",
+    "dark_mode": "الوضع الداكن",
+    "light_mode": "الوضع الفاتح",
+    "privacy_policy": "سياسة الخصوصية",
+    "terms_conditions": "الشروط والأحكام",
+    "about_us": "عن التطبيق",
+    "contact_us": "اتصل بنا",
+    "change_password": "تغيير كلمة المرور"
+  },
+  "validation": {
+    "required_field": "هذا الحقل مطلوب",
+    "invalid_email": "يرجى إدخال بريد إلكتروني صحيح",
+    "invalid_phone": "يرجى إدخال رقم هاتف صحيح",
+    "password_too_short": "كلمة المرور يجب أن لا تقل عن 6 أحرف",
+    "passwords_do_not_match": "كلمات المرور غير متطابقة"
+  },
+  "errors": {
+    "something_went_wrong": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    "no_internet_connection": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
+    "server_error": "خطأ في الخادم. يرجى المحاولة لاحقاً.",
+    "timeout_error": "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.",
+    "unauthorized": "انتهت الجلسة. يرجى تسجيل الدخول مجدداً."
+  }
+}
