@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:base_app/core/theming/colors_manager.dart';
-import 'package:base_app/core/theming/styles.dart';
+import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/styles.dart';
 
 class AppButton extends StatelessWidget {
   final double? buttonWidth;

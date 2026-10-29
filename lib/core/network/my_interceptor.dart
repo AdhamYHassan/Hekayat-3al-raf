@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart'; // ضروري عشان kDebugMode
-import 'package:base_app/core/helpers/secure_storage_helper.dart';
+import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 
 class MyInterceptor extends Interceptor {
   // بنعدل الـ _log عشان يطبع في الـ Debug Mode فقط

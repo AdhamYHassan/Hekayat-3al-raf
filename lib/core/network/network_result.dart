@@ -1,4 +1,4 @@
-import 'package:base_app/core/network/failure.dart';
+import 'package:hekayat_3al_raf/core/network/failure.dart';
 
 sealed class ApiResult<T> {
   const ApiResult();

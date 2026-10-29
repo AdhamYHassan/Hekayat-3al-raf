@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:base_app/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 class AppLoadingIndicator extends StatefulWidget {
   final double size;

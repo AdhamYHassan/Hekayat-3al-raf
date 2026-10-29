@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:base_app/core/theming/colors_manager.dart';
-import 'package:base_app/core/theming/styles.dart';
-import 'package:base_app/core/widgets/app_loading_indicator.dart';
+import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/styles.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_loading_indicator.dart';
 
 class AppLoadingDialog {
   static bool _isShowing = false;

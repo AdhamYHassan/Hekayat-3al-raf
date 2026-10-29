@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:base_app/core/helpers/shared_prefs_helper.dart';
+import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
 
 class ThemeCubit extends Cubit<ThemeMode> {
   ThemeCubit() : super(_getInitialTheme());

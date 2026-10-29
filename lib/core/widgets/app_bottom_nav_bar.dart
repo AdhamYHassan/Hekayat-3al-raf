@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:base_app/core/theming/colors_manager.dart';
-import 'package:base_app/core/theming/styles.dart';
+import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/styles.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int selectedIndex;
