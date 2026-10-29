@@ -1,4 +1,4 @@
-import 'package:hekayat_3al_raf/features/home/presentation/pages/home_screen.dart';
+import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
 import 'package:hekayat_3al_raf/features/splash/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -46,7 +46,7 @@ class AppRouter {
         pageBuilder: (context, state) => _buildPageWithTransition(
           context: context,
           state: state,
-          child: const HomeScreen(),
+          child: const MainScreen(),
         ),
       ),
     ],

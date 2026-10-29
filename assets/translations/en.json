@@ -1,5 +1,13 @@
 {
-  "app_name": "Base App",
+  "app_name": "Hekayat 3al Raf",
+  "nav": {
+    "home": "Home",
+    "stories": "Stories",
+    "ambassadors": "Ambassadors",
+    "submit": "Tell Your Story",
+    "more": "More",
+    "back": "Back"
+  },
   "common": {
     "ok": "OK",
     "cancel": "Cancel",
