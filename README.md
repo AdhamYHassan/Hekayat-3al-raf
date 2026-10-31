@@ -1,17 +1,42 @@
-# base_app
+# 📜 حكايات على الرف (Hekayat 3al Raf)
 
-A new Flutter project.
+> **منصة توثيق وأرشفة التاريخ الشفاهي والتراث الثقافي الحي.**
 
-## Getting Started
+تطبيق Flutter معماري متطور ومصمم للعمل بمعدل **60/120 FPS مقفل** على كافة الهواتف (بما فيها أجهزة أندرويد الاقتصادية 2GB-3GB RAM وهواتف iPhone القديمة) لخدمة أكثر من مليون مستخدم.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 🏗️ المعمارية والأنماط الهندسية (Architecture & Engineering)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+يتبع المشروع بدقة مبادئ **Clean Architecture** الصارمة مع فصل الطبقات:
+* **Presentation Layer:** واجهات مستخدم نقية خالية من الـ Business Logic، تدار حصرياً بواسطة **Cubit / Bloc** ومدعومة بـ `BlocSelector` و `RepaintBoundary` لتحقيق أعلى أداء لعرض الفريمات.
+* **Domain Layer:** نوات بيزنس نقية، Use Cases مستقلة تماماً، و Entities محصنة ضد التغييرات الخارجية ومحمية بـ `Equatable`.
+* **Data Layer:** تطبيق نمط الـ Repository Pattern، إدارة الـ Data Sources (Remote / Local / Mock)، وعزل استثناءات الشبكة.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 🎧 نظام الصوت المتطور (Audio Subsystem Architecture)
+
+تم بناء نظام تشغيل الصوت في التطبيق ليعمل كـ **Production-Grade Media Engine** مطابق لمعايير تطبيقات مثل Spotify و Audible:
+
+* **Smart Singleton with Virtual Lazy Resurrection:** إيقاف وتحرير محركات الصوت الأصلية (Native Decoders) تلقائياً عند خمول المستخدم لأكثر من 5 دقائق لتوفير البطارية والذاكرة، مع استعادة موضع الصوت والتراك فوراً وبدون أي كراش عند العودة للتشغيل.
+* **Dual-Stream Zero-Latency Audio Caching:** تشغيل لحظي للصوت من الإنترنت مع كتابة وتخزين الملف بالتوازي في مجلد الكاش المؤقت لضمان تشغيله أوفلاين في المرات القادمة وتوفير 100% من باقة المستخدم.
+* **Audio Focus & Becoming Noisy Handling:** إيقاف التشغيل فوراً عند فصل سماعات الرأس أو الـ AirPods لمنع الإحراج في الأماكن العامة، مع استئناف الصوت تلقائياً بعد انتهاء المكالمات الهاتفية.
+* **Lock Screen & Media Notification:** تكامل كامل مع `MPNowPlayingInfoCenter` على iOS و `ForegroundService (mediaPlayback)` على Android.
+* **Granular 120 FPS Rebuilds:** عزل شريط التمرير (Slider) عن الكارت الخارجي بواسطة `BlocSelector` و `buildWhen` الدقيقة.
+
+> 📖 **للاطلاع على التوثيق الهندسي والمعماري الكامل لنظام الصوت:**  
+> يرجى مراجعة [Audio Architecture Guide](docs/AUDIO_ARCHITECTURE.md).
+
+---
+
+## 📱 التقنيات المستخدمة (Tech Stack)
+
+* **Framework:** Flutter 3.x (Dart 3+)
+* **State Management:** `flutter_bloc` / `bloc` (No Freezed, No code generation)
+* **Service Locator:** `get_it`
+* **Routing:** `go_router`
+* **Media & Audio:** `just_audio`, `just_audio_background`, `audio_session`
+* **Responsive Layout:** `flutter_screenutil`
+* **Typography:** `google_fonts` (Alexandria, IBM Plex Sans Arabic, Aref Ruqaa)
+* **Localization:** `easy_localization` (دعم عربي وإنجليزي بدون أي Hardcoded Strings)

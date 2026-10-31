@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -21,7 +22,12 @@ void main() async {
   // 2. EasyLocalization setup
   await EasyLocalization.ensureInitialized();
 
-  // 3. Dependency Injection (Service Locator)
+  // 3. Force Global Portrait Orientation by default
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
+  // 4. Dependency Injection (Service Locator)
   setupDependencyInjection();
 
   // 3. Firebase (Commented until needed)

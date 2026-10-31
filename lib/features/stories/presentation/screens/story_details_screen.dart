@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_detail_header.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_media_hero.dart';
-import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_player_card.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_rating_section.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_video_player_card.dart';
 
 class StoryDetailsScreen extends StatelessWidget {
   const StoryDetailsScreen({super.key});
@@ -105,16 +105,21 @@ class StoryDetailsScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Media / Voice Note Player Container (Audio / Video / Image)
-                  const StoryPlayerCard(
-                    mediaType: StoryMediaType.audio,
+                  // Media Container (Dynamic Video / Audio Player)
+                  // Toggle between StoryVideoPlayerCard and StoryPlayerCard according to story mediaType
+                  const StoryVideoPlayerCard(
                     title: 'الألبوم اللي فضل في الدولاب أربعين سنة',
-                    narrator: 'فتحي عبد الله · القاهرة',
-                    category: 'ذكريات ١٩٨٤',
-                    artworkUrl:
-                        'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-album.webp',
-                    audioUrl: 'https://server7.mp3quran.net/basit/001.mp3',
+                    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
                   ),
+                  // const StoryPlayerCard(
+                  //   mediaType: StoryMediaType.audio,
+                  //   title: 'الألبوم اللي فضل في الدولاب أربعين سنة',
+                  //   narrator: 'فتحي عبد الله · القاهرة',
+                  //   category: 'ذكريات ١٩٨٤',
+                  //   artworkUrl:
+                  //       'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-album.webp',
+                  //   audioUrl: 'https://server7.mp3quran.net/basit/001.mp3',
+                  // ),
 
                   // Narrative body paragraphs
                   Padding(

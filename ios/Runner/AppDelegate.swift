@@ -13,4 +13,12 @@ import UIKit
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
   }
+
+  /// Allows dynamic runtime orientation changes (e.g. Fullscreen Landscape Video) on iOS 16+
+  override func application(
+    _ application: UIApplication,
+    supportedInterfaceOrientationsFor window: UIWindow?
+  ) -> UIInterfaceOrientationMask {
+    return .allButUpsideDown
+  }
 }

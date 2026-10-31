@@ -62,8 +62,10 @@ class AppRouter {
         pageBuilder: (context, state) => _buildPageWithTransition(
           context: context,
           state: state,
-          child: BlocProvider<AudioPlayerCubit>(
-            create: (_) => getIt<AudioPlayerCubit>(),
+          // Using BlocProvider.value prevents the Global AudioPlayerCubit from
+          // being disposed when the user navigates back to feed screens.
+          child: BlocProvider<AudioPlayerCubit>.value(
+            value: getIt<AudioPlayerCubit>(),
             child: const StoryDetailsScreen(),
           ),
         ),
