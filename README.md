@@ -30,13 +30,28 @@
 
 ---
 
+## 🎬 نظام الفيديو السينمائي المتطور (Video Subsystem Architecture)
+
+تم بناء نظام تشغيل الفيديو ليعمل بكفاءة فائقة على أجهزة الـ 2GB RAM وبدون استنزاف كارت الشاشة (VRAM):
+
+* **Single-Instance GPU Factory & Auto-Disposal:** إدارة صارمة لذاكرة الـ Texture Surface، حيث يتم تحرير معالج الفيديو وموارده فور مغادرة الشاشة لمنع الـ Out-Of-Memory (OOM) Crashes.
+* **Audio/Video Coexistence:** إيقاف مشغل الصوت في الخلفية تلقائياً عند تشغيل أي مقطع فيديو لمنع تداخل الأصوات.
+* **Bulletproof Fullscreen & Dual-Platform Rotation:** دعم كامل لوضع الشاشة الكاملة الأفقي (Landscape) مع حماية ضد أخطاء iOS 16 (`UISceneErrorDomain Code=101`)، واستعادة الوضع الرأسي (Portrait) بشكل متزامن وآمن عبر `PopScope`.
+* **Legacy Device & Network Compatibility:** إضافة `network_security_config.xml` لحل مشكلات الشهادات منتهية الصلاحية (SSL Handshake) على هواتف أندرويد القديمة مثل Huawei GR5.
+* **Heritage Glassmorphism UI:** تصميم أزرار زجاجية فخمة باللون الماروني والذهبي، مع أبعاد دائرية نقية 1:1 في الوضع الأفقي، وخاصية الإخفاء التلقائي بعد 3 ثوانٍ.
+
+> 📖 **للاطلاع على التوثيق الهندسي والمعماري الكامل لنظام الفيديو:**  
+> يرجى مراجعة [Video Architecture Guide](docs/VIDEO_ARCHITECTURE.md).
+
+---
+
 ## 📱 التقنيات المستخدمة (Tech Stack)
 
 * **Framework:** Flutter 3.x (Dart 3+)
 * **State Management:** `flutter_bloc` / `bloc` (No Freezed, No code generation)
 * **Service Locator:** `get_it`
 * **Routing:** `go_router`
-* **Media & Audio:** `just_audio`, `just_audio_background`, `audio_session`
+* **Media & Playback:** `just_audio`, `just_audio_background`, `audio_session`, `video_player`
 * **Responsive Layout:** `flutter_screenutil`
 * **Typography:** `google_fonts` (Alexandria, IBM Plex Sans Arabic, Aref Ruqaa)
 * **Localization:** `easy_localization` (دعم عربي وإنجليزي بدون أي Hardcoded Strings)

@@ -15,9 +15,10 @@ class ColorManager {
   static const Color goldDark = Color(0xFF9A7627);     // #9A7627 gold-dark
   static const Color orange = gold;                    // Alias
 
-  // Paper / Text Colors from HTML (text-paper-100, text-paper-200, text-paper-400)
+  // Paper / Text Colors from HTML (text-paper-100, text-paper-200, text-paper-300, text-paper-400)
   static const Color paper100 = Color(0xFFFFFDF8);     // #FFFDF8 text-paper-100
   static const Color paper200 = Color(0xFFF3DFD6);     // #F3DFD6 text-paper-200
+  static const Color paper300 = Color(0xFFD1D5DB);     // #D1D5DB text-paper-300
   static const Color paper400 = Color(0xFF9CA3AF);     // #9CA3AF text-paper-400
 
   // Compatibility aliases

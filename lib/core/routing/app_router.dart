@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/media/audio/cubit/audio_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
+import 'package:hekayat_3al_raf/features/ambassadors/presentation/screens/ambassador_details_screen.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
 import 'package:hekayat_3al_raf/features/splash/presentation/splash_screen.dart';
@@ -69,6 +70,18 @@ class AppRouter {
             child: const StoryDetailsScreen(),
           ),
         ),
+      ),
+      GoRoute(
+        path: Routes.ambassadorDetails,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final ambassadorId = extra?['id'] as String? ?? '1';
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: AmbassadorDetailsScreen(ambassadorId: ambassadorId),
+          );
+        },
       ),
     ],
   );

@@ -82,7 +82,12 @@ class HomeFeedScreen extends StatelessWidget {
                 SizedBox(height: 14.h),
                 HomeAmbassadorsList(
                   ambassadors: homeData.ambassadors,
-                  onAmbassadorTap: (_) {},
+                  onAmbassadorTap: (ambassador) {
+                    context.push(
+                      Routes.ambassadorDetails,
+                      extra: {'id': ambassador.id},
+                    );
+                  },
                 ),
                 SizedBox(height: 32.h),
                 HomeSectionHeader(
