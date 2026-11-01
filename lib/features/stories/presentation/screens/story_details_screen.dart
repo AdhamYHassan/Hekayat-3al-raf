@@ -1,15 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_cubit.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_state.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_detail_header.dart';
-import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_media_hero.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_details_shimmer_loading.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_document_card.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_media_hero.dart'
+    as hero;
+import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_player_card.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_rating_section.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_video_player_card.dart';
 
 class StoryDetailsScreen extends StatelessWidget {
-  const StoryDetailsScreen({super.key});
+  final String storyId;
+
+  const StoryDetailsScreen({
+    super.key,
+    required this.storyId,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<StoryDetailsCubit>(
+      create: (context) => getIt<StoryDetailsCubit>()..loadStoryDetails(storyId),
+      child: const _StoryDetailsView(),
+    );
+  }
+}
+
+class _StoryDetailsView extends StatelessWidget {
+  const _StoryDetailsView();
 
   @override
   Widget build(BuildContext context) {
@@ -20,356 +46,187 @@ class StoryDetailsScreen extends StatelessWidget {
           children: [
             // 1. Top Bar with Brand Logo and Back button
             StoryDetailHeader(onBackTap: () => Navigator.of(context).pop()),
-            // 2. Scrollable Body
+
+            // 2. Body State
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.only(bottom: 40.h),
-                children: [
-                  // Hero Cover & Header info
-                  StoryMediaHero(
-                    imageUrl:
-                        'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-album.webp',
-                    title: 'الألبوم اللي فضل في الدولاب أربعين سنة',
-                    authorInfo: 'فتحي عبد الله · القاهرة',
-                    category: 'ذكريات',
-                    year: '١٩٨٤',
-                    mediaType: StoryMediaType.audio,
-                    onShareTap: () {},
-                  ),
-                  // Stats bar
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 12.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.eye,
-                              size: 14.sp,
-                              color: ColorManager.paper400,
-                            ),
-                            SizedBox(width: 4.w),
-                            Text(
-                              '٤٨٫٢ ألف',
-                              style: GoogleFonts.ibmPlexSansArabic(
-                                fontSize: 12.sp,
-                                color: ColorManager.paper200,
-                              ),
-                            ),
-                            SizedBox(width: 14.w),
-                            Icon(
-                              CupertinoIcons.star_fill,
-                              size: 14.sp,
-                              color: ColorManager.gold,
-                            ),
-                            SizedBox(width: 4.w),
-                            Text(
-                              '٤٫٦',
-                              style: GoogleFonts.ibmPlexSansArabic(
-                                fontSize: 12.sp,
-                                color: ColorManager.paper200,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '٢١ سبتمبر',
+              child: BlocBuilder<StoryDetailsCubit, StoryDetailsState>(
+                builder: (context, state) {
+                  if (state.status == StoryDetailsStatus.loading ||
+                      state.status == StoryDetailsStatus.initial) {
+                    return const StoryDetailsShimmerLoading();
+                  }
+
+                  if (state.status == StoryDetailsStatus.failure || state.story == null) {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: Text(
+                          state.errorMessage ?? 'تعذر تحميل تفاصيل الحكاية',
+                          textAlign: TextAlign.center,
                           style: GoogleFonts.ibmPlexSansArabic(
-                            fontSize: 11.sp,
-                            color: ColorManager.paper400,
+                            color: ColorManager.paper200,
+                            fontSize: 14.sp,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: ColorManager.gold.withValues(alpha: 0.15),
-                    height: 1.h,
-                  ),
-
-                  // Article intro paragraph
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 8.h),
-                    child: Text(
-                      'عم فتحي ماكانش بيفتح الألبوم ده قدام حد. لما حفيدته سألته عن الصورة اللي في الصفحة الأخيرة، سكت شوية... وبعدين ابتدى يحكي عن صيف سنة ١٩٨٤.',
-                      style: GoogleFonts.ibmPlexSansArabic(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w500,
-                        color: ColorManager.goldLight.withValues(alpha: 0.95),
-                        height: 1.9,
                       ),
-                    ),
-                  ),
+                    );
+                  }
 
-                  // Media Container (Dynamic Video / Audio Player)
-                  // Toggle between StoryVideoPlayerCard and StoryPlayerCard according to story mediaType
-                  const StoryVideoPlayerCard(
-                    title: 'الألبوم اللي فضل في الدولاب أربعين سنة',
-                    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-                  ),
-                  // const StoryPlayerCard(
-                  //   mediaType: StoryMediaType.audio,
-                  //   title: 'الألبوم اللي فضل في الدولاب أربعين سنة',
-                  //   narrator: 'فتحي عبد الله · القاهرة',
-                  //   category: 'ذكريات ١٩٨٤',
-                  //   artworkUrl:
-                  //       'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-album.webp',
-                  //   audioUrl: 'https://server7.mp3quran.net/basit/001.mp3',
-                  // ),
+                  final story = state.story!;
+                  final media = story.media;
 
-                  // Narrative body paragraphs
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'الحكاية دي اتسجلت في صالة بيت عم فتحي في شبرا، والشباك مفتوح على صوت الشارع. حفيدته مريم هي اللي ضغطت زرار التسجيل، وهو اللي قرر يكمل.',
-                          style: GoogleFonts.ibmPlexSansArabic(
-                            fontSize: 14.sp,
-                            color: ColorManager.paper200.withValues(alpha: 0.8),
-                            height: 1.9,
-                          ),
-                        ),
-                        SizedBox(height: 16.h),
-                        Text(
-                          'بيحكي عن بيت ماعادش موجود، وعن جيران كانوا بيتقاسموا الشاي على السلم، وعن صورة واحدة فضلت مستخبية في آخر صفحة لأنها كانت أصعب من إنها تتشاف.',
-                          style: GoogleFonts.ibmPlexSansArabic(
-                            fontSize: 14.sp,
-                            color: ColorManager.paper200.withValues(alpha: 0.8),
-                            height: 1.9,
-                          ),
-                        ),
-                        // Literary Pull Quote
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 20.h),
-                          padding: EdgeInsets.only(
-                            right: 14.w,
-                            left: 8.w,
-                            top: 4.h,
-                            bottom: 4.h,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              right: BorderSide(
-                                color: ColorManager.gold,
-                                width: 2.5.w,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            '«أنا مش بحكي عشان افتكر... أنا بحكي عشان ماحدش ينساهم.»',
-                            style: GoogleFonts.arefRuqaa(
-                              fontSize: 18.sp,
-                              color: ColorManager.goldLight,
-                              height: 1.6,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          'التسجيل كامل زي ما اتقال، من غير تعديل غير إننا شيلنا أصوات الموبايل اللي رن مرتين في النص.',
-                          style: GoogleFonts.ibmPlexSansArabic(
-                            fontSize: 14.sp,
-                            color: ColorManager.paper200.withValues(alpha: 0.8),
-                            height: 1.9,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  return ListView(
+                    padding: EdgeInsets.only(bottom: 40.h),
+                    children: [
+                      // Hero Cover & Header info
+                      hero.StoryMediaHero(
+                        imageUrl: story.coverImage,
+                        title: story.title,
+                        authorInfo: '${story.authorName} · ${story.submissionTypeLabel}',
+                        category: story.submissionTypeLabel,
+                        year: story.publishedAt.split('-').first,
+                        mediaType: switch (story.mediaType) {
+                          StoryMediaType.audio => hero.StoryMediaType.audio,
+                          StoryMediaType.video => hero.StoryMediaType.video,
+                          _ => hero.StoryMediaType.image,
+                        },
+                        onShareTap: () {},
+                      ),
 
-                  SizedBox(height: 24.h),
-                  // Rating Section
-                  const StoryRatingSection(),
-
-                  // Share Button
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 12.h,
-                    ),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(24.r),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24.r),
-                          border: Border.all(
-                            color: ColorManager.gold.withValues(alpha: 0.3),
-                          ),
+                      // Stats bar
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 12.h,
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(
-                              CupertinoIcons.share,
-                              size: 16.sp,
-                              color: ColorManager.gold,
-                            ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              'مشاركة',
-                              style: GoogleFonts.ibmPlexSansArabic(
-                                fontSize: 13.sp,
-                                color: ColorManager.gold,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Ambassador Attached Card
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 12.h,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(12.w),
-                      decoration: BoxDecoration(
-                        color: ColorManager.primaryLight.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(
-                          color: ColorManager.gold.withValues(alpha: 0.1),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(24.r),
-                            child: Image.network(
-                              'https://hekayat-ala-el-raff-m9tr.bolt.host/amb-2.webp',
-                              width: 48.w,
-                              height: 48.h,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
+                                Icon(
+                                  CupertinoIcons.eye,
+                                  size: 14.sp,
+                                  color: ColorManager.paper400,
+                                ),
+                                SizedBox(width: 4.w),
                                 Text(
-                                  'السفير المرافق',
+                                  story.viewsCount >= 1000
+                                      ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ألف'
+                                      : '${story.viewsCount}',
                                   style: GoogleFonts.ibmPlexSansArabic(
-                                    fontSize: 10.sp,
-                                    color: ColorManager.goldLight,
+                                    fontSize: 12.sp,
+                                    color: ColorManager.paper200,
                                   ),
                                 ),
-                                Text(
-                                  'أحمد رشدي',
-                                  style: GoogleFonts.alexandria(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: ColorManager.paper100,
-                                  ),
+                                SizedBox(width: 14.w),
+                                Icon(
+                                  CupertinoIcons.heart_fill,
+                                  size: 14.sp,
+                                  color: ColorManager.gold,
                                 ),
+                                SizedBox(width: 4.w),
                                 Text(
-                                  'إذاعي سابق',
+                                  '${story.likes}',
                                   style: GoogleFonts.ibmPlexSansArabic(
-                                    fontSize: 10.sp,
-                                    color: ColorManager.paper400,
+                                    fontSize: 12.sp,
+                                    color: ColorManager.paper200,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          Icon(
-                            CupertinoIcons.chevron_back,
-                            size: 18.sp,
-                            color: ColorManager.gold,
-                          ),
-                        ],
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                              decoration: BoxDecoration(
+                                color: ColorManager.primaryLight.withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                              child: Text(
+                                story.submissionTypeLabel,
+                                style: GoogleFonts.ibmPlexSansArabic(
+                                  fontSize: 11.sp,
+                                  color: ColorManager.goldLight,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
 
-                  // Related Stories (حكايات تانية)
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 12.h),
-                    child: Text(
-                      'حكايات تانية',
-                      style: GoogleFonts.alexandria(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w700,
-                        color: ColorManager.paper100,
+                      // Dynamic Media Player based on API response:
+                      if (story.mediaType == StoryMediaType.video &&
+                          media.video != null &&
+                          media.video!.isNotEmpty) ...[
+                        StoryVideoPlayerCard(
+                          title: story.title,
+                          videoUrl: media.video!,
+                        ),
+                        SizedBox(height: 16.h),
+                      ] else if (story.mediaType == StoryMediaType.audio &&
+                          media.audio != null &&
+                          media.audio!.isNotEmpty) ...[
+                        StoryPlayerCard(
+                          mediaType: hero.StoryMediaType.audio,
+                          title: story.title,
+                          audioUrl: media.audio!,
+                          narrator: story.authorName,
+                          category: story.submissionTypeLabel,
+                          artworkUrl: story.coverImage,
+                        ),
+                        SizedBox(height: 16.h),
+                      ] else if (story.mediaType == StoryMediaType.document &&
+                          media.document != null &&
+                          media.document!.isNotEmpty) ...[
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: StoryDocumentCard(
+                            title: story.title,
+                            documentUrl: media.document!,
+                            documentKey: story.id,
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                      ],
+
+                      // Narrative body paragraphs
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              story.summary,
+                              style: GoogleFonts.ibmPlexSansArabic(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: ColorManager.paper100,
+                                height: 1.8,
+                              ),
+                            ),
+                            SizedBox(height: 12.h),
+                            Text(
+                              story.body,
+                              style: GoogleFonts.ibmPlexSansArabic(
+                                fontSize: 13.5.sp,
+                                color: ColorManager.paper200.withValues(alpha: 0.8),
+                                height: 1.9,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  _buildRelatedStoryItem(
-                    'الصور اللي ستي خبتها في علبة البسكويت',
-                    'ندى الشريف',
-                    'https://hekayat-ala-el-raff-m9tr.bolt.host/home/feature-tin.webp',
-                  ),
-                  _buildRelatedStoryItem(
-                    'شريط كاسيت من أبويا وهو في الغربة',
-                    'محمود عبد الرحيم',
-                    'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-abroad.webp',
-                  ),
-                  _buildRelatedStoryItem(
-                    'جواب ماتبعتش',
-                    'سلوى منير',
-                    'https://hekayat-ala-el-raff-m9tr.bolt.host/home/feature-letter.webp',
-                  ),
-                ],
+
+                      SizedBox(height: 24.h),
+
+                      // Rating & Voting Section
+                      const StoryRatingSection(),
+                    ],
+                  );
+                },
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildRelatedStoryItem(String title, String author, String imageUrl) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
-            child: Image.network(
-              imageUrl,
-              width: 64.w,
-              height: 64.h,
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.alexandria(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w700,
-                    color: ColorManager.paper100,
-                    height: 1.25,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  author,
-                  style: GoogleFonts.ibmPlexSansArabic(
-                    fontSize: 10.sp,
-                    color: ColorManager.paper400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum StoryContentType { text, audio, video }
+enum StoryContentType { text, audio, video, document }
 
 /// Entity representing a single story card displayed in feeds.
 class StoryFeedItem extends Equatable {
@@ -11,8 +11,10 @@ class StoryFeedItem extends Equatable {
   final String authorName;
   final String coverImageUrl;
   final StoryContentType contentType;
+  final String submissionTypeLabel;
   final int viewsCount;
-  final double rating;
+  final int likes;
+  final double? rating;
 
   const StoryFeedItem({
     required this.id,
@@ -22,8 +24,10 @@ class StoryFeedItem extends Equatable {
     required this.authorName,
     required this.coverImageUrl,
     required this.contentType,
+    this.submissionTypeLabel = '',
     required this.viewsCount,
-    required this.rating,
+    this.likes = 0,
+    this.rating,
   });
 
   @override
@@ -35,7 +39,9 @@ class StoryFeedItem extends Equatable {
         authorName,
         coverImageUrl,
         contentType,
+        submissionTypeLabel,
         viewsCount,
+        likes,
         rating,
       ];
 }

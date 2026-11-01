@@ -52,24 +52,28 @@ class AppRouter {
         pageBuilder: (context, state) => _buildPageWithTransition(
           context: context,
           state: state,
-          child: BlocProvider<HomeCubit>(
-            create: (_) => getIt<HomeCubit>()..loadHomeData(),
+          child: BlocProvider<HomeCubit>.value(
+            value: getIt<HomeCubit>(),
             child: const MainScreen(),
           ),
         ),
       ),
       GoRoute(
         path: Routes.storyDetails,
-        pageBuilder: (context, state) => _buildPageWithTransition(
-          context: context,
-          state: state,
-          // Using BlocProvider.value prevents the Global AudioPlayerCubit from
-          // being disposed when the user navigates back to feed screens.
-          child: BlocProvider<AudioPlayerCubit>.value(
-            value: getIt<AudioPlayerCubit>(),
-            child: const StoryDetailsScreen(),
-          ),
-        ),
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final storyId = extra?['id'] as String? ?? 'c77848a2-d890-4e60-b654-d603dcae67f6';
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            // Using BlocProvider.value prevents the Global AudioPlayerCubit from
+            // being disposed when the user navigates back to feed screens.
+            child: BlocProvider<AudioPlayerCubit>.value(
+              value: getIt<AudioPlayerCubit>(),
+              child: StoryDetailsScreen(storyId: storyId),
+            ),
+          );
+        },
       ),
       GoRoute(
         path: Routes.ambassadorDetails,

@@ -6,6 +6,7 @@ import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassador_details_cubit.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassador_details_state.dart';
+import 'package:hekayat_3al_raf/features/ambassadors/presentation/widgets/ambassador_details_shimmer_loading.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/widgets/ambassador_gallery_carousel.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/widgets/ambassador_hero_header.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/widgets/ambassador_qa_section.dart';
@@ -65,9 +66,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
         builder: (context, state) {
           if (state.status == AmbassadorStatus.loading ||
               state.status == AmbassadorStatus.initial) {
-            return const Center(
-              child: CircularProgressIndicator(color: ColorManager.gold),
-            );
+            return const AmbassadorDetailsShimmerLoading();
           }
 
           if (state.details == null) {

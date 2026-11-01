@@ -9,6 +9,7 @@ import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassadors_list_cubit.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassadors_list_state.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/widgets/ambassador_card_item.dart';
+import 'package:hekayat_3al_raf/features/ambassadors/presentation/widgets/ambassadors_list_shimmer_loading.dart';
 
 class AmbassadorsScreen extends StatelessWidget {
   const AmbassadorsScreen({super.key});
@@ -25,6 +26,16 @@ class AmbassadorsScreen extends StatelessWidget {
 class _AmbassadorsView extends StatelessWidget {
   const _AmbassadorsView();
 
+  bool _onScrollNotification(ScrollNotification notification, BuildContext context) {
+    if (notification is ScrollUpdateNotification) {
+      final metrics = notification.metrics;
+      if (metrics.pixels >= metrics.maxScrollExtent * 0.85) {
+        context.read<AmbassadorsListCubit>().loadMoreAmbassadors();
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,75 +46,108 @@ class _AmbassadorsView extends StatelessWidget {
           builder: (context, state) {
             if (state.status == AmbassadorsListStatus.loading ||
                 state.status == AmbassadorsListStatus.initial) {
-              return const Center(
-                child: CircularProgressIndicator(color: ColorManager.gold),
-              );
+              return const AmbassadorsListShimmerLoading();
             }
 
-            if (state.status == AmbassadorsListStatus.failure) {
+            if (state.status == AmbassadorsListStatus.failure && state.ambassadors.isEmpty) {
               return Center(
-                child: Text(
-                  state.errorMessage ?? 'تعذر تحميل السفراء',
-                  style: GoogleFonts.ibmPlexSansArabic(
-                    color: ColorManager.paper200,
-                    fontSize: 14.sp,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      state.errorMessage ?? 'تعذر تحميل السفراء',
+                      style: GoogleFonts.ibmPlexSansArabic(
+                        color: ColorManager.paper200,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    ElevatedButton(
+                      onPressed: () => context.read<AmbassadorsListCubit>().loadAmbassadors(),
+                      style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
+                      child: Text(
+                        'إعادة المحاولة',
+                        style: GoogleFonts.alexandria(color: ColorManager.primaryDark),
+                      ),
+                    ),
+                  ],
                 ),
               );
             }
 
-            return CustomScrollView(
-              slivers: [
-                // Header (Title & Subtitle strictly matching prototype DOM)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'السفراء',
-                          style: GoogleFonts.alexandria(
-                            color: ColorManager.paper100,
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.bold,
+            return NotificationListener<ScrollNotification>(
+              onNotification: (notification) => _onScrollNotification(notification, context),
+              child: CustomScrollView(
+                slivers: [
+                  // Header (Title & Subtitle strictly matching prototype DOM)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'السفراء',
+                            style: GoogleFonts.alexandria(
+                              color: ColorManager.paper100,
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 6.h),
-                        Text(
-                          'أصوات بتساعد الحكايات تلاقي طريقها. تعرف عليهم وعلى دورهم.',
-                          style: GoogleFonts.ibmPlexSansArabic(
-                            color: ColorManager.paper200.withValues(alpha: 0.65),
-                            fontSize: 13.sp,
-                            height: 1.5,
+                          SizedBox(height: 6.h),
+                          Text(
+                            'أصوات بتساعد الحكايات تلاقي طريقها. تعرف عليهم وعلى دورهم.',
+                            style: GoogleFonts.ibmPlexSansArabic(
+                              color: ColorManager.paper200.withValues(alpha: 0.65),
+                              fontSize: 13.sp,
+                              height: 1.5,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                // Ambassadors Cards List
-                SliverPadding(
-                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 120.h),
-                  sliver: SliverList.separated(
-                    itemCount: state.ambassadors.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 16.h),
-                    itemBuilder: (context, index) {
-                      final item = state.ambassadors[index];
-                      return AmbassadorCardItem(
-                        ambassador: item,
-                        onTap: () {
-                          context.push(
-                            Routes.ambassadorDetails,
-                            extra: {'id': item.id},
-                          );
-                        },
-                      );
-                    },
+                  // Ambassadors Cards List
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 16.h),
+                    sliver: SliverList.separated(
+                      itemCount: state.ambassadors.length,
+                      separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                      itemBuilder: (context, index) {
+                        final item = state.ambassadors[index];
+                        return AmbassadorCardItem(
+                          ambassador: item,
+                          onTap: () {
+                            context.push(
+                              Routes.ambassadorDetails,
+                              extra: {'id': item.id},
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+
+                  // Bottom Pagination Indicator
+                  if (state.isLoadingMore)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: ColorManager.gold,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 100.h),
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -111,4 +155,3 @@ class _AmbassadorsView extends StatelessWidget {
     );
   }
 }
-

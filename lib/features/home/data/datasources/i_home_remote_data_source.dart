@@ -4,7 +4,7 @@ import 'package:hekayat_3al_raf/features/home/domain/entities/home_story_entity.
 
 abstract class IHomeRemoteDataSource {
   Future<List<HomeHeroSlide>> getHeroSlides();
-  Future<FeaturedStoryEntity> getFeaturedStory();
+  Future<FeaturedStoryEntity?> getFeaturedStory();
   Future<List<StoryFeedItem>> getTopStories();
   Future<List<AmbassadorFeedItem>> getAmbassadors();
   Future<List<RegionArchiveItem>> getRegions();

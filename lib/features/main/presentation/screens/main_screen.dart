@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/screens/ambassadors_screen.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/screens/home_feed_screen.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/screens/stories_feed_screen.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/screens/submit_story_screen.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_state.dart';
@@ -47,7 +48,7 @@ class _MainScreenContent extends StatelessWidget {
               index: state.selectedIndex,
               children: const [
                 HomeFeedScreen(),
-                _TabPlaceholder(title: 'الحكايات'),
+                StoriesFeedScreen(),
                 AmbassadorsScreen(),
                 SubmitStoryScreen(),
                 _TabPlaceholder(title: 'المزيد'),

@@ -89,5 +89,16 @@
     "server_error": "Server error. Please try again later.",
     "timeout_error": "Request timed out. Please try again.",
     "unauthorized": "Session expired. Please log in again."
+  },
+  "document": {
+    "view_document": "View Document",
+    "downloading": "Preparing document...",
+    "download_failed": "Failed to load document",
+    "pdf_document": "PDF Document",
+    "page_count": "Page {current} of {total}",
+    "open_fullscreen": "View Fullscreen",
+    "story_document": "Story Document",
+    "share_document": "Share Document",
+    "save_to_device": "Save to Device"
   }
 }

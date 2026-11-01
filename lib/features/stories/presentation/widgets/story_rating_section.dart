@@ -4,6 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
+/// Rating section for story reader interaction.
+///
+/// TODO(backend): Connect with the live rate/vote endpoint once available.
+/// Expected contract: POST /api/v1/mobile/stories/{id}/rate/ or /vote/
+/// Payload: { "rating": int (1-5), "story_id": String }
 class StoryRatingSection extends StatefulWidget {
   const StoryRatingSection({super.key});
 
@@ -42,6 +47,7 @@ class _StoryRatingSectionState extends State<StoryRatingSection> {
               return InkWell(
                 onTap: () {
                   setState(() => _userRating = starIndex);
+                  // TODO(backend): Dispatch rating usecase/cubit event to submit _userRating to API.
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.w),

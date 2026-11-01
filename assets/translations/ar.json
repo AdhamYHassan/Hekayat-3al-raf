@@ -93,5 +93,16 @@
     "server_error": "خطأ في الخادم. يرجى المحاولة لاحقاً.",
     "timeout_error": "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.",
     "unauthorized": "انتهت الجلسة. يرجى تسجيل الدخول مجدداً."
+  },
+  "document": {
+    "view_document": "تصفح الوثيقة",
+    "downloading": "جاري تجهيز الوثيقة...",
+    "download_failed": "تعذر تحميل الوثيقة",
+    "pdf_document": "وثيقة PDF",
+    "page_count": "صفحة {current} من {total}",
+    "open_fullscreen": "عرض بملء الشاشة",
+    "story_document": "مستند الحكاية",
+    "share_document": "مشاركة المستند",
+    "save_to_device": "حفظ في الجهاز"
   }
 }

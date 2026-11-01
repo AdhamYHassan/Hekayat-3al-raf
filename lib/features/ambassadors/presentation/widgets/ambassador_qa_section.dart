@@ -4,6 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 
+/// Q&A and Community Interaction section for an ambassador profile.
+///
+/// TODO(backend): Connect with the live comments/questions endpoint for ambassadors.
+/// Expected contract: POST /api/v1/mobile/ambassadors/{slug}/comments/ or /questions/
+/// Payload: { "name": String, "city": String, "question": String, "ambassador_slug": String }
 class AmbassadorQaSection extends StatefulWidget {
   final List<AmbassadorQaItem> questions;
   final bool isSubmitting;
@@ -36,6 +41,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
 
   void _handleSubmit() {
     if (_formKey.currentState?.validate() ?? false) {
+      // TODO(backend): Wire question/comment submission once API endpoint is published.
       widget.onSubmitQuestion(
         _nameController.text.trim(),
         _cityController.text.trim(),

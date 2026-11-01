@@ -1,6 +1,7 @@
 import 'package:hekayat_3al_raf/features/ambassadors/data/datasources/i_ambassador_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_list_item_entity.dart';
+import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/paginated_ambassadors_entity.dart';
 
 /// In-memory mock data source providing authentic cultural oral history content
 /// strictly matching the prototype DOM (Mona El-Husseini profile).
@@ -8,10 +9,13 @@ class AmbassadorMockDataSource implements IAmbassadorRemoteDataSource {
   static const String _baseUrl = 'https://hekayat-ala-el-raff-m9tr.bolt.host';
 
   @override
-  Future<List<AmbassadorListItemEntity>> getAmbassadorsList() async {
+  Future<PaginatedAmbassadorsEntity> getAmbassadorsList({
+    int limit = 10,
+    int offset = 0,
+  }) async {
     await Future.delayed(const Duration(milliseconds: 100));
 
-    return const [
+    const list = [
       AmbassadorListItemEntity(
         id: 'mona-elhusseiny',
         name: 'منى الحسيني',
@@ -63,6 +67,12 @@ class AmbassadorMockDataSource implements IAmbassadorRemoteDataSource {
         imageUrl: '$_baseUrl/amb-5.webp',
       ),
     ];
+
+    return PaginatedAmbassadorsEntity(
+      count: list.length,
+      hasMore: false,
+      ambassadors: list,
+    );
   }
 
   @override

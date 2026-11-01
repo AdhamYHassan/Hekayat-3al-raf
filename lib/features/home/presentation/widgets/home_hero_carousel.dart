@@ -62,7 +62,28 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                       fit: BoxFit.cover,
                       alignment: const Alignment(0.0, -0.2),
                       cacheWidth: (375 * 2),
-                      errorBuilder: (context, error, stackTrace) => Container(color: ColorManager.primaryDark),
+                      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                        if (wasSynchronouslyLoaded || frame != null) {
+                          return child;
+                        }
+                        return Container(
+                          color: ColorManager.primaryLight,
+                          child: const Center(
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: ColorManager.gold,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        debugPrint('Failed to load hero slide image: $error');
+                        return Container(color: ColorManager.primaryDark);
+                      },
                     ),
                     Container(
                       decoration: const BoxDecoration(

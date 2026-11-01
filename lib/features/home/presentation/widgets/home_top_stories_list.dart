@@ -76,19 +76,24 @@ class HomeTopStoriesList extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(
-                                    story.contentType == StoryContentType.audio
-                                        ? CupertinoIcons.headphones
-                                        : (story.contentType == StoryContentType.video
-                                            ? CupertinoIcons.video_camera_solid
-                                            : CupertinoIcons.book),
+                                    switch (story.contentType) {
+                                      StoryContentType.audio => CupertinoIcons.headphones,
+                                      StoryContentType.video => CupertinoIcons.video_camera_solid,
+                                      StoryContentType.document => CupertinoIcons.doc_text,
+                                      StoryContentType.text => CupertinoIcons.book,
+                                    },
                                     size: 10.sp,
                                     color: ColorManager.goldLight,
                                   ),
-                                  SizedBox(width: 3.w),
+                                  SizedBox(width: 4.w),
                                   Text(
-                                    story.contentType == StoryContentType.audio
-                                        ? 'صوتية'
-                                        : (story.contentType == StoryContentType.video ? 'مصورة' : 'مكتوبة'),
+                                    story.submissionTypeLabel.isNotEmpty
+                                        ? story.submissionTypeLabel
+                                        : (story.contentType == StoryContentType.audio
+                                            ? 'صوتية'
+                                            : (story.contentType == StoryContentType.video
+                                                ? 'مصورة'
+                                                : 'مكتوبة')),
                                     style: GoogleFonts.ibmPlexSansArabic(
                                       fontSize: 10.sp,
                                       fontWeight: FontWeight.w500,
@@ -121,22 +126,37 @@ class HomeTopStoriesList extends StatelessWidget {
                       Icon(CupertinoIcons.eye, size: 12.sp, color: ColorManager.paper400),
                       SizedBox(width: 3.w),
                       Text(
-                        '${(story.viewsCount / 1000).toStringAsFixed(1)} ألف',
+                        story.viewsCount >= 1000
+                            ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ألف'
+                            : '${story.viewsCount}',
                         style: GoogleFonts.ibmPlexSansArabic(
                           fontSize: 11.sp,
                           color: ColorManager.paper400,
                         ),
                       ),
-                      SizedBox(width: 8.w),
-                      Icon(CupertinoIcons.star_fill, size: 12.sp, color: ColorManager.gold),
-                      SizedBox(width: 3.w),
-                      Text(
-                        '${story.rating}',
-                        style: GoogleFonts.ibmPlexSansArabic(
-                          fontSize: 11.sp,
-                          color: ColorManager.paper400,
+                      if (story.rating != null) ...[
+                        SizedBox(width: 8.w),
+                        Icon(CupertinoIcons.star_fill, size: 12.sp, color: ColorManager.gold),
+                        SizedBox(width: 3.w),
+                        Text(
+                          '${story.rating}',
+                          style: GoogleFonts.ibmPlexSansArabic(
+                            fontSize: 11.sp,
+                            color: ColorManager.paper400,
+                          ),
                         ),
-                      ),
+                      ] else if (story.likes > 0) ...[
+                        SizedBox(width: 8.w),
+                        Icon(CupertinoIcons.heart_fill, size: 12.sp, color: ColorManager.gold),
+                        SizedBox(width: 3.w),
+                        Text(
+                          '${story.likes}',
+                          style: GoogleFonts.ibmPlexSansArabic(
+                            fontSize: 11.sp,
+                            color: ColorManager.paper400,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ],

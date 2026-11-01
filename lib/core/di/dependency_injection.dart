@@ -1,10 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hekayat_3al_raf/core/network/dio_factory.dart';
+import 'package:hekayat_3al_raf/core/network/inetwork_helper.dart';
+import 'package:hekayat_3al_raf/core/network/network_helper.dart';
 import 'package:hekayat_3al_raf/core/media/audio/cubit/audio_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/audio/service/i_audio_player_service.dart';
 import 'package:hekayat_3al_raf/core/media/audio/service/just_audio_player_service.dart';
 import 'package:hekayat_3al_raf/core/media/video/cubit/video_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/video/service/default_video_player_service.dart';
-import 'package:hekayat_3al_raf/features/ambassadors/data/datasources/ambassador_mock_data_source.dart';
+import 'package:hekayat_3al_raf/features/ambassadors/data/datasources/ambassador_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/data/datasources/i_ambassador_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/data/repositories/ambassador_repository_impl.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/repositories/i_ambassador_repository.dart';
@@ -15,7 +19,16 @@ import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassado
 import 'package:hekayat_3al_raf/features/submit_story/data/repositories/submit_story_repository_impl.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/repositories/i_submit_story_repository.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
-import 'package:hekayat_3al_raf/features/home/data/datasources/home_mock_data_source.dart';
+import 'package:hekayat_3al_raf/features/stories/data/datasources/i_story_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/stories/data/datasources/story_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/stories/data/repositories/story_repository_impl.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/repositories/i_story_repository.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/usecases/get_stories_list_usecase.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/usecases/get_story_details_usecase.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/usecases/get_story_types_usecase.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/bloc/stories_feed_cubit.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_cubit.dart';
+import 'package:hekayat_3al_raf/features/home/data/datasources/home_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/home/data/datasources/i_home_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/home/data/repositories/home_repository_impl.dart';
 import 'package:hekayat_3al_raf/features/home/domain/repositories/i_home_repository.dart';
@@ -26,10 +39,19 @@ final getIt = GetIt.instance;
 
 void setupDependencyInjection() {
   // ---------------------------------------------------------------------------
-  // Home Feature DI Setup
+  // Core Network Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<Dio>(() => DioFactory.getDio());
+  getIt.registerLazySingleton<InetworkHelper>(
+    () => NetworkHelper(getIt<Dio>()),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Home Feature DI Setup (Single BFF API with Isolate & In-Memory Cache)
+  // Registered as LazySingleton to enable Splash Pre-fetching and persistent cache
   // ---------------------------------------------------------------------------
   getIt.registerLazySingleton<IHomeRemoteDataSource>(
-    () => HomeMockDataSource(),
+    () => HomeRemoteDataSource(getIt<InetworkHelper>()),
   );
 
   getIt.registerLazySingleton<IHomeRepository>(
@@ -40,7 +62,7 @@ void setupDependencyInjection() {
     () => GetHomeDataUseCase(getIt<IHomeRepository>()),
   );
 
-  getIt.registerFactory<HomeCubit>(
+  getIt.registerLazySingleton<HomeCubit>(
     () => HomeCubit(getIt<GetHomeDataUseCase>()),
   );
 
@@ -48,7 +70,7 @@ void setupDependencyInjection() {
   // Ambassador Feature DI Setup
   // ---------------------------------------------------------------------------
   getIt.registerLazySingleton<IAmbassadorRemoteDataSource>(
-    () => AmbassadorMockDataSource(),
+    () => AmbassadorRemoteDataSource(getIt<Dio>()),
   );
 
   getIt.registerLazySingleton<IAmbassadorRepository>(
@@ -72,6 +94,40 @@ void setupDependencyInjection() {
 
   getIt.registerFactory<AmbassadorsListCubit>(
     () => AmbassadorsListCubit(getIt<GetAmbassadorsListUseCase>()),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Stories Feature DI Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<IStoryRemoteDataSource>(
+    () => StoryRemoteDataSource(getIt<InetworkHelper>()),
+  );
+
+  getIt.registerLazySingleton<IStoryRepository>(
+    () => StoryRepositoryImpl(getIt<IStoryRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetStoryDetailsUseCase>(
+    () => GetStoryDetailsUseCase(getIt<IStoryRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetStoriesListUseCase>(
+    () => GetStoriesListUseCase(getIt<IStoryRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetStoryTypesUseCase>(
+    () => GetStoryTypesUseCase(getIt<IStoryRepository>()),
+  );
+
+  getIt.registerFactory<StoryDetailsCubit>(
+    () => StoryDetailsCubit(getIt<GetStoryDetailsUseCase>()),
+  );
+
+  getIt.registerFactory<StoriesFeedCubit>(
+    () => StoriesFeedCubit(
+      storiesListUseCase: getIt<GetStoriesListUseCase>(),
+      storyTypesUseCase: getIt<GetStoryTypesUseCase>(),
+    ),
   );
 
   // ---------------------------------------------------------------------------

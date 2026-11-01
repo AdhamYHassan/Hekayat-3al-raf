@@ -2,8 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_state.dart';
 
 /// High-Performance Splash Screen with hardware-isolated pulsating progress bar.
 ///
@@ -37,6 +40,19 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 1. Kick off Home Data Pre-fetching concurrently while splash logo animates
+      final homeCubit = getIt<HomeCubit>();
+      homeCubit.loadHomeData().then((_) {
+        // Targeted Precaching: Precache Slide #1 image strictly in the background
+        if (mounted && homeCubit.state is HomeSuccess) {
+          final slides = (homeCubit.state as HomeSuccess).homeData.heroSlides;
+          if (slides.isNotEmpty && slides.first.imageUrl.isNotEmpty) {
+            precacheImage(NetworkImage(slides.first.imageUrl), context);
+          }
+        }
+      });
+
+      // 2. Perform locale check and proceed to home
       _navigateToNext();
     });
   }

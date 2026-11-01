@@ -7,6 +7,7 @@ import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_state.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_shimmer_loading.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_ambassadors_list.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_featured_card.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_hero_carousel.dart';
@@ -29,9 +30,7 @@ class HomeFeedScreen extends StatelessWidget {
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           return switch (state) {
-            HomeInitial() || HomeLoading() => const Center(
-              child: CircularProgressIndicator(color: ColorManager.gold),
-            ),
+            HomeInitial() || HomeLoading() => const HomeShimmerLoading(),
             HomeError(:final message) => Center(
               child: Text(
                 message,
@@ -48,16 +47,21 @@ class HomeFeedScreen extends StatelessWidget {
                   onSubmitTap: () =>
                       context.read<MainCubit>().changeTab(MainTab.submit),
                 ),
-                SizedBox(height: 24.h),
-                HomeSectionHeader(
-                  kicker: 'home.featured_kicker'.tr(),
-                  title: 'home.featured_title'.tr(),
-                ),
-                SizedBox(height: 14.h),
-                HomeFeaturedCard(
-                  featured: homeData.featuredStory,
-                  onTap: () => context.push(Routes.storyDetails),
-                ),
+                if (homeData.featuredStory != null) ...[
+                  SizedBox(height: 24.h),
+                  HomeSectionHeader(
+                    kicker: 'home.featured_kicker'.tr(),
+                    title: 'home.featured_title'.tr(),
+                  ),
+                  SizedBox(height: 14.h),
+                  HomeFeaturedCard(
+                    featured: homeData.featuredStory!,
+                    onTap: () => context.push(
+                      Routes.storyDetails,
+                      extra: {'id': homeData.featuredStory!.story.id},
+                    ),
+                  ),
+                ],
                 SizedBox(height: 32.h),
                 HomeSectionHeader(
                   kicker: 'home.top_stories_kicker'.tr(),
@@ -69,7 +73,12 @@ class HomeFeedScreen extends StatelessWidget {
                 SizedBox(height: 14.h),
                 HomeTopStoriesList(
                   stories: homeData.topStories,
-                  onStoryTap: (_) {},
+                  onStoryTap: (story) {
+                    context.push(
+                      Routes.storyDetails,
+                      extra: {'id': story.id},
+                    );
+                  },
                 ),
                 SizedBox(height: 32.h),
                 HomeSectionHeader(
