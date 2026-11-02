@@ -5,6 +5,11 @@ import 'package:hekayat_3al_raf/features/stories/domain/entities/story_type_enti
 abstract class IStoryRemoteDataSource {
   Future<StoryDetailsEntity> getStoryDetails(String storyId);
 
+  Future<StoryDetailsEntity> voteStory({
+    required String storyId,
+    required String value,
+  });
+
   Future<PaginatedStoriesEntity> getStories({
     int limit = 10,
     int offset = 0,

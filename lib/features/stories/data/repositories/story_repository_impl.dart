@@ -44,6 +44,25 @@ class StoryRepositoryImpl implements IStoryRepository {
   }
 
   @override
+  Future<ApiResult<StoryDetailsEntity>> voteStory({
+    required String storyId,
+    required String value,
+  }) async {
+    try {
+      final updatedEntity = await _remoteDataSource.voteStory(
+        storyId: storyId,
+        value: value,
+      );
+
+      // Invalidate / update the in-memory cache with the fresh entity from backend
+      _storyCache[storyId] = (updatedEntity, DateTime.now());
+      return ApiSuccess(updatedEntity);
+    } catch (e) {
+      return ApiFailure(ServerFailure('فشل في تسجيل التفاعل: $e'));
+    }
+  }
+
+  @override
   Future<ApiResult<PaginatedStoriesEntity>> getStories({
     int limit = 10,
     int offset = 0,

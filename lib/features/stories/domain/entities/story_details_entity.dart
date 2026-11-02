@@ -48,6 +48,47 @@ class StoryDetailsEntity extends Equatable {
         _ => StoryMediaType.text,
       };
 
+  StoryDetailsEntity copyWith({
+    String? id,
+    String? title,
+    String? summary,
+    String? submissionType,
+    String? submissionTypeLabel,
+    String? storyType,
+    String? coverImage,
+    String? authorName,
+    String? publishedAt,
+    int? viewsCount,
+    int? likes,
+    int? dislikes,
+    bool? votingOpen,
+    String? myVote,
+    bool clearMyVote = false,
+    String? webUrl,
+    String? body,
+    StoryMediaUrls? media,
+  }) {
+    return StoryDetailsEntity(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      summary: summary ?? this.summary,
+      submissionType: submissionType ?? this.submissionType,
+      submissionTypeLabel: submissionTypeLabel ?? this.submissionTypeLabel,
+      storyType: storyType ?? this.storyType,
+      coverImage: coverImage ?? this.coverImage,
+      authorName: authorName ?? this.authorName,
+      publishedAt: publishedAt ?? this.publishedAt,
+      viewsCount: viewsCount ?? this.viewsCount,
+      likes: likes ?? this.likes,
+      dislikes: dislikes ?? this.dislikes,
+      votingOpen: votingOpen ?? this.votingOpen,
+      myVote: clearMyVote ? null : (myVote ?? this.myVote),
+      webUrl: webUrl ?? this.webUrl,
+      body: body ?? this.body,
+      media: media ?? this.media,
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,

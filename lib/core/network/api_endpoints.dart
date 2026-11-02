@@ -3,6 +3,7 @@ class ApiEndpoints {
   static const String baseUrl = 'https://hekayat3alraf.com/ar/api/v1/mobile/';
   static const String home = 'home/';
   static String storyDetails(String id) => 'stories/$id/';
+  static String voteStory(String id) => 'stories/$id/vote/';
   static String ambassadorDetails(String slug) => 'ambassadors/$slug/';
   static String ambassadors({int limit = 10, int offset = 0}) =>
       'ambassadors/?limit=$limit&offset=$offset';

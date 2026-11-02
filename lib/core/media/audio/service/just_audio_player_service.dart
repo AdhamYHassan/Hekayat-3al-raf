@@ -259,32 +259,14 @@ class JustAudioPlayerService implements IAudioPlayerService {
           tag: mediaItem,
         );
       } else {
-        debugPrint('[AudioPlayer] Cache MISS: Checking connectivity before network streaming...');
-        // Pre-flight connectivity check to avoid unhandled proxy socket crashes when offline
-        try {
-          final uri = Uri.parse(track.url);
-          final result = await InternetAddress.lookup(uri.host)
-              .timeout(const Duration(seconds: 2));
-          if (result.isEmpty || result[0].rawAddress.isEmpty) {
-            throw const SocketException('No address associated with hostname');
-          }
-        } catch (_) {
-          debugPrint('[AudioPlayer] Pre-flight Offline Check: No active internet connection.');
-          _emitState(
-            _currentState.copyWith(
-              status: AudioStatus.error,
-              errorMessage: 'لا يوجد اتصال بالإنترنت للاستماع لأول مرة',
-            ),
-          );
-          return;
-        }
-
-        debugPrint('[AudioPlayer] Network verified. Streaming over network with LockCaching.');
-        audioSource = LockCachingAudioSource(
+        debugPrint('[AudioPlayer] Cache MISS: Streaming over standard network URI (Lockscreen compatible).');
+        audioSource = AudioSource.uri(
           Uri.parse(track.url),
-          cacheFile: cacheFile,
           tag: mediaItem,
         );
+
+        // Background caching: stream-save concurrently without proxy overhead
+        unawaited(_cacheTrackInBackground(track.url, cacheFile));
       }
 
       final duration = await player.setAudioSource(audioSource);
@@ -359,6 +341,28 @@ class JustAudioPlayerService implements IAudioPlayerService {
   Future<void> stop() async {
     await _player?.stop();
     _scheduleIdleRelease();
+  }
+
+  /// Silently caches the audio file in the background without localhost proxying
+  Future<void> _cacheTrackInBackground(String url, File cacheFile) async {
+    try {
+      final partFile = File('${cacheFile.path}.part');
+      if (await partFile.exists()) {
+        await partFile.delete();
+      }
+
+      final request = await HttpClient().getUrl(Uri.parse(url));
+      final response = await request.close();
+
+      if (response.statusCode == 200) {
+        final sink = partFile.openWrite();
+        await response.pipe(sink);
+        await partFile.rename(cacheFile.path);
+        debugPrint('[AudioPlayer] Background cache complete: ${cacheFile.path}');
+      }
+    } catch (e) {
+      debugPrint('[AudioPlayer] Non-fatal background cache error: $e');
+    }
   }
 
   @override

@@ -42,6 +42,13 @@
     "welcome_back": "مرحباً بعودتك!",
     "create_account": "إنشاء حساب جديد"
   },
+  "stories": {
+    "feedback_title": "وصلتك الحكاية؟",
+    "feedback_subtitle": "صوتك بيخليها توصل لناس أكثر.",
+    "like": "أعجبني",
+    "dislike": "لم يعجبني",
+    "voting_closed": "التصويت مغلق لهذه الحكاية"
+  },
   "home": {
     "title": "الرئيسية",
     "welcome": "مرحباً",

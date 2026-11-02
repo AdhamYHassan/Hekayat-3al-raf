@@ -26,6 +26,7 @@ import 'package:hekayat_3al_raf/features/stories/domain/repositories/i_story_rep
 import 'package:hekayat_3al_raf/features/stories/domain/usecases/get_stories_list_usecase.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/usecases/get_story_details_usecase.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/usecases/get_story_types_usecase.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/usecases/vote_story_usecase.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/bloc/stories_feed_cubit.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_cubit.dart';
 import 'package:hekayat_3al_raf/features/home/data/datasources/home_remote_data_source.dart';
@@ -111,6 +112,10 @@ void setupDependencyInjection() {
     () => GetStoryDetailsUseCase(getIt<IStoryRepository>()),
   );
 
+  getIt.registerLazySingleton<VoteStoryUseCase>(
+    () => VoteStoryUseCase(getIt<IStoryRepository>()),
+  );
+
   getIt.registerLazySingleton<GetStoriesListUseCase>(
     () => GetStoriesListUseCase(getIt<IStoryRepository>()),
   );
@@ -120,7 +125,10 @@ void setupDependencyInjection() {
   );
 
   getIt.registerFactory<StoryDetailsCubit>(
-    () => StoryDetailsCubit(getIt<GetStoryDetailsUseCase>()),
+    () => StoryDetailsCubit(
+      getIt<GetStoryDetailsUseCase>(),
+      getIt<VoteStoryUseCase>(),
+    ),
   );
 
   getIt.registerFactory<StoriesFeedCubit>(

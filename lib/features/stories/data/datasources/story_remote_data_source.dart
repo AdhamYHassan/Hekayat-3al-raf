@@ -21,6 +21,20 @@ class StoryRemoteDataSource implements IStoryRemoteDataSource {
   }
 
   @override
+  Future<StoryDetailsEntity> voteStory({
+    required String storyId,
+    required String value,
+  }) async {
+    final response = await _networkHelper.post(
+      ApiEndpoints.voteStory(storyId),
+      data: {'value': value},
+    );
+    final rawData = response.data as Map<String, dynamic>;
+    final dto = StoryDetailsResponseDto.fromJson(rawData);
+    return dto.data.toDomain();
+  }
+
+  @override
   Future<PaginatedStoriesEntity> getStories({
     int limit = 10,
     int offset = 0,

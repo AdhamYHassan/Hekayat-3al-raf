@@ -14,7 +14,7 @@ import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_docu
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_media_hero.dart'
     as hero;
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_player_card.dart';
-import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_rating_section.dart';
+import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_feedback_vote_section.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_video_player_card.dart';
 
 class StoryDetailsScreen extends StatelessWidget {
@@ -218,8 +218,8 @@ class _StoryDetailsView extends StatelessWidget {
 
                       SizedBox(height: 24.h),
 
-                      // Rating & Voting Section
-                      const StoryRatingSection(),
+                      // Interactive Feedback & Voting Section ("وصلتك الحكاية؟")
+                      const StoryFeedbackVoteSection(),
                     ],
                   );
                 },

@@ -42,6 +42,13 @@
     "welcome_back": "Welcome Back!",
     "create_account": "Create an Account"
   },
+  "stories": {
+    "feedback_title": "Did the story resonate?",
+    "feedback_subtitle": "Your voice helps it reach more people.",
+    "like": "Like",
+    "dislike": "Dislike",
+    "voting_closed": "Voting is closed for this story"
+  },
   "home": {
     "title": "Home",
     "welcome": "Welcome",

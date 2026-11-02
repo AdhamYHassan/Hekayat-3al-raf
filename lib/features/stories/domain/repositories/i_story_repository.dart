@@ -6,6 +6,11 @@ import 'package:hekayat_3al_raf/features/stories/domain/entities/story_type_enti
 abstract class IStoryRepository {
   Future<ApiResult<StoryDetailsEntity>> getStoryDetails(String storyId);
 
+  Future<ApiResult<StoryDetailsEntity>> voteStory({
+    required String storyId,
+    required String value,
+  });
+
   Future<ApiResult<PaginatedStoriesEntity>> getStories({
     int limit = 10,
     int offset = 0,
