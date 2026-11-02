@@ -2,6 +2,9 @@ class ApiEndpoints {
   // Use direct language prefix to eliminate 302 redirects and save 300-500ms network round-trip.
   static const String baseUrl = 'https://hekayat3alraf.com/ar/api/v1/mobile/';
   static const String home = 'home/';
+  static const String contact = 'contact/';
+  static const String login = 'auth/login/';
+  static const String register = 'auth/register/';
   static String storyDetails(String id) => 'stories/$id/';
   static String voteStory(String id) => 'stories/$id/vote/';
   static String ambassadorDetails(String slug) => 'ambassadors/$slug/';

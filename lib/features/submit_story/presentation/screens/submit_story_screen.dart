@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
+import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_state.dart';
+import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/draft_recovery_banner.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/story_type_card.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/submit_story_review_info_card.dart';
+import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/submit_story_step2_form.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/submit_story_stepper.dart';
 
 class SubmitStoryScreen extends StatelessWidget {
@@ -24,6 +29,25 @@ class SubmitStoryScreen extends StatelessWidget {
 
 class _SubmitStoryView extends StatelessWidget {
   const _SubmitStoryView();
+
+  void _navigateToForm(BuildContext context, StorySubmissionFormat format) {
+    final cubit = context.read<SubmitStoryCubit>();
+    cubit.selectFormat(format);
+    cubit.setStep(2);
+
+    context.push(
+      Routes.submitStoryForm,
+      extra: {
+        'format': format,
+        'cubit': cubit,
+      },
+    ).then((_) {
+      // Upon returning to main tab, restore step to 1 if user backed out
+      if (cubit.state.currentStep != 1) {
+        cubit.setStep(1);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,108 +93,127 @@ class _SubmitStoryView extends StatelessWidget {
                   child: SubmitStoryStepper(currentStep: state.currentStep),
                 ),
 
-                // 3. Section Title Indicator
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 18.w,
-                          height: 1.5.h,
-                          color: ColorManager.gold,
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          'اختار نوع الحكاية',
-                          style: GoogleFonts.ibmPlexSansArabic(
-                            color: ColorManager.gold,
-                            fontSize: 11.5.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                // 2.1 Recoverable Draft Banner
+                if (state.hasRecoverableDraft)
+                  SliverToBoxAdapter(
+                    child: DraftRecoveryBanner(
+                      draft: state.recoverableDraft!,
+                      onRestore: () {
+                        context.read<SubmitStoryCubit>().restoreDraft();
+                        final format = context.read<SubmitStoryCubit>().state.selectedFormat ??
+                            StorySubmissionFormat.written;
+                        _navigateToForm(context, format);
+                      },
+                      onDiscard: () => context.read<SubmitStoryCubit>().discardDraft(),
                     ),
                   ),
-                ),
 
-                // 4. Story Type Cards List
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
-                  sliver: SliverList.separated(
-                    itemCount: state.storyOptions.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 12.h),
-                    itemBuilder: (context, index) {
-                      final option = state.storyOptions[index];
-                      final isSelected = state.selectedFormat == option.format;
-                      return StoryTypeCard(
-                        option: option,
-                        isSelected: isSelected,
-                        onTap: () {
-                          context
-                              .read<SubmitStoryCubit>()
-                              .selectFormat(option.format);
-                        },
-                      );
-                    },
-                  ),
-                ),
-
-                // Dynamic Next Button when an option is selected
-                if (state.selectedFormat != null)
+                // 3. STEP 1: Select Story Format
+                if (state.currentStep == 1) ...[
+                  // Section Title Indicator
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 4.h),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            context.read<SubmitStoryCubit>().setStep(2);
-                          },
-                          borderRadius: BorderRadius.circular(30.r),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFFE8CB7D),
-                                  Color(0xFFC9A24B),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 18.w,
+                            height: 1.5.h,
+                            color: ColorManager.gold,
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            'اختار نوع الحكاية',
+                            style: GoogleFonts.ibmPlexSansArabic(
+                              color: ColorManager.gold,
+                              fontSize: 11.5.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Story Type Cards List
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+                    sliver: SliverList.separated(
+                      itemCount: state.storyOptions.length,
+                      separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                      itemBuilder: (context, index) {
+                        final option = state.storyOptions[index];
+                        final isSelected = state.selectedFormat == option.format;
+                        return StoryTypeCard(
+                          option: option,
+                          isSelected: isSelected,
+                          onTap: () => _navigateToForm(context, option.format),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Dynamic Next Button when an option is selected
+                  if (state.selectedFormat != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 4.h),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              _navigateToForm(context, state.selectedFormat!);
+                            },
+                            borderRadius: BorderRadius.circular(30.r),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFFE8CB7D),
+                                    Color(0xFFC9A24B),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(30.r),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 13.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'التالي',
+                                    style: GoogleFonts.alexandria(
+                                      color: ColorManager.primaryDark,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(width: 6.w),
+                                  Icon(
+                                    Icons.chevron_left_rounded,
+                                    color: ColorManager.primaryDark,
+                                    size: 18.sp,
+                                  ),
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(30.r),
-                            ),
-                            padding: EdgeInsets.symmetric(vertical: 13.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'التالي',
-                                  style: GoogleFonts.alexandria(
-                                    color: ColorManager.primaryDark,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(width: 6.w),
-                                Icon(
-                                  Icons.chevron_left_rounded,
-                                  color: ColorManager.primaryDark,
-                                  size: 18.sp,
-                                ),
-                              ],
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
 
-                // 5. Review Info Card & Bottom Margin
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 120.h),
-                    child: SubmitStoryReviewInfoCard(steps: state.reviewSteps),
+                  // Review Info Card & Bottom Margin
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 120.h),
+                      child: SubmitStoryReviewInfoCard(steps: state.reviewSteps),
+                    ),
                   ),
-                ),
+                ] else if (state.currentStep == 2 && state.selectedFormat != null) ...[
+                  // 4. STEP 2: Fill Details Form (Written / Video / Audio / Document)
+                  SliverToBoxAdapter(
+                    child: SubmitStoryStep2Form(format: state.selectedFormat!),
+                  ),
+                ],
               ],
             );
           },

@@ -12,6 +12,8 @@ class SharedPrefsHelper {
     _prefs = await SharedPreferences.getInstance();
   }
 
+  static SharedPreferences? get instance => _prefs;
+
   static Future<void> setFcmToken(String token) async {
     await _prefs?.setString(_fcmTokenKey, token);
   }

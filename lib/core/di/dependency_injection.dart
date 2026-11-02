@@ -1,5 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hekayat_3al_raf/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/auth/data/datasources/i_auth_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:hekayat_3al_raf/features/auth/domain/repositories/i_auth_repository.dart';
+import 'package:hekayat_3al_raf/features/auth/domain/usecases/login_usecase.dart';
+import 'package:hekayat_3al_raf/features/auth/domain/usecases/register_usecase.dart';
+import 'package:hekayat_3al_raf/features/auth/presentation/bloc/login_cubit.dart';
+import 'package:hekayat_3al_raf/features/auth/presentation/bloc/register_cubit.dart';
+import 'package:hekayat_3al_raf/features/contact/data/datasources/contact_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/contact/data/datasources/i_contact_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/contact/data/repositories/contact_repository_impl.dart';
+import 'package:hekayat_3al_raf/features/contact/domain/repositories/i_contact_repository.dart';
+import 'package:hekayat_3al_raf/features/contact/domain/usecases/submit_contact_message_usecase.dart';
+import 'package:hekayat_3al_raf/features/contact/presentation/bloc/contact_us_cubit.dart';
 import 'package:hekayat_3al_raf/core/network/dio_factory.dart';
 import 'package:hekayat_3al_raf/core/network/inetwork_helper.dart';
 import 'package:hekayat_3al_raf/core/network/network_helper.dart';
@@ -16,9 +30,15 @@ import 'package:hekayat_3al_raf/features/ambassadors/domain/usecases/get_ambassa
 import 'package:hekayat_3al_raf/features/ambassadors/domain/usecases/get_ambassadors_list_usecase.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassador_details_cubit.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassadors_list_cubit.dart';
+import 'package:hekayat_3al_raf/features/submit_story/data/datasources/i_submit_story_local_data_source.dart';
+import 'package:hekayat_3al_raf/features/submit_story/data/datasources/submit_story_local_data_source.dart';
 import 'package:hekayat_3al_raf/features/submit_story/data/repositories/submit_story_repository_impl.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/repositories/i_submit_story_repository.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/usecases/clear_story_draft_usecase.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/usecases/get_story_draft_usecase.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/usecases/save_story_draft_usecase.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
+import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
 import 'package:hekayat_3al_raf/features/stories/data/datasources/i_story_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/stories/data/datasources/story_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/stories/data/repositories/story_repository_impl.dart';
@@ -141,12 +161,79 @@ void setupDependencyInjection() {
   // ---------------------------------------------------------------------------
   // Submit Story Feature DI Setup
   // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<ISubmitStoryLocalDataSource>(
+    () => SubmitStoryLocalDataSource(SharedPrefsHelper.instance!),
+  );
+
   getIt.registerLazySingleton<ISubmitStoryRepository>(
-    () => const SubmitStoryRepositoryImpl(),
+    () => SubmitStoryRepositoryImpl(getIt<ISubmitStoryLocalDataSource>()),
+  );
+
+  getIt.registerLazySingleton<SaveStoryDraftUseCase>(
+    () => SaveStoryDraftUseCase(getIt<ISubmitStoryRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetStoryDraftUseCase>(
+    () => GetStoryDraftUseCase(getIt<ISubmitStoryRepository>()),
+  );
+
+  getIt.registerLazySingleton<ClearStoryDraftUseCase>(
+    () => ClearStoryDraftUseCase(getIt<ISubmitStoryRepository>()),
   );
 
   getIt.registerFactory<SubmitStoryCubit>(
-    () => SubmitStoryCubit(getIt<ISubmitStoryRepository>()),
+    () => SubmitStoryCubit(
+      getIt<ISubmitStoryRepository>(),
+      getIt<SaveStoryDraftUseCase>(),
+      getIt<GetStoryDraftUseCase>(),
+      getIt<ClearStoryDraftUseCase>(),
+    ),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Contact Us Feature DI Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<IContactRemoteDataSource>(
+    () => ContactRemoteDataSource(getIt<InetworkHelper>()),
+  );
+
+  getIt.registerLazySingleton<IContactRepository>(
+    () => ContactRepositoryImpl(getIt<IContactRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<SubmitContactMessageUseCase>(
+    () => SubmitContactMessageUseCase(getIt<IContactRepository>()),
+  );
+
+  getIt.registerFactory<ContactUsCubit>(
+    () => ContactUsCubit(getIt<SubmitContactMessageUseCase>()),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Auth Feature DI Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<IAuthRemoteDataSource>(
+    () => AuthRemoteDataSource(getIt<InetworkHelper>()),
+  );
+
+  getIt.registerLazySingleton<IAuthRepository>(
+    () => AuthRepositoryImpl(getIt<IAuthRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<LoginUseCase>(
+    () => LoginUseCase(getIt<IAuthRepository>()),
+  );
+
+  getIt.registerLazySingleton<RegisterUseCase>(
+    () => RegisterUseCase(getIt<IAuthRepository>()),
+  );
+
+  getIt.registerFactory<LoginCubit>(
+    () => LoginCubit(getIt<LoginUseCase>()),
+  );
+
+  getIt.registerFactory<RegisterCubit>(
+    () => RegisterCubit(getIt<RegisterUseCase>()),
   );
 
   // ---------------------------------------------------------------------------

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
+import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
 import 'package:hekayat_3al_raf/core/routing/app_router.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart'; // Uncomment when Firebase is configured
@@ -22,10 +23,15 @@ void main() async {
   // 2. EasyLocalization setup
   await EasyLocalization.ensureInitialized();
 
-  // 3. Force Global Portrait Orientation by default
+  // 3. Local Storage setup
+  await SharedPrefsHelper.init();
+
+  // 4. Force Global Portrait Orientation by default & White Status Bar icons
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   // 4. Dependency Injection (Service Locator)
   setupDependencyInjection();
@@ -73,6 +79,13 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
             // fontFamily: 'Cairo',
+            colorScheme: const ColorScheme.dark(
+              brightness: Brightness.dark,
+              surface: Color(0xFF220610),
+            ),
+            appBarTheme: const AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+            ),
           ),
 
           routerConfig: AppRouter.router,

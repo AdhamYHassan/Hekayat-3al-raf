@@ -16,6 +16,13 @@
 -keep class androidx.media3.** { *; }
 -dontwarn androidx.media3.**
 
+# 4. Record & File Picker
+-keep class com.llfbandit.record.** { *; }
+-dontwarn com.llfbandit.record.**
+
+-keep class com.mr.flutter.plugin.filepicker.** { *; }
+-dontwarn com.mr.flutter.plugin.filepicker.**
+
 -keep class android.support.v4.media.** { *; }
 -dontwarn android.support.v4.media.**
 

@@ -1,57 +1,104 @@
-# 📜 حكايات على الرف (Hekayat 3al Raf)
+# 📚 حكايات على الرف (Hekayat 3al Raf)
 
-> **منصة توثيق وأرشفة التاريخ الشفاهي والتراث الثقافي الحي.**
-
-تطبيق Flutter معماري متطور ومصمم للعمل بمعدل **60/120 FPS مقفل** على كافة الهواتف (بما فيها أجهزة أندرويد الاقتصادية 2GB-3GB RAM وهواتف iPhone القديمة) لخدمة أكثر من مليون مستخدم.
+> **منصة التراث الشفهي والحكايات العربية الأصيلة — مبنية على أحدث معايير هندسة البرمجيات (Clean Architecture) ومحسنة لتشغيل فائق النعومة (60/120 FPS) على جميع الأجهزة بمقياس 1M+ Scale.**
 
 ---
 
-## 🏗️ المعمارية والأنماط الهندسية (Architecture & Engineering)
+## 🏛️ المعمارية البرمجية (System Architecture)
 
-يتبع المشروع بدقة مبادئ **Clean Architecture** الصارمة مع فصل الطبقات:
-* **Presentation Layer:** واجهات مستخدم نقية خالية من الـ Business Logic، تدار حصرياً بواسطة **Cubit / Bloc** ومدعومة بـ `BlocSelector` و `RepaintBoundary` لتحقيق أعلى أداء لعرض الفريمات.
-* **Domain Layer:** نوات بيزنس نقية، Use Cases مستقلة تماماً، و Entities محصنة ضد التغييرات الخارجية ومحمية بـ `Equatable`.
-* **Data Layer:** تطبيق نمط الـ Repository Pattern، إدارة الـ Data Sources (Remote / Local / Mock)، وعزل استثناءات الشبكة.
+يعتمد التطبيق على معمارية **Clean Architecture** الصارمة مع مبادئ **SOLID**، حيث تنقسم الميزات (`Features`) إلى ثلاث طبقات معزولة:
 
----
-
-## 🎧 نظام الصوت المتطور (Audio Subsystem Architecture)
-
-تم بناء نظام تشغيل الصوت في التطبيق ليعمل كـ **Production-Grade Media Engine** مطابق لمعايير تطبيقات مثل Spotify و Audible:
-
-* **Smart Singleton with Virtual Lazy Resurrection:** إيقاف وتحرير محركات الصوت الأصلية (Native Decoders) تلقائياً عند خمول المستخدم لأكثر من 5 دقائق لتوفير البطارية والذاكرة، مع استعادة موضع الصوت والتراك فوراً وبدون أي كراش عند العودة للتشغيل.
-* **Dual-Stream Zero-Latency Audio Caching:** تشغيل لحظي للصوت من الإنترنت مع كتابة وتخزين الملف بالتوازي في مجلد الكاش المؤقت لضمان تشغيله أوفلاين في المرات القادمة وتوفير 100% من باقة المستخدم.
-* **Audio Focus & Becoming Noisy Handling:** إيقاف التشغيل فوراً عند فصل سماعات الرأس أو الـ AirPods لمنع الإحراج في الأماكن العامة، مع استئناف الصوت تلقائياً بعد انتهاء المكالمات الهاتفية.
-* **Lock Screen & Media Notification:** تكامل كامل مع `MPNowPlayingInfoCenter` على iOS و `ForegroundService (mediaPlayback)` على Android.
-* **Granular 120 FPS Rebuilds:** عزل شريط التمرير (Slider) عن الكارت الخارجي بواسطة `BlocSelector` و `buildWhen` الدقيقة.
-
-> 📖 **للاطلاع على التوثيق الهندسي والمعماري الكامل لنظام الصوت:**  
-> يرجى مراجعة [Audio Architecture Guide](docs/AUDIO_ARCHITECTURE.md).
-
----
-
-## 🎬 نظام الفيديو السينمائي المتطور (Video Subsystem Architecture)
-
-تم بناء نظام تشغيل الفيديو ليعمل بكفاءة فائقة على أجهزة الـ 2GB RAM وبدون استنزاف كارت الشاشة (VRAM):
-
-* **Single-Instance GPU Factory & Auto-Disposal:** إدارة صارمة لذاكرة الـ Texture Surface، حيث يتم تحرير معالج الفيديو وموارده فور مغادرة الشاشة لمنع الـ Out-Of-Memory (OOM) Crashes.
-* **Audio/Video Coexistence:** إيقاف مشغل الصوت في الخلفية تلقائياً عند تشغيل أي مقطع فيديو لمنع تداخل الأصوات.
-* **Bulletproof Fullscreen & Dual-Platform Rotation:** دعم كامل لوضع الشاشة الكاملة الأفقي (Landscape) مع حماية ضد أخطاء iOS 16 (`UISceneErrorDomain Code=101`)، واستعادة الوضع الرأسي (Portrait) بشكل متزامن وآمن عبر `PopScope`.
-* **Legacy Device & Network Compatibility:** إضافة `network_security_config.xml` لحل مشكلات الشهادات منتهية الصلاحية (SSL Handshake) على هواتف أندرويد القديمة مثل Huawei GR5.
-* **Heritage Glassmorphism UI:** تصميم أزرار زجاجية فخمة باللون الماروني والذهبي، مع أبعاد دائرية نقية 1:1 في الوضع الأفقي، وخاصية الإخفاء التلقائي بعد 3 ثوانٍ.
-
-> 📖 **للاطلاع على التوثيق الهندسي والمعماري الكامل لنظام الفيديو:**  
-> يرجى مراجعة [Video Architecture Guide](docs/VIDEO_ARCHITECTURE.md).
+```
+[Presentation Layer]
+  ├── Screens (Pure Rendering & Interactions)
+  ├── Widgets (Isolated RepaintBoundaries & BlocSelectors)
+  └── BLoC / Cubits (State Machine & Use Case Consumers only)
+         │
+         ▼ (Calls Interactors)
+[Domain Layer]
+  ├── Entities (Immutable Domain Models extending Equatable)
+  ├── Use Cases (Single Responsibility Business Workflows)
+  └── Repositories Contract (Abstract Interfaces)
+         │
+         ▼ (Dependency Inversion via GetIt)
+[Data Layer]
+  ├── Repositories Implementation (Caching, Error Mapping & Fallbacks)
+  ├── Data Sources (Network APIs via Dio & Local Cache)
+  └── DTOs / Models (Safe JSON Serialization)
+```
 
 ---
 
-## 📱 التقنيات المستخدمة (Tech Stack)
+## ⚡ أبرز الركائز الهندسية (Engineering Highlights)
 
-* **Framework:** Flutter 3.x (Dart 3+)
-* **State Management:** `flutter_bloc` / `bloc` (No Freezed, No code generation)
-* **Service Locator:** `get_it`
-* **Routing:** `go_router`
-* **Media & Playback:** `just_audio`, `just_audio_background`, `audio_session`, `video_player`
-* **Responsive Layout:** `flutter_screenutil`
-* **Typography:** `google_fonts` (Alexandria, IBM Plex Sans Arabic, Aref Ruqaa)
-* **Localization:** `easy_localization` (دعم عربي وإنجليزي بدون أي Hardcoded Strings)
+### 1. مشغل الصوت الاحترافي (Background Audio Engine)
+- **Zero-Latency Playback:** تشغيل فوري مع دعم كامل للتحكم في الصوت من مركز الإشعارات وشاشة القفل (`Lock Screen & Notification Center MediaSession`).
+- **Smart Singleton with Virtual Resurrection:**
+  - إيقاف وتحرير وحدات فك الترميز الأصلية (`Native Decoders`) تلقائياً بعد 5 دقائق من الخمول لتوفير طاقة البطارية والـ RAM.
+  - استعادة الحالة وموضع التشغيل فور نقر المستخدم مرة أخرى بدون أي انهيار.
+- **Background Stream Caching:** تحميل وحفظ المسار الصوتي تدريجياً في الذاكرة المؤقتة ليعمل 100% دون إنترنت في المرات القادمة.
+
+### 2. محرر الحكايات الطويلة فائق الأداء (High-Performance Long-Form Editor)
+- **Zero Keystroke Lag:** التخلص التام من تأخير الكتابة عبر فصل مدخلات لوحة المفاتيح عن شجرة الـ Widgets واستخدام **Debounced Autosave (1.2s)**.
+- **وضع التركيز (Distraction-Free Zen Mode ✍️):** إمكانية فتح محرر ملء الشاشة للكتابة المستمرة بدون أي مشتتات بصرية.
+- **Granular Leaf Metrics:** حساب عدد الكلمات وزمن القراءة التقديري عبر `ValueNotifier` معزول دون التسبب في إعادة رسم الحقول أو النصوص المحيطة (`RepaintBoundary`).
+
+### 3. التفاعل والتصويت التفاؤلي (Optimistic UI Feedback)
+- **انعدام زمن الاستجابة (Zero UI Latency):** تحديث أرقام الإعجاب وعدم الإعجاب وحالة الزر لحظياً عند النقر.
+- **Graceful Rollback:** تراجع ناعم للحالة السابقة تلقائياً في حالة انقطاع اتصال الإنترنت دون إزعاج المستخدم.
+
+---
+
+## 📱 إعداد وتجهيز بيئات التشغيل (Platforms Setup)
+
+### 🍏 iOS (100% Swift Package Manager)
+- المشروع معد ليعمل **100% بواسطة Apple Swift Package Manager (SPM)** الصافي.
+- **لا يحتاج إلى تثبيت CocoaPods نهائياً**، مما يقضي على مشاكل Ruby وأذونات النظام.
+- متوافق مع نظام أبل لإدارة الحزم المعتمد في أحدث إصدارات Xcode و Flutter.
+
+### 🤖 Android (Production & Low-End Optimization)
+- **R8 / ProGuard Protection:** ملف `proguard-rules.pro` معد بدقة لحماية كلاسات المشغل والميديا (`com.ryanheise.audioservice`, `ExoPlayer`, `Media3`) من الحذف في وضع الإنتاج (`release`).
+- **Foreground Service:** مهيأ كـ `mediaPlayback` وفقاً لأحدث سياسات متجر Google Play.
+
+---
+
+## 🚀 البدء والتشغيل (Getting Started)
+
+### 1. تثبيت الاعتماديات:
+```bash
+flutter pub get
+```
+
+### 2. فحص جودة الكود:
+```bash
+flutter analyze lib/
+```
+
+### 3. تشغيل التطبيق (Debug):
+```bash
+flutter run
+```
+
+### 4. بناء نسخة الإنتاج (Android Release):
+```bash
+flutter build apk --release
+```
+
+---
+
+## 📂 بنية المشروع (Project Structure)
+
+```text
+lib/
+├── core/
+│   ├── di/               # GetIt Service Locator Registration
+│   ├── media/            # Audio & Video Native Services & Cubits
+│   ├── network/          # Dio Factory, Failure contracts, Endpoints
+│   ├── routing/          # GoRouter with custom smooth transitions
+│   └── theming/          # Brand Colors & Typography
+└── features/
+    ├── home/             # Featured & Top Stories, Ambassadors BFF API
+    ├── stories/          # Feed, Details, Audio Player, Optimistic Voting
+    ├── ambassadors/      # Ambassadors Profiles & Cultural Archives
+    └── submit_story/     # Multi-step Story Creator with Long-form Zen Editor
+```

@@ -20,18 +20,17 @@ class StoryFeedbackVoteSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-        padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
-        decoration: BoxDecoration(
-          color: ColorManager.primaryLight.withValues(alpha: 0.35),
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: ColorManager.gold.withValues(alpha: 0.15),
-          ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+      padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
+      decoration: BoxDecoration(
+        color: ColorManager.primaryLight.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: ColorManager.gold.withValues(alpha: 0.15),
         ),
-        child: Column(
+      ),
+      child: Column(
           children: [
             // Title: وصلتك الحكاية؟
             Text(
@@ -111,8 +110,7 @@ class StoryFeedbackVoteSection extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

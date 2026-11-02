@@ -1,8 +1,13 @@
+import 'package:hekayat_3al_raf/features/submit_story/data/datasources/i_submit_story_local_data_source.dart';
+import 'package:hekayat_3al_raf/features/submit_story/data/models/story_draft_model.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/entities/story_draft_entity.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/repositories/i_submit_story_repository.dart';
 
 class SubmitStoryRepositoryImpl implements ISubmitStoryRepository {
-  const SubmitStoryRepositoryImpl();
+  final ISubmitStoryLocalDataSource _localDataSource;
+
+  const SubmitStoryRepositoryImpl(this._localDataSource);
 
   @override
   List<StoryTypeOptionEntity> getStoryTypeOptions() {
@@ -51,5 +56,22 @@ class SubmitStoryRepositoryImpl implements ISubmitStoryRepository {
       ),
     ];
   }
+
+  @override
+  Future<void> saveDraft(StoryDraftEntity draft) async {
+    final model = StoryDraftModel.fromEntity(draft);
+    await _localDataSource.saveDraft(model);
+  }
+
+  @override
+  Future<StoryDraftEntity?> getDraft() async {
+    return await _localDataSource.getDraft();
+  }
+
+  @override
+  Future<void> clearDraft() async {
+    await _localDataSource.clearDraft();
+  }
 }
+
 

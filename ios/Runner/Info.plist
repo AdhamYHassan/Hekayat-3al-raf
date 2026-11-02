@@ -75,5 +75,11 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>نحتاج إلى إذن استخدام الميكروفون لتسجيل الحكاية الصوتية الخاصة بك.</string>
 </dict>
 </plist>

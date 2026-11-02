@@ -5,6 +5,7 @@ class SecureStorageHelper {
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
   static const String _tokenKey = 'auth_token';
+  static const String _refreshTokenKey = 'refresh_token';
   static const String _phoneNumber = 'phone_number';
   static const String _userRoleKey = 'user_role';
   static const String _userNameKey = 'user_name';
@@ -20,6 +21,18 @@ class SecureStorageHelper {
 
   static Future<void> clearToken() async {
     await _storage.delete(key: _tokenKey);
+  }
+
+  static Future<void> saveRefreshToken(String token) async {
+    await _storage.write(key: _refreshTokenKey, value: token);
+  }
+
+  static Future<String?> getRefreshToken() async {
+    return await _storage.read(key: _refreshTokenKey);
+  }
+
+  static Future<void> clearRefreshToken() async {
+    await _storage.delete(key: _refreshTokenKey);
   }
 
   static Future<void> savePhoneNumber(String phoneNumber) async {

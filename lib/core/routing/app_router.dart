@@ -5,10 +5,16 @@ import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/media/audio/cubit/audio_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/screens/ambassador_details_screen.dart';
+import 'package:hekayat_3al_raf/features/auth/presentation/screens/login_screen.dart';
+import 'package:hekayat_3al_raf/features/auth/presentation/screens/register_screen.dart';
+import 'package:hekayat_3al_raf/features/contact/presentation/screens/contact_us_screen.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
 import 'package:hekayat_3al_raf/features/splash/presentation/splash_screen.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/screens/story_details_screen.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
+import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
+import 'package:hekayat_3al_raf/features/submit_story/presentation/screens/submit_story_form_subscreen.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
@@ -86,6 +92,53 @@ class AppRouter {
             child: AmbassadorDetailsScreen(ambassadorId: ambassadorId),
           );
         },
+      ),
+      GoRoute(
+        path: Routes.submitStoryForm,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final format = extra?['format'] as StorySubmissionFormat? ??
+              StorySubmissionFormat.written;
+          final cubit = extra?['cubit'] as SubmitStoryCubit?;
+
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: cubit != null
+                ? BlocProvider<SubmitStoryCubit>.value(
+                    value: cubit,
+                    child: SubmitStoryFormSubscreen(format: format),
+                  )
+                : BlocProvider<SubmitStoryCubit>(
+                    create: (context) => getIt<SubmitStoryCubit>(),
+                    child: SubmitStoryFormSubscreen(format: format),
+                  ),
+          );
+        },
+      ),
+      GoRoute(
+        path: Routes.contactUs,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: const ContactUsScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.login,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: const LoginScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.register,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: const RegisterScreen(),
+        ),
       ),
     ],
   );

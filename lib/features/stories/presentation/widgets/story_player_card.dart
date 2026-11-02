@@ -52,16 +52,15 @@ class StoryPlayerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: ColorManager.primaryLight.withValues(alpha: 0.4),
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: ColorManager.gold.withValues(alpha: 0.15)),
-        ),
-        child: Column(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: ColorManager.primaryLight.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: ColorManager.gold.withValues(alpha: 0.15)),
+      ),
+      child: Column(
           children: [
             Row(
               children: [
@@ -106,8 +105,7 @@ class StoryPlayerCard extends StatelessWidget {
             const _AudioStatusFooter(),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 
