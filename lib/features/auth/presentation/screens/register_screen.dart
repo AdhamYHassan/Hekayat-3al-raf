@@ -127,13 +127,13 @@ class _RegisterViewState extends State<_RegisterView> {
     if (!_validateForm()) return;
 
     context.read<RegisterCubit>().register(
-          name: _nameController.text,
-          phone: _phoneController.text,
-          email: _emailController.text,
-          password: _passwordController.text,
-          confirmPassword: _confirmPasswordController.text,
-          agreedToTerms: _agreedToTerms,
-        );
+      name: _nameController.text,
+      phone: _phoneController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+      confirmPassword: _confirmPasswordController.text,
+      agreedToTerms: _agreedToTerms,
+    );
   }
 
   @override
@@ -261,7 +261,9 @@ class _RegisterViewState extends State<_RegisterView> {
                           textAlign: TextAlign.center,
                           style: GoogleFonts.ibmPlexSansArabic(
                             fontSize: 13.sp,
-                            color: ColorManager.paper200.withValues(alpha: 0.65),
+                            color: ColorManager.paper200.withValues(
+                              alpha: 0.65,
+                            ),
                             height: 1.5,
                           ),
                         ),
@@ -395,14 +397,20 @@ class _RegisterViewState extends State<_RegisterView> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 14.w, vertical: 10.h),
+                                horizontal: 14.w,
+                                vertical: 10.h,
+                              ),
                               decoration: BoxDecoration(
-                                color: ColorManager.primary.withValues(alpha: 0.30),
+                                color: ColorManager.primary.withValues(
+                                  alpha: 0.30,
+                                ),
                                 borderRadius: BorderRadius.circular(10.r),
                                 border: Border.all(
                                   color: _termsError != null
                                       ? ColorManager.error
-                                      : ColorManager.gold.withValues(alpha: 0.08),
+                                      : ColorManager.gold.withValues(
+                                          alpha: 0.08,
+                                        ),
                                 ),
                               ),
                               child: Row(
@@ -420,7 +428,9 @@ class _RegisterViewState extends State<_RegisterView> {
                                         materialTapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(4.r),
+                                          borderRadius: BorderRadius.circular(
+                                            4.r,
+                                          ),
                                         ),
                                         onChanged: (val) {
                                           setState(() {
@@ -446,18 +456,20 @@ class _RegisterViewState extends State<_RegisterView> {
                                         children: [
                                           TextSpan(
                                             text: 'الشروط والأحكام',
-                                            style: GoogleFonts.ibmPlexSansArabic(
-                                              color: ColorManager.goldLight,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style:
+                                                GoogleFonts.ibmPlexSansArabic(
+                                                  color: ColorManager.goldLight,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                           ),
                                           const TextSpan(text: ' و'),
                                           TextSpan(
                                             text: 'سياسة الخصوصية',
-                                            style: GoogleFonts.ibmPlexSansArabic(
-                                              color: ColorManager.goldLight,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            style:
+                                                GoogleFonts.ibmPlexSansArabic(
+                                                  color: ColorManager.goldLight,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -514,8 +526,8 @@ class _RegisterViewState extends State<_RegisterView> {
                                           strokeWidth: 2,
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
-                                            ColorManager.primaryDark,
-                                          ),
+                                                ColorManager.primaryDark,
+                                              ),
                                         ),
                                       )
                                     else ...[
@@ -661,8 +673,10 @@ class _RegisterViewState extends State<_RegisterView> {
                 fontSize: 13.5.sp,
               ),
               border: InputBorder.none,
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 14.w, vertical: 13.h),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 14.w,
+                vertical: 13.h,
+              ),
             ),
           ),
         ),
