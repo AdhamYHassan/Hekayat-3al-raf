@@ -11,6 +11,7 @@ class ApiEndpoints {
   static String ambassadors({int limit = 10, int offset = 0}) =>
       'ambassadors/?limit=$limit&offset=$offset';
   static const String storyTypes = 'stories/types/';
+  static const String submitStory = 'stories/submit/';
   static String stories({
     int limit = 10,
     int offset = 0,

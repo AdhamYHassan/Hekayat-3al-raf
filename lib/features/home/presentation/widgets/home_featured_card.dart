@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -81,7 +82,7 @@ class HomeFeaturedCard extends StatelessWidget {
                             Icon(CupertinoIcons.headphones, size: 12.sp, color: ColorManager.goldLight),
                             SizedBox(width: 4.w),
                             Text(
-                              'صوتية',
+                              'stories.type_audio'.tr(),
                               style: GoogleFonts.ibmPlexSansArabic(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w500,
@@ -139,7 +140,7 @@ class HomeFeaturedCard extends StatelessWidget {
                                   Icon(CupertinoIcons.eye, size: 13.sp, color: ColorManager.paper400),
                                   SizedBox(width: 4.w),
                                   Text(
-                                    '٤٨٫٢ ألف',
+                                    '48.2 ${'stories.thousand'.tr()}',
                                     style: GoogleFonts.ibmPlexSansArabic(
                                       fontSize: 11.sp,
                                       color: ColorManager.paper400,
@@ -149,7 +150,7 @@ class HomeFeaturedCard extends StatelessWidget {
                                   Icon(CupertinoIcons.star_fill, size: 13.sp, color: ColorManager.gold),
                                   SizedBox(width: 4.w),
                                   Text(
-                                    '٤٫٦',
+                                    '4.6',
                                     style: GoogleFonts.ibmPlexSansArabic(
                                       fontSize: 11.sp,
                                       color: ColorManager.paper400,

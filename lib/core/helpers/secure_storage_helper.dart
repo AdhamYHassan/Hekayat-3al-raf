@@ -10,6 +10,15 @@ class SecureStorageHelper {
   static const String _userRoleKey = 'user_role';
   static const String _userNameKey = 'user_name';
   static const String _userEmailKey = 'user_email';
+  static const String _deviceIdKey = 'device_id';
+
+  static Future<void> saveDeviceId(String deviceId) async {
+    await _storage.write(key: _deviceIdKey, value: deviceId);
+  }
+
+  static Future<String?> getDeviceId() async {
+    return await _storage.read(key: _deviceIdKey);
+  }
 
   static Future<void> saveToken(String token) async {
     await _storage.write(key: _tokenKey, value: token);

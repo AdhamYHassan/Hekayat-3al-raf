@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,13 +30,13 @@ import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 class LongFormStoryEditorField extends StatefulWidget {
   final TextEditingController controller;
   final ValueChanged<String> onDebouncedChanged;
-  final String hintText;
+  final String? hintText;
 
   const LongFormStoryEditorField({
     super.key,
     required this.controller,
     required this.onDebouncedChanged,
-    this.hintText = 'اكتب حكايتك هنا...',
+    this.hintText,
   });
 
   @override
@@ -136,7 +137,9 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                             ),
                             SizedBox(width: 5.w),
                             Text(
-                              isSaved ? 'تم الحفظ تلقائياً' : 'جاري الحفظ...',
+                              isSaved
+                                  ? 'submit.editor.saved_auto'.tr()
+                                  : 'submit.editor.saving'.tr(),
                               style: GoogleFonts.ibmPlexSansArabic(
                                 fontSize: 10.5.sp,
                                 color: isSaved
@@ -163,7 +166,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                         child: Row(
                           children: [
                             Text(
-                              'وضع التركيز',
+                              'submit.editor.focus_mode'.tr(),
                               style: GoogleFonts.ibmPlexSansArabic(
                                 fontSize: 11.sp,
                                 color: ColorManager.gold,
@@ -197,7 +200,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                 ),
                 cursorColor: ColorManager.gold,
                 decoration: InputDecoration(
-                  hintText: widget.hintText,
+                  hintText: widget.hintText ?? 'submit.form.story_hint'.tr(),
                   hintStyle: GoogleFonts.ibmPlexSansArabic(
                     fontSize: 13.5.sp,
                     color: ColorManager.paper400.withValues(alpha: 0.45),
@@ -226,7 +229,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '$words كلمة',
+                          'submit.editor.words_count'.tr(args: [words.toString()]),
                           style: GoogleFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper300.withValues(
@@ -237,7 +240,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                         ),
                         Text(
                           words > 0
-                              ? 'قراءة في ~$readingTimeMinutes دقيقة'
+                              ? 'submit.editor.reading_time'.tr(args: [readingTimeMinutes.toString()])
                               : '',
                           style: GoogleFonts.ibmPlexSansArabic(
                             fontSize: 10.5.sp,
@@ -286,7 +289,9 @@ class _ZenFullscreenEditor extends StatelessWidget {
                         valueListenable: isAutosavedNotifier,
                         builder: (context, isSaved, _) {
                           return Text(
-                            isSaved ? 'تم الحفظ تلقائياً ✓' : 'جاري الحفظ...',
+                            isSaved
+                                ? 'submit.editor.saved_auto'.tr()
+                                : 'submit.editor.saving'.tr(),
                             style: GoogleFonts.ibmPlexSansArabic(
                               fontSize: 11.5.sp,
                               color: ColorManager.gold.withValues(alpha: 0.85),
@@ -304,7 +309,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                       color: ColorManager.paper100,
                     ),
                     label: Text(
-                      'خروج من وضع التركيز',
+                      'submit.editor.exit_focus_mode'.tr(),
                       style: GoogleFonts.ibmPlexSansArabic(
                         fontSize: 12.sp,
                         color: ColorManager.paper100,
@@ -333,7 +338,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                   ),
                   cursorColor: ColorManager.gold,
                   decoration: InputDecoration(
-                    hintText: 'ابدأ بسرد الحكاية بهدوء...',
+                    hintText: 'submit.editor.deep_dive_hint'.tr(),
                     hintStyle: GoogleFonts.ibmPlexSansArabic(
                       fontSize: 14.5.sp,
                       color: ColorManager.paper400.withValues(alpha: 0.4),
@@ -357,7 +362,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '$words كلمة مكتوبة',
+                        'submit.editor.words_written'.tr(args: [words.toString()]),
                         style: GoogleFonts.ibmPlexSansArabic(
                           fontSize: 12.sp,
                           color: ColorManager.gold,

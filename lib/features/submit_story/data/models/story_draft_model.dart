@@ -9,6 +9,8 @@ class StoryDraftModel extends StoryDraftEntity {
     required super.body,
     required super.format,
     required super.isAnonymous,
+    super.recordedAudioPath,
+    super.recordingDurationSeconds = 0,
     required super.lastSavedAt,
   });
 
@@ -20,6 +22,8 @@ class StoryDraftModel extends StoryDraftEntity {
       body: entity.body,
       format: entity.format,
       isAnonymous: entity.isAnonymous,
+      recordedAudioPath: entity.recordedAudioPath,
+      recordingDurationSeconds: entity.recordingDurationSeconds,
       lastSavedAt: entity.lastSavedAt,
     );
   }
@@ -32,6 +36,8 @@ class StoryDraftModel extends StoryDraftEntity {
       body: json['body'] as String? ?? '',
       format: json['format'] as String? ?? 'written',
       isAnonymous: json['is_anonymous'] as bool? ?? false,
+      recordedAudioPath: json['recorded_audio_path'] as String?,
+      recordingDurationSeconds: json['recording_duration_seconds'] as int? ?? 0,
       lastSavedAt: json['last_saved_at'] != null
           ? DateTime.tryParse(json['last_saved_at'] as String) ?? DateTime.now()
           : DateTime.now(),
@@ -46,6 +52,8 @@ class StoryDraftModel extends StoryDraftEntity {
       'body': body,
       'format': format,
       'is_anonymous': isAnonymous,
+      'recorded_audio_path': recordedAudioPath,
+      'recording_duration_seconds': recordingDurationSeconds,
       'last_saved_at': lastSavedAt.toIso8601String(),
     };
   }
@@ -62,4 +70,3 @@ class StoryDraftModel extends StoryDraftEntity {
     }
   }
 }
-

@@ -43,6 +43,31 @@
     "create_account": "Create an Account"
   },
   "stories": {
+    "title": "Stories",
+    "all": "All",
+    "search_hint": "Search for a story...",
+    "content_type": "Content Type",
+    "story_type": "Category",
+    "sort_latest": "Latest",
+    "sort_liked": "Most Liked",
+    "sort_top": "Top Rated",
+    "sort_viewed": "Most Viewed",
+    "type_text": "Written",
+    "type_audio": "Audio",
+    "type_video": "Visual",
+    "type_document": "Document",
+    "type_visual": "Video",
+    "stories_count": "{} Stories",
+    "thousand": "K",
+    "no_stories_match": "No stories matching your search or filters",
+    "load_error": "Failed to load stories",
+    "details_load_error": "Failed to load story details",
+    "video_load_error": "Failed to load video",
+    "audio_offline_error": "Cannot play audio without internet connection",
+    "audio_playing": "Playing now",
+    "audio_loading": "Loading...",
+    "audio_tap_to_play": "Tap to listen",
+    "rate_story": "Rate Story",
     "feedback_title": "Did the story resonate?",
     "feedback_subtitle": "Your voice helps it reach more people.",
     "like": "Like",
@@ -77,10 +102,19 @@
     "theme": "Theme",
     "dark_mode": "Dark Mode",
     "light_mode": "Light Mode",
-    "privacy_policy": "Privacy Policy",
-    "terms_conditions": "Terms & Conditions",
-    "about_us": "About Us",
+    "about_us": "About the Platform",
+    "about_us_sub": "Learn about the mission and vision",
     "contact_us": "Contact Us",
+    "contact_us_sub": "Question, suggestion, or idea",
+    "privacy_policy": "Privacy Policy",
+    "privacy_policy_sub": "How we protect your data",
+    "terms_conditions": "Terms & Conditions",
+    "terms_conditions_sub": "A simple agreement between us",
+    "menu_section": "Menu",
+    "language_section": "Language",
+    "profile": "Profile",
+    "profile_sub": "My account, my stories, my questions",
+    "footer_version": "Hekayat 3al Raf · Mobile Preview",
     "change_password": "Change Password"
   },
   "validation": {
@@ -88,7 +122,16 @@
     "invalid_email": "Please enter a valid email address",
     "invalid_phone": "Please enter a valid phone number",
     "password_too_short": "Password must be at least 6 characters",
-    "passwords_do_not_match": "Passwords do not match"
+    "passwords_do_not_match": "Passwords do not match",
+    "title_required": "Please enter the story title",
+    "author_required": "Please enter the narrator/author name",
+    "summary_required": "Please provide a brief summary of the story",
+    "body_required": "Please enter your story text",
+    "audio_required": "Please record your audio story first",
+    "video_required": "Please choose a video file",
+    "document_required": "Please select a document file (PDF or Word)",
+    "guest_name_required": "Please enter your name as a guest",
+    "guest_phone_required": "Please enter your mobile phone number"
   },
   "errors": {
     "something_went_wrong": "Something went wrong. Please try again.",
@@ -107,5 +150,74 @@
     "story_document": "Story Document",
     "share_document": "Share Document",
     "save_to_device": "Save to Device"
+  },
+  "submit": {
+    "title": "Tell Your Story",
+    "subtitle": "Every experience deserves to be heard. Choose your preferred format, and we'll deliver it to those who need to hear it.",
+    "choose_type": "Choose Story Format",
+    "next": "Next",
+    "prev": "Previous",
+    "review": "Review",
+    "back": "Back",
+    "anonymous_toggle": "I agree to show my name and allowed details with the story",
+    "anonymous_hint": "Will be published as 'Anonymous'",
+    "stepper": {
+      "step1": "Choose Format",
+      "step2": "Review",
+      "step3": "Confirm & Send"
+    },
+    "types": {
+      "written": "Written Narrative",
+      "audio": "Audio Story",
+      "video": "Visual / Video Story",
+      "document": "Document & Manuscript"
+    },
+    "form": {
+      "title_label": "Story Title",
+      "title_hint": "Enter story title",
+      "author_label": "Author Name",
+      "author_hint": "Enter your name",
+      "description_label": "Brief Summary",
+      "description_hint": "Write a brief description of the story",
+      "story_label": "Write Your Story",
+      "story_hint": "Write your story here...",
+      "audio_label": "Voice Recording",
+      "file_label": "Attached File",
+      "choose_file": "Select file...",
+      "cover_label": "Cover Photo (Optional)",
+      "choose_image": "Select photo..."
+    },
+    "editor": {
+      "focus_mode": "Focus Mode",
+      "exit_focus_mode": "Exit Focus Mode",
+      "saved_auto": "Automatically saved ✓",
+      "saving": "Saving...",
+      "words_count": "{} words",
+      "words_written": "{} words written",
+      "reading_time": "Read time ~{} min",
+      "deep_dive_hint": "Begin narrating calmly..."
+    },
+    "recorder": {
+      "permission_required": "Please grant microphone permission to begin recording.",
+      "start_prompt": "Start Recording Your Story",
+      "start_subtitle": "Record comfortably, pause, resume, and review anytime.",
+      "recording_now": "Recording in progress...",
+      "paused": "Recording paused",
+      "save_recording": "Save Recording",
+      "ready_for_review": "Audio recording ready for review",
+      "preview_title": "Audio Recording Preview",
+      "draft_narrator": "Story Draft",
+      "re_record": "Re-record"
+    },
+    "draft": {
+      "unnamed": "Untitled Draft",
+      "banner_title": "You have an autosaved draft",
+      "banner_body": "Your previous story '{}' is still preserved. You can restore and complete it immediately.",
+      "restore": "Restore Draft",
+      "discard": "Discard Draft"
+    },
+    "review_info": {
+      "title": "How do we review stories?"
+    }
   }
 }

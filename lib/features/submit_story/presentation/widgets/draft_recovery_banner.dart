@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +21,7 @@ class DraftRecoveryBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = draft.title.trim().isNotEmpty
         ? '«${draft.title.trim()}»'
-        : 'مسودة غير معنونة';
+        : 'submit.draft.unnamed'.tr();
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -46,7 +47,7 @@ class DraftRecoveryBanner extends StatelessWidget {
               SizedBox(width: 8.w),
               Expanded(
                 child: Text(
-                  'لديك مسودة محفوظة تلقائياً',
+                  'submit.draft.banner_title'.tr(),
                   style: GoogleFonts.alexandria(
                     color: ColorManager.paper100,
                     fontSize: 13.sp,
@@ -69,7 +70,7 @@ class DraftRecoveryBanner extends StatelessWidget {
           ),
           SizedBox(height: 6.h),
           Text(
-            'حكايتك السابقة $title لا تزال محفوظة، يمكنك استعادتها وإكمالها فوراً.',
+            'submit.draft.banner_body'.tr(args: [title]),
             style: GoogleFonts.ibmPlexSansArabic(
               color: ColorManager.paper200.withValues(alpha: 0.75),
               fontSize: 11.5.sp,
@@ -84,7 +85,7 @@ class DraftRecoveryBanner extends StatelessWidget {
                   onPressed: onRestore,
                   icon: Icon(Icons.restore_page_rounded, size: 16.sp, color: ColorManager.primaryDark),
                   label: Text(
-                    'استعادة المسودة',
+                    'submit.draft.restore'.tr(),
                     style: GoogleFonts.alexandria(
                       color: ColorManager.primaryDark,
                       fontSize: 12.sp,
@@ -108,7 +109,7 @@ class DraftRecoveryBanner extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                 ),
                 child: Text(
-                  'تجاهل المسودة',
+                  'submit.draft.discard'.tr(),
                   style: GoogleFonts.ibmPlexSansArabic(
                     color: ColorManager.paper200.withValues(alpha: 0.6),
                     fontSize: 11.5.sp,

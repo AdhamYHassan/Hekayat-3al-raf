@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -274,7 +275,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                       'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                       height: 38.h,
                       errorBuilder: (context, error, stackTrace) => Text(
-                        'حكايات على الرف',
+                        'app_name'.tr(),
                         style: GoogleFonts.arefRuqaa(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w700,

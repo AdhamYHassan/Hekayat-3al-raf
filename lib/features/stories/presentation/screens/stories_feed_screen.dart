@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -96,7 +97,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                         child: Text(
-                          '${state.totalCount} حكاية',
+                          'stories.stories_count'.tr(args: [state.totalCount.toString()]),
                           style: GoogleFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper400,
@@ -116,7 +117,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              state.errorMessage ?? 'تعذر تحميل الحكايات',
+                              state.errorMessage ?? 'stories.load_error'.tr(),
                               style: GoogleFonts.ibmPlexSansArabic(
                                 color: ColorManager.paper200,
                                 fontSize: 14.sp,
@@ -127,7 +128,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                               onPressed: () => context.read<StoriesFeedCubit>().loadInitialData(),
                               style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
                               child: Text(
-                                'إعادة المحاولة',
+                                'common.retry'.tr(),
                                 style: GoogleFonts.alexandria(color: ColorManager.primaryDark),
                               ),
                             ),
@@ -140,7 +141,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                       hasScrollBody: false,
                       child: Center(
                         child: Text(
-                          'لا توجد حكايات مطابقة للبحث أو التصفية',
+                          'stories.no_stories_match'.tr(),
                           style: GoogleFonts.ibmPlexSansArabic(
                             color: ColorManager.paper300,
                             fontSize: 13.sp,

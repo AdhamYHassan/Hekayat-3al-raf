@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -86,7 +87,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      state.errorMessage ?? 'تعذر تحميل الفيديو',
+                      state.errorMessage ?? 'stories.video_load_error'.tr(),
                       style: GoogleFonts.ibmPlexSansArabic(
                         color: ColorManager.paper200,
                         fontSize: 12.sp,

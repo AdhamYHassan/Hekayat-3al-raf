@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -307,16 +308,16 @@ class _AudioStatusFooter extends StatelessWidget {
         Color color;
 
         if (isError) {
-          message = state.errorMessage ?? 'تعذر تشغيل الصوت بدون اتصال';
+          message = state.errorMessage ?? 'stories.audio_offline_error'.tr();
           color = Colors.redAccent.withValues(alpha: 0.9);
         } else if (isPlaying) {
-          message = 'جاري الاستماع الآن';
+          message = 'stories.audio_playing'.tr();
           color = ColorManager.paper400.withValues(alpha: 0.8);
         } else if (isLoading) {
-          message = 'جاري التحميل...';
+          message = 'stories.audio_loading'.tr();
           color = ColorManager.gold.withValues(alpha: 0.8);
         } else {
-          message = 'اضغط للاستماع';
+          message = 'stories.audio_tap_to_play'.tr();
           color = ColorManager.paper400.withValues(alpha: 0.6);
         }
 

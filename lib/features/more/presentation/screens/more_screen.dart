@@ -60,14 +60,14 @@ class MoreScreen extends StatelessWidget {
               SizedBox(height: 24.h),
 
               // 2. Section: القائمة
-              _buildSectionHeader('القائمة'),
+              _buildSectionHeader('settings.menu_section'.tr()),
               SizedBox(height: 8.h),
 
               // Card 1: الملف الشخصي (Highlighted)
               MoreMenuItemCard(
                 icon: CupertinoIcons.person_fill,
-                title: 'الملف الشخصي',
-                subtitle: 'حسابي، حكاياتي، أسئلتي',
+                title: 'settings.profile'.tr(),
+                subtitle: 'settings.profile_sub'.tr(),
                 isHighlighted: true,
                 onTap: () async {
                   final token = await SecureStorageHelper.getToken();
@@ -86,10 +86,17 @@ class MoreScreen extends StatelessWidget {
               // Card 2: عن المنصة
               MoreMenuItemCard(
                 icon: CupertinoIcons.info_circle_fill,
-                title: 'عن المنصة',
-                subtitle: 'تعرف على الرسالة والفكرة',
+                title: 'settings.about_us'.tr(),
+                subtitle: 'settings.about_us_sub'.tr(),
                 onTap: () {
-                  // About Navigation
+                  final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+                  context.push(
+                    Routes.webView,
+                    extra: {
+                      'title': 'settings.about_us'.tr(),
+                      'url': 'https://hekayat3alraf.com/$lang/about/',
+                    },
+                  );
                 },
               ),
               SizedBox(height: 8.h),
@@ -97,8 +104,8 @@ class MoreScreen extends StatelessWidget {
               // Card 3: تواصل معنا
               MoreMenuItemCard(
                 icon: CupertinoIcons.mail_solid,
-                title: 'تواصل معنا',
-                subtitle: 'سؤال، اقتراح، أو فكرة',
+                title: 'settings.contact_us'.tr(),
+                subtitle: 'settings.contact_us_sub'.tr(),
                 onTap: () {
                   context.push(Routes.contactUs);
                 },
@@ -108,10 +115,17 @@ class MoreScreen extends StatelessWidget {
               // Card 4: سياسة الخصوصية
               MoreMenuItemCard(
                 icon: CupertinoIcons.shield_fill,
-                title: 'سياسة الخصوصية',
-                subtitle: 'إزاي بنحمي بياناتك',
+                title: 'settings.privacy_policy'.tr(),
+                subtitle: 'settings.privacy_policy_sub'.tr(),
                 onTap: () {
-                  // Privacy Policy Navigation
+                  final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+                  context.push(
+                    Routes.webView,
+                    extra: {
+                      'title': 'settings.privacy_policy'.tr(),
+                      'url': 'https://hekayat3alraf.com/$lang/privacy/',
+                    },
+                  );
                 },
               ),
               SizedBox(height: 8.h),
@@ -119,17 +133,24 @@ class MoreScreen extends StatelessWidget {
               // Card 5: الشروط والأحكام
               MoreMenuItemCard(
                 icon: CupertinoIcons.doc_text_fill,
-                title: 'الشروط والأحكام',
-                subtitle: 'اتفاق بسيط بينا',
+                title: 'settings.terms_conditions'.tr(),
+                subtitle: 'settings.terms_conditions_sub'.tr(),
                 onTap: () {
-                  // Terms Navigation
+                  final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+                  context.push(
+                    Routes.webView,
+                    extra: {
+                      'title': 'settings.terms_conditions'.tr(),
+                      'url': 'https://hekayat3alraf.com/$lang/terms/',
+                    },
+                  );
                 },
               ),
 
               SizedBox(height: 24.h),
 
               // 3. Section: اللغة
-              _buildSectionHeader('اللغة'),
+              _buildSectionHeader('settings.language_section'.tr()),
               SizedBox(height: 8.h),
               MoreLanguageSelector(
                 currentLocale: locale,
@@ -142,7 +163,7 @@ class MoreScreen extends StatelessWidget {
 
               // 4. Footer Note
               Text(
-                'حكايات على الرف · نسخة تجريبية للهاتف',
+                'settings.footer_version'.tr(),
                 style: GoogleFonts.ibmPlexSansArabic(
                   fontSize: 10.5.sp,
                   color: ColorManager.paper400.withValues(alpha: 0.6),

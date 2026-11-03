@@ -81,5 +81,9 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>نحتاج إلى إذن استخدام الميكروفون لتسجيل الحكاية الصوتية الخاصة بك.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>نحتاج للوصول إلى معرض الصور لاختيار صورة الغلاف أو مقطع الفيديو للحكاية.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>نحتاج للوصول إلى الكاميرا لالتقاط صورة الغلاف للحكاية.</string>
 </dict>
 </plist>

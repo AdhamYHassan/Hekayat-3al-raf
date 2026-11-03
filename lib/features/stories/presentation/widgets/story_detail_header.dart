@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,7 +34,7 @@ class StoryDetailHeader extends StatelessWidget {
             'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
             height: 32.h,
             errorBuilder: (context, error, stackTrace) => Text(
-              'حكايات على الرف',
+              'app_name'.tr(),
               style: GoogleFonts.arefRuqaa(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
@@ -47,7 +48,7 @@ class StoryDetailHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'رجوع',
+                  'common.back'.tr(),
                   style: GoogleFonts.ibmPlexSansArabic(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,

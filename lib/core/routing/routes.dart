@@ -5,6 +5,7 @@ class Routes {
   static const String ambassadorDetails = '/ambassador-details';
   static const String submitStoryForm = '/submit-story-form';
   static const String contactUs = '/contact-us';
+  static const String webView = '/web-view';
   static const String login = '/login';
   static const String register = '/register';
 }

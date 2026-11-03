@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,7 +68,7 @@ class _SubmitStoryView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'احكي حكايتك',
+                          'submit.title'.tr(),
                           style: GoogleFonts.alexandria(
                             color: ColorManager.paper100,
                             fontSize: 22.sp,
@@ -76,7 +77,7 @@ class _SubmitStoryView extends StatelessWidget {
                         ),
                         SizedBox(height: 6.h),
                         Text(
-                          'كل تجربة تستحق أن تُسمع. اختار الطريقة اللي تناسبك، وإحنا هنوصلها للي يحتاج يسمعها.',
+                          'submit.subtitle'.tr(),
                           style: GoogleFonts.ibmPlexSansArabic(
                             color: ColorManager.paper200.withValues(alpha: 0.65),
                             fontSize: 13.sp,
@@ -123,7 +124,7 @@ class _SubmitStoryView extends StatelessWidget {
                           ),
                           SizedBox(width: 8.w),
                           Text(
-                            'اختار نوع الحكاية',
+                            'submit.choose_type'.tr(),
                             style: GoogleFonts.ibmPlexSansArabic(
                               color: ColorManager.gold,
                               fontSize: 11.5.sp,
@@ -147,7 +148,9 @@ class _SubmitStoryView extends StatelessWidget {
                         return StoryTypeCard(
                           option: option,
                           isSelected: isSelected,
-                          onTap: () => _navigateToForm(context, option.format),
+                          onTap: () {
+                            context.read<SubmitStoryCubit>().selectFormat(option.format);
+                          },
                         );
                       },
                     ),
@@ -180,7 +183,7 @@ class _SubmitStoryView extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'التالي',
+                                    'submit.next'.tr(),
                                     style: GoogleFonts.alexandria(
                                       color: ColorManager.primaryDark,
                                       fontSize: 14.sp,

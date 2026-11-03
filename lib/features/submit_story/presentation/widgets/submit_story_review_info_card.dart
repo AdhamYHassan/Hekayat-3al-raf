@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,7 +29,7 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'إزاي بنراجع الحكايات؟',
+            'submit.review_info.title'.tr(),
             style: GoogleFonts.alexandria(
               color: ColorManager.gold,
               fontSize: 13.sp,

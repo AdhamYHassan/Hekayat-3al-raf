@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/media/audio/cubit/audio_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_web_view_screen.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/screens/ambassador_details_screen.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/screens/login_screen.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/screens/register_screen.dart';
@@ -123,6 +124,22 @@ class AppRouter {
           state: state,
           child: const ContactUsScreen(),
         ),
+      ),
+      GoRoute(
+        path: Routes.webView,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final title = extra?['title'] as String? ?? 'حكايات على الرف';
+          final url = extra?['url'] as String? ?? 'https://hekayat3alraf.com/ar/';
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: AppWebViewScreen(
+              title: title,
+              initialUrl: url,
+            ),
+          );
+        },
       ),
       GoRoute(
         path: Routes.login,

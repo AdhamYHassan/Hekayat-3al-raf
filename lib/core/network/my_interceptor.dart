@@ -1,3 +1,4 @@
+import 'package:hekayat_3al_raf/core/helpers/device_helper.dart';
 import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart'; // ضروري عشان kDebugMode
@@ -20,6 +21,14 @@ class MyInterceptor extends Interceptor {
       'REQUEST[${options.method}] => PATH: ${options.path}',
       'Network-Request',
     );
+
+    // 1. Device ID header
+    try {
+      final String? deviceId = await DeviceHelper.getDeviceId();
+      if (deviceId != null && deviceId.isNotEmpty) {
+        options.headers['X-Device-Id'] = deviceId;
+      }
+    } catch (_) {}
 
     final String? token = await SecureStorageHelper.getToken();
     if (token != null) {

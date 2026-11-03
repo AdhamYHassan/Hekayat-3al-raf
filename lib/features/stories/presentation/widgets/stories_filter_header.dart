@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,20 +31,20 @@ class StoriesFilterHeader extends StatelessWidget {
     required this.onTypeSelected,
   });
 
-  // Sort Mapping: label -> query value (Replaced Top 8 with liked as instructed)
-  static const List<({String label, String value})> _sortOptions = [
-    (label: 'الأحدث', value: 'latest'),
-    (label: 'الأكثر إعجابًا', value: 'liked'),
-    (label: 'الأعلى تقييمًا', value: 'top'),
-    (label: 'الأكثر مشاهدة', value: 'viewed'),
+  // Sort Mapping: labelKey -> query value
+  static const List<({String labelKey, String value})> _sortOptions = [
+    (labelKey: 'stories.sort_latest', value: 'latest'),
+    (labelKey: 'stories.sort_liked', value: 'liked'),
+    (labelKey: 'stories.sort_top', value: 'top'),
+    (labelKey: 'stories.sort_viewed', value: 'viewed'),
   ];
 
-  static const List<({String label, String? value})> _typeOptions = [
-    (label: 'الكل', value: null),
-    (label: 'مكتوبة', value: 'text'),
-    (label: 'صوتية', value: 'audio'),
-    (label: 'مصورة', value: 'video'),
-    (label: 'وثيقة', value: 'document'),
+  static const List<({String labelKey, String? value})> _typeOptions = [
+    (labelKey: 'stories.all', value: null),
+    (labelKey: 'stories.type_text', value: 'text'),
+    (labelKey: 'stories.type_audio', value: 'audio'),
+    (labelKey: 'stories.type_video', value: 'video'),
+    (labelKey: 'stories.type_document', value: 'document'),
   ];
 
   void _showTypeBottomSheet(BuildContext context) {
@@ -62,7 +63,7 @@ class StoriesFilterHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'نوع المحتوى',
+                  'stories.content_type'.tr(),
                   style: GoogleFonts.alexandria(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
@@ -90,7 +91,7 @@ class StoriesFilterHeader extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: Text(
-                          opt.label,
+                          opt.labelKey.tr(),
                           style: GoogleFonts.ibmPlexSansArabic(
                             fontSize: 12.sp,
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
@@ -122,7 +123,7 @@ class StoriesFilterHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'الحكايات',
+                'stories.title'.tr(),
                 style: GoogleFonts.alexandria(
                   fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
@@ -157,8 +158,8 @@ class StoriesFilterHeader extends StatelessWidget {
                       SizedBox(width: 6.w),
                       Text(
                         selectedType != null
-                            ? _typeOptions.firstWhere((t) => t.value == selectedType).label
-                            : 'النوع',
+                            ? _typeOptions.firstWhere((t) => t.value == selectedType).labelKey.tr()
+                            : 'stories.story_type'.tr(),
                         style: GoogleFonts.ibmPlexSansArabic(
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w500,
@@ -194,7 +195,7 @@ class StoriesFilterHeader extends StatelessWidget {
               ),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: 'ابحث عن حكاية...',
+                hintText: 'stories.search_hint'.tr(),
                 hintStyle: GoogleFonts.ibmPlexSansArabic(
                   fontSize: 13.sp,
                   color: ColorManager.paper400,
@@ -240,7 +241,7 @@ class StoriesFilterHeader extends StatelessWidget {
                             ),
                     ),
                     child: Text(
-                      sort.label,
+                      sort.labelKey.tr(),
                       style: GoogleFonts.ibmPlexSansArabic(
                         fontSize: 12.sp,
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
@@ -265,7 +266,7 @@ class StoriesFilterHeader extends StatelessWidget {
               itemBuilder: (context, index) {
                 final isAll = index == 0;
                 final slug = isAll ? null : storyTypes[index - 1].slug;
-                final name = isAll ? 'الكل' : storyTypes[index - 1].name;
+                final name = isAll ? 'stories.all'.tr() : storyTypes[index - 1].name;
                 final isSelected = slug == selectedKindSlug;
 
                 return InkWell(

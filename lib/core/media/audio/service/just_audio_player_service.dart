@@ -87,10 +87,14 @@ class JustAudioPlayerService implements IAudioPlayerService {
       _sessionSubscriptions.add(
         session.interruptionEventStream.listen((event) {
           if (event.begin) {
-            debugPrint('[AudioSession] Interruption began (e.g. Incoming call). Pausing.');
+            debugPrint(
+              '[AudioSession] Interruption began (e.g. Incoming call). Pausing.',
+            );
             pause();
           } else {
-            debugPrint('[AudioSession] Interruption ended. Resuming playback if appropriate.');
+            debugPrint(
+              '[AudioSession] Interruption ended. Resuming playback if appropriate.',
+            );
             if (event.type == AudioInterruptionType.pause) {
               resume();
             }
@@ -106,7 +110,9 @@ class JustAudioPlayerService implements IAudioPlayerService {
   /// the previous instance was released due to idle timeout.
   AudioPlayer _ensurePlayer() {
     if (_player == null) {
-      debugPrint('[AudioPlayer] Provisioning fresh native AudioPlayer instance');
+      debugPrint(
+        '[AudioPlayer] Provisioning fresh native AudioPlayer instance',
+      );
       _player = AudioPlayer();
       _initStreams();
     }
@@ -120,7 +126,8 @@ class JustAudioPlayerService implements IAudioPlayerService {
 
     _subscriptions.add(
       p.playbackEventStream.listen(
-        (event) => debugPrint('[AudioPlayer Event] state: ${event.processingState}'),
+        (event) =>
+            debugPrint('[AudioPlayer Event] state: ${event.processingState}'),
         onError: (Object e) => debugPrint('[AudioPlayer Event ERROR] $e'),
       ),
     );
@@ -236,10 +243,6 @@ class JustAudioPlayerService implements IAudioPlayerService {
       debugPrint('[AudioPlayer] Loading Track with Caching: ${track.title}');
       _emitState(_currentState.copyWith(status: AudioStatus.loading));
 
-      // Resolve local cache destination
-      final cacheFile = await _resolveCacheFile(track.id);
-      debugPrint('[AudioPlayer] Cache destination: ${cacheFile.path}');
-
       final mediaItem = MediaItem(
         id: track.id,
         album: track.category,
@@ -248,25 +251,39 @@ class JustAudioPlayerService implements IAudioPlayerService {
         artUri: track.artworkUrl != null ? Uri.parse(track.artworkUrl!) : null,
       );
 
-      // 1. Pure Offline Check: If file is fully downloaded, stream directly from disk
+      // Check if local file or remote URL
       AudioSource audioSource;
-      final isCached = await cacheFile.exists() && await cacheFile.length() > 0;
+      final isLocalFile =
+          track.url.startsWith('/') || track.url.startsWith('file://');
 
-      if (isCached) {
-        debugPrint('[AudioPlayer] Cache HIT: Playing directly from local storage (Zero Network).');
-        audioSource = AudioSource.file(
-          cacheFile.path,
-          tag: mediaItem,
-        );
+      if (isLocalFile) {
+        final filePath = track.url.startsWith('file://')
+            ? Uri.parse(track.url).toFilePath()
+            : track.url;
+        debugPrint('[AudioPlayer] Playing local file: $filePath');
+        audioSource = AudioSource.file(filePath, tag: mediaItem);
       } else {
-        debugPrint('[AudioPlayer] Cache MISS: Streaming over standard network URI (Lockscreen compatible).');
-        audioSource = AudioSource.uri(
-          Uri.parse(track.url),
-          tag: mediaItem,
-        );
+        // Resolve local cache destination for remote URLs
+        final cacheFile = await _resolveCacheFile(track.id);
+        debugPrint('[AudioPlayer] Cache destination: ${cacheFile.path}');
 
-        // Background caching: stream-save concurrently without proxy overhead
-        unawaited(_cacheTrackInBackground(track.url, cacheFile));
+        final isCached =
+            await cacheFile.exists() && await cacheFile.length() > 0;
+
+        if (isCached) {
+          debugPrint(
+            '[AudioPlayer] Cache HIT: Playing directly from local storage (Zero Network).',
+          );
+          audioSource = AudioSource.file(cacheFile.path, tag: mediaItem);
+        } else {
+          debugPrint(
+            '[AudioPlayer] Cache MISS: Streaming over standard network URI (Lockscreen compatible).',
+          );
+          audioSource = AudioSource.uri(Uri.parse(track.url), tag: mediaItem);
+
+          // Background caching: stream-save concurrently without proxy overhead
+          unawaited(_cacheTrackInBackground(track.url, cacheFile));
+        }
       }
 
       final duration = await player.setAudioSource(audioSource);
@@ -274,7 +291,9 @@ class JustAudioPlayerService implements IAudioPlayerService {
       await player.play();
       debugPrint('[AudioPlayer] Playback started successfully');
     } on SocketException catch (e) {
-      debugPrint('[AudioPlayer] Offline SocketException: No network connection available: $e');
+      debugPrint(
+        '[AudioPlayer] Offline SocketException: No network connection available: $e',
+      );
       _emitState(
         _currentState.copyWith(
           status: AudioStatus.error,
@@ -283,7 +302,8 @@ class JustAudioPlayerService implements IAudioPlayerService {
       );
     } catch (e, stack) {
       debugPrint('[AudioPlayer] ERROR playing track: $e\n$stack');
-      final isNetworkError = e.toString().contains('Failed host lookup') ||
+      final isNetworkError =
+          e.toString().contains('Failed host lookup') ||
           e.toString().contains('SocketException') ||
           e.toString().contains('HttpException');
 
@@ -358,7 +378,9 @@ class JustAudioPlayerService implements IAudioPlayerService {
         final sink = partFile.openWrite();
         await response.pipe(sink);
         await partFile.rename(cacheFile.path);
-        debugPrint('[AudioPlayer] Background cache complete: ${cacheFile.path}');
+        debugPrint(
+          '[AudioPlayer] Background cache complete: ${cacheFile.path}',
+        );
       }
     } catch (e) {
       debugPrint('[AudioPlayer] Non-fatal background cache error: $e');

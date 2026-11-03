@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -101,8 +102,10 @@ class StoryMediaHero extends StatelessWidget {
                           SizedBox(width: 4.w),
                           Text(
                             mediaType == StoryMediaType.audio
-                                ? 'صوتية'
-                                : (mediaType == StoryMediaType.video ? 'مرئية' : 'مصورة'),
+                                ? 'stories.type_audio'.tr()
+                                : (mediaType == StoryMediaType.video
+                                    ? 'stories.type_visual'.tr()
+                                    : 'stories.type_video'.tr()),
                             style: GoogleFonts.ibmPlexSansArabic(
                               fontSize: 10.sp,
                               fontWeight: FontWeight.w500,

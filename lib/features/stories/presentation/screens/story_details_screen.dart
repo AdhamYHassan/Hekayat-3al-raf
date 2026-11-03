@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +62,7 @@ class _StoryDetailsView extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
                         child: Text(
-                          state.errorMessage ?? 'تعذر تحميل تفاصيل الحكاية',
+                          state.errorMessage ?? 'stories.details_load_error'.tr(),
                           textAlign: TextAlign.center,
                           style: GoogleFonts.ibmPlexSansArabic(
                             color: ColorManager.paper200,
@@ -112,7 +113,7 @@ class _StoryDetailsView extends StatelessWidget {
                                 SizedBox(width: 4.w),
                                 Text(
                                   story.viewsCount >= 1000
-                                      ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ألف'
+                                      ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ${'stories.thousand'.tr()}'
                                       : '${story.viewsCount}',
                                   style: GoogleFonts.ibmPlexSansArabic(
                                     fontSize: 12.sp,

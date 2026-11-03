@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_sto
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_state.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/submit_story_step2_form.dart';
+import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/submit_story_step3_review.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/widgets/submit_story_stepper.dart';
 
 class SubmitStoryFormSubscreen extends StatelessWidget {
@@ -21,13 +23,13 @@ class SubmitStoryFormSubscreen extends StatelessWidget {
   String _getFormatTitle(StorySubmissionFormat format) {
     switch (format) {
       case StorySubmissionFormat.written:
-        return 'حكاية مكتوبة';
+        return 'submit.types.written'.tr();
       case StorySubmissionFormat.audio:
-        return 'حكاية صوتية';
+        return 'submit.types.audio'.tr();
       case StorySubmissionFormat.video:
-        return 'حكاية مصورة';
+        return 'submit.types.video'.tr();
       case StorySubmissionFormat.document:
-        return 'وثيقة ومستند';
+        return 'submit.types.document'.tr();
     }
   }
 
@@ -61,7 +63,7 @@ class SubmitStoryFormSubscreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'رجوع',
+                      'submit.back'.tr(),
                       style: GoogleFonts.ibmPlexSansArabic(
                         fontSize: 13.5.sp,
                         fontWeight: FontWeight.w500,
@@ -100,7 +102,10 @@ class SubmitStoryFormSubscreen extends StatelessWidget {
                   // Stepper showing Step 2 (أو Step 3 عند المراجعة)
                   SubmitStoryStepper(currentStep: state.currentStep),
                   SizedBox(height: 8.h),
-                  SubmitStoryStep2Form(format: format),
+                  if (state.currentStep == 3)
+                    SubmitStoryStep3Review(format: format)
+                  else
+                    SubmitStoryStep2Form(format: format),
                 ],
               ),
             );

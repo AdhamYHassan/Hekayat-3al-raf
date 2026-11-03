@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,19 +21,19 @@ class SubmitStoryStepper extends StatelessWidget {
         children: [
           _StepItem(
             stepNumber: 1,
-            label: 'اختار نوع الحكاية',
+            label: 'submit.stepper.step1'.tr(),
             isActive: currentStep >= 1,
           ),
           _StepDivider(isActive: currentStep >= 2),
           _StepItem(
             stepNumber: 2,
-            label: 'مراجعة',
+            label: 'submit.stepper.step2'.tr(),
             isActive: currentStep >= 2,
           ),
           _StepDivider(isActive: currentStep >= 3),
           _StepItem(
             stepNumber: 3,
-            label: 'تأكيد وإرسال',
+            label: 'submit.stepper.step3'.tr(),
             isActive: currentStep >= 3,
           ),
         ],

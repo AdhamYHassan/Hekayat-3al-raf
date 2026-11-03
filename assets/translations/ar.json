@@ -43,6 +43,31 @@
     "create_account": "إنشاء حساب جديد"
   },
   "stories": {
+    "title": "الحكايات",
+    "all": "الكل",
+    "search_hint": "ابحث عن حكاية...",
+    "content_type": "نوع المحتوى",
+    "story_type": "النوع",
+    "sort_latest": "الأحدث",
+    "sort_liked": "الأكثر إعجابًا",
+    "sort_top": "الأعلى تقييمًا",
+    "sort_viewed": "الأكثر مشاهدة",
+    "type_text": "مكتوبة",
+    "type_audio": "صوتية",
+    "type_video": "مصورة",
+    "type_document": "وثيقة",
+    "type_visual": "مرئية",
+    "stories_count": "{} حكاية",
+    "thousand": "ألف",
+    "no_stories_match": "لا توجد حكايات مطابقة للبحث أو التصفية",
+    "load_error": "تعذر تحميل الحكايات",
+    "details_load_error": "تعذر تحميل تفاصيل الحكاية",
+    "video_load_error": "تعذر تحميل الفيديو",
+    "audio_offline_error": "تعذر تشغيل الصوت بدون اتصال",
+    "audio_playing": "جاري الاستماع الآن",
+    "audio_loading": "جاري التحميل...",
+    "audio_tap_to_play": "اضغط للاستماع",
+    "rate_story": "قيّم الحكاية",
     "feedback_title": "وصلتك الحكاية؟",
     "feedback_subtitle": "صوتك بيخليها توصل لناس أكثر.",
     "like": "أعجبني",
@@ -81,10 +106,19 @@
     "theme": "المظهر",
     "dark_mode": "الوضع الداكن",
     "light_mode": "الوضع الفاتح",
+    "about_us": "عن المنصة",
+    "about_us_sub": "تعرف على الرسالة والفكرة",
+    "contact_us": "تواصل معنا",
+    "contact_us_sub": "سؤال، اقتراح، أو فكرة",
     "privacy_policy": "سياسة الخصوصية",
+    "privacy_policy_sub": "إزاي بنحمي بياناتك",
     "terms_conditions": "الشروط والأحكام",
-    "about_us": "عن التطبيق",
-    "contact_us": "اتصل بنا",
+    "terms_conditions_sub": "اتفاق بسيط بينا",
+    "menu_section": "القائمة",
+    "language_section": "اللغة",
+    "profile": "الملف الشخصي",
+    "profile_sub": "حسابي، حكاياتي، أسئلتي",
+    "footer_version": "حكايات على الرف · نسخة تجريبية للهاتف",
     "change_password": "تغيير كلمة المرور"
   },
   "validation": {
@@ -92,7 +126,16 @@
     "invalid_email": "يرجى إدخال بريد إلكتروني صحيح",
     "invalid_phone": "يرجى إدخال رقم هاتف صحيح",
     "password_too_short": "كلمة المرور يجب أن لا تقل عن 6 أحرف",
-    "passwords_do_not_match": "كلمات المرور غير متطابقة"
+    "passwords_do_not_match": "كلمات المرور غير متطابقة",
+    "title_required": "يرجى إدخال عنوان الحكاية",
+    "author_required": "يرجى إدخال اسم الكاتب أو الراوي",
+    "summary_required": "يرجى كتابة وصف مختصر للحكاية",
+    "body_required": "يرجى كتابة نص الحكاية",
+    "audio_required": "يرجى تسجيل الحكاية الصوتية أولاً",
+    "video_required": "يرجى اختيار ملف الفيديو",
+    "document_required": "يرجى اختيار ملف المستند (PDF أو Word)",
+    "guest_name_required": "يرجى إدخال اسمك كزائر",
+    "guest_phone_required": "يرجى إدخال رقم هاتفك المحمول"
   },
   "errors": {
     "something_went_wrong": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
@@ -111,5 +154,74 @@
     "story_document": "مستند الحكاية",
     "share_document": "مشاركة المستند",
     "save_to_device": "حفظ في الجهاز"
+  },
+  "submit": {
+    "title": "احكي حكايتك",
+    "subtitle": "كل تجربة تستحق أن تُسمع. اختار الطريقة اللي تناسبك، وإحنا هنوصلها للي يحتاج يسمعها.",
+    "choose_type": "اختار نوع الحكاية",
+    "next": "التالي",
+    "prev": "السابق",
+    "review": "مراجعة",
+    "back": "رجوع",
+    "anonymous_toggle": "أوافق على إظهار اسمي وبياناتي المسموح بنشرها مع الحكاية",
+    "anonymous_hint": "سيتم النشر كـ \"بدون اسم\"",
+    "stepper": {
+      "step1": "اختار نوع الحكاية",
+      "step2": "مراجعة",
+      "step3": "تأكيد وإرسال"
+    },
+    "types": {
+      "written": "حكاية مكتوبة",
+      "audio": "حكاية صوتية",
+      "video": "حكاية مصورة",
+      "document": "وثيقة ومستند"
+    },
+    "form": {
+      "title_label": "عنوان الحكاية",
+      "title_hint": "اكتب عنوان الحكاية",
+      "author_label": "اسم الكاتب",
+      "author_hint": "اكتب اسمك",
+      "description_label": "وصف مختصر",
+      "description_hint": "اكتب وصف مختصر للحكاية",
+      "story_label": "اكتب حكايتك",
+      "story_hint": "اكتب حكايتك هنا...",
+      "audio_label": "التسجيل الصوتي",
+      "file_label": "الملف المرفق",
+      "choose_file": "اختر ملف...",
+      "cover_label": "صورة الغلاف (اختياري)",
+      "choose_image": "اختر صورة..."
+    },
+    "editor": {
+      "focus_mode": "وضع التركيز",
+      "exit_focus_mode": "خروج من وضع التركيز",
+      "saved_auto": "تم الحفظ تلقائياً ✓",
+      "saving": "جاري الحفظ...",
+      "words_count": "{} كلمة",
+      "words_written": "{} كلمة مكتوبة",
+      "reading_time": "قراءة في ~{} دقيقة",
+      "deep_dive_hint": "ابدأ بسرد الحكاية بهدوء..."
+    },
+    "recorder": {
+      "permission_required": "يرجى منح إذن الميكروفون للبدء في تسجيل الحكاية.",
+      "start_prompt": "ابدأ تسجيل حكايتك",
+      "start_subtitle": "سجل براحتك، تقدر توقف مؤقتاً وتعيد في أي وقت.",
+      "recording_now": "جاري التسجيل الآن...",
+      "paused": "التسجيل موقوف مؤقتاً",
+      "save_recording": "حفظ التسجيل",
+      "ready_for_review": "التسجيل الصوتي جاهز للمراجعة",
+      "preview_title": "معاينة التسجيل الصوتي",
+      "draft_narrator": "مسودة الحكاية",
+      "re_record": "إعادة التسجيل"
+    },
+    "draft": {
+      "unnamed": "مسودة غير معنونة",
+      "banner_title": "لديك مسودة محفوظة تلقائياً",
+      "banner_body": "حكايتك السابقة {} لا تزال محفوظة، يمكنك استعادتها وإكمالها فوراً.",
+      "restore": "استعادة المسودة",
+      "discard": "تجاهل المسودة"
+    },
+    "review_info": {
+      "title": "إزاي بنراجع الحكايات؟"
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,10 +91,10 @@ class HomeTopStoriesList extends StatelessWidget {
                                     story.submissionTypeLabel.isNotEmpty
                                         ? story.submissionTypeLabel
                                         : (story.contentType == StoryContentType.audio
-                                            ? 'صوتية'
+                                            ? 'stories.type_audio'.tr()
                                             : (story.contentType == StoryContentType.video
-                                                ? 'مصورة'
-                                                : 'مكتوبة')),
+                                                ? 'stories.type_video'.tr()
+                                                : 'stories.type_text'.tr())),
                                     style: GoogleFonts.ibmPlexSansArabic(
                                       fontSize: 10.sp,
                                       fontWeight: FontWeight.w500,
@@ -127,7 +128,7 @@ class HomeTopStoriesList extends StatelessWidget {
                       SizedBox(width: 3.w),
                       Text(
                         story.viewsCount >= 1000
-                            ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ألف'
+                            ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ${'stories.thousand'.tr()}'
                             : '${story.viewsCount}',
                         style: GoogleFonts.ibmPlexSansArabic(
                           fontSize: 11.sp,

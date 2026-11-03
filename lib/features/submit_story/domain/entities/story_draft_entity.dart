@@ -7,6 +7,8 @@ class StoryDraftEntity extends Equatable {
   final String body;
   final String format;
   final bool isAnonymous;
+  final String? recordedAudioPath;
+  final int recordingDurationSeconds;
   final DateTime lastSavedAt;
 
   const StoryDraftEntity({
@@ -16,6 +18,8 @@ class StoryDraftEntity extends Equatable {
     required this.body,
     required this.format,
     required this.isAnonymous,
+    this.recordedAudioPath,
+    this.recordingDurationSeconds = 0,
     required this.lastSavedAt,
   });
 
@@ -23,7 +27,8 @@ class StoryDraftEntity extends Equatable {
       title.trim().isEmpty &&
       authorName.trim().isEmpty &&
       summary.trim().isEmpty &&
-      body.trim().isEmpty;
+      body.trim().isEmpty &&
+      (recordedAudioPath == null || recordedAudioPath!.trim().isEmpty);
 
   bool get isNotEmpty => !isEmpty;
 
@@ -35,7 +40,8 @@ class StoryDraftEntity extends Equatable {
         body,
         format,
         isAnonymous,
+        recordedAudioPath,
+        recordingDurationSeconds,
         lastSavedAt,
       ];
 }
-

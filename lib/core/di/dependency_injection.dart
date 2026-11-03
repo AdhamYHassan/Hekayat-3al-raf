@@ -19,7 +19,9 @@ import 'package:hekayat_3al_raf/core/network/inetwork_helper.dart';
 import 'package:hekayat_3al_raf/core/network/network_helper.dart';
 import 'package:hekayat_3al_raf/core/media/audio/cubit/audio_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/audio/service/i_audio_player_service.dart';
+import 'package:hekayat_3al_raf/core/media/audio/service/i_audio_recorder_service.dart';
 import 'package:hekayat_3al_raf/core/media/audio/service/just_audio_player_service.dart';
+import 'package:hekayat_3al_raf/core/media/audio/service/record_audio_recorder_service.dart';
 import 'package:hekayat_3al_raf/core/media/video/cubit/video_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/video/service/default_video_player_service.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/data/datasources/ambassador_remote_data_source.dart';
@@ -31,12 +33,15 @@ import 'package:hekayat_3al_raf/features/ambassadors/domain/usecases/get_ambassa
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassador_details_cubit.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassadors_list_cubit.dart';
 import 'package:hekayat_3al_raf/features/submit_story/data/datasources/i_submit_story_local_data_source.dart';
+import 'package:hekayat_3al_raf/features/submit_story/data/datasources/i_submit_story_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/submit_story/data/datasources/submit_story_local_data_source.dart';
+import 'package:hekayat_3al_raf/features/submit_story/data/datasources/submit_story_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/submit_story/data/repositories/submit_story_repository_impl.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/repositories/i_submit_story_repository.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/usecases/clear_story_draft_usecase.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/usecases/get_story_draft_usecase.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/usecases/save_story_draft_usecase.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/usecases/submit_story_usecase.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
 import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
 import 'package:hekayat_3al_raf/features/stories/data/datasources/i_story_remote_data_source.dart';
@@ -165,8 +170,15 @@ void setupDependencyInjection() {
     () => SubmitStoryLocalDataSource(SharedPrefsHelper.instance!),
   );
 
+  getIt.registerLazySingleton<ISubmitStoryRemoteDataSource>(
+    () => SubmitStoryRemoteDataSource(getIt<InetworkHelper>()),
+  );
+
   getIt.registerLazySingleton<ISubmitStoryRepository>(
-    () => SubmitStoryRepositoryImpl(getIt<ISubmitStoryLocalDataSource>()),
+    () => SubmitStoryRepositoryImpl(
+      getIt<ISubmitStoryLocalDataSource>(),
+      getIt<ISubmitStoryRemoteDataSource>(),
+    ),
   );
 
   getIt.registerLazySingleton<SaveStoryDraftUseCase>(
@@ -181,12 +193,17 @@ void setupDependencyInjection() {
     () => ClearStoryDraftUseCase(getIt<ISubmitStoryRepository>()),
   );
 
+  getIt.registerLazySingleton<SubmitStoryUseCase>(
+    () => SubmitStoryUseCase(getIt<ISubmitStoryRepository>()),
+  );
+
   getIt.registerFactory<SubmitStoryCubit>(
     () => SubmitStoryCubit(
       getIt<ISubmitStoryRepository>(),
       getIt<SaveStoryDraftUseCase>(),
       getIt<GetStoryDraftUseCase>(),
       getIt<ClearStoryDraftUseCase>(),
+      getIt<SubmitStoryUseCase>(),
     ),
   );
 
@@ -234,6 +251,13 @@ void setupDependencyInjection() {
 
   getIt.registerFactory<RegisterCubit>(
     () => RegisterCubit(getIt<RegisterUseCase>()),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Audio Recorder Service DI Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<IAudioRecorderService>(
+    () => RecordAudioRecorderService(),
   );
 
   // ---------------------------------------------------------------------------

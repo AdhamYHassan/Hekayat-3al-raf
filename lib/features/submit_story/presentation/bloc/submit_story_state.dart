@@ -17,10 +17,18 @@ class SubmitStoryState extends Equatable {
   final String? attachedFilePath;
   final String? recordedAudioPath;
   final bool isAnonymous;
+  final bool showAuthor; // user choice: show_author = false by default
   final bool isRecording;
   final int recordingDurationSeconds;
   final bool isSubmitting;
+  final bool isSubmittedSuccessfully;
+  final String? successMessage;
   final String? errorMessage;
+
+  // Guest Fields (When not logged in)
+  final String guestName;
+  final String guestPhone;
+  final String guestPhoneRegion;
 
   // Autosave & Recovery State
   final bool isAutosaving;
@@ -40,10 +48,16 @@ class SubmitStoryState extends Equatable {
     this.attachedFilePath,
     this.recordedAudioPath,
     this.isAnonymous = false,
+    this.showAuthor = false,
     this.isRecording = false,
     this.recordingDurationSeconds = 0,
     this.isSubmitting = false,
+    this.isSubmittedSuccessfully = false,
+    this.successMessage,
     this.errorMessage,
+    this.guestName = '',
+    this.guestPhone = '',
+    this.guestPhoneRegion = 'EG',
     this.isAutosaving = false,
     this.isDraftSaved = false,
     this.recoverableDraft,
@@ -68,11 +82,17 @@ class SubmitStoryState extends Equatable {
     String? recordedAudioPath,
     bool clearRecordedAudio = false,
     bool? isAnonymous,
+    bool? showAuthor,
     bool? isRecording,
     int? recordingDurationSeconds,
     bool? isSubmitting,
+    bool? isSubmittedSuccessfully,
+    String? successMessage,
     String? errorMessage,
     bool clearError = false,
+    String? guestName,
+    String? guestPhone,
+    String? guestPhoneRegion,
     bool? isAutosaving,
     bool? isDraftSaved,
     StoryDraftEntity? recoverableDraft,
@@ -94,11 +114,18 @@ class SubmitStoryState extends Equatable {
       recordedAudioPath:
           clearRecordedAudio ? null : (recordedAudioPath ?? this.recordedAudioPath),
       isAnonymous: isAnonymous ?? this.isAnonymous,
+      showAuthor: showAuthor ?? this.showAuthor,
       isRecording: isRecording ?? this.isRecording,
       recordingDurationSeconds:
           recordingDurationSeconds ?? this.recordingDurationSeconds,
       isSubmitting: isSubmitting ?? this.isSubmitting,
+      isSubmittedSuccessfully:
+          isSubmittedSuccessfully ?? this.isSubmittedSuccessfully,
+      successMessage: successMessage ?? this.successMessage,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      guestName: guestName ?? this.guestName,
+      guestPhone: guestPhone ?? this.guestPhone,
+      guestPhoneRegion: guestPhoneRegion ?? this.guestPhoneRegion,
       isAutosaving: isAutosaving ?? this.isAutosaving,
       isDraftSaved: isDraftSaved ?? this.isDraftSaved,
       recoverableDraft: clearRecoverableDraft
@@ -121,10 +148,16 @@ class SubmitStoryState extends Equatable {
         attachedFilePath,
         recordedAudioPath,
         isAnonymous,
+        showAuthor,
         isRecording,
         recordingDurationSeconds,
         isSubmitting,
+        isSubmittedSuccessfully,
+        successMessage,
         errorMessage,
+        guestName,
+        guestPhone,
+        guestPhoneRegion,
         isAutosaving,
         isDraftSaved,
         recoverableDraft,
