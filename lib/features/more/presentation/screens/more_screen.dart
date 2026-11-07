@@ -75,8 +75,7 @@ class MoreScreen extends StatelessWidget {
                     if (token == null || token.trim().isEmpty) {
                       context.push(Routes.login);
                     } else {
-                      // Navigate to Profile Screen when available
-                      // context.push(Routes.profile);
+                      context.push(Routes.profile);
                     }
                   }
                 },
@@ -89,7 +88,9 @@ class MoreScreen extends StatelessWidget {
                 title: 'settings.about_us'.tr(),
                 subtitle: 'settings.about_us_sub'.tr(),
                 onTap: () {
-                  final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+                  final lang = context.locale.languageCode == 'en'
+                      ? 'en'
+                      : 'ar';
                   context.push(
                     Routes.webView,
                     extra: {
@@ -118,7 +119,9 @@ class MoreScreen extends StatelessWidget {
                 title: 'settings.privacy_policy'.tr(),
                 subtitle: 'settings.privacy_policy_sub'.tr(),
                 onTap: () {
-                  final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+                  final lang = context.locale.languageCode == 'en'
+                      ? 'en'
+                      : 'ar';
                   context.push(
                     Routes.webView,
                     extra: {
@@ -136,7 +139,9 @@ class MoreScreen extends StatelessWidget {
                 title: 'settings.terms_conditions'.tr(),
                 subtitle: 'settings.terms_conditions_sub'.tr(),
                 onTap: () {
-                  final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+                  final lang = context.locale.languageCode == 'en'
+                      ? 'en'
+                      : 'ar';
                   context.push(
                     Routes.webView,
                     extra: {

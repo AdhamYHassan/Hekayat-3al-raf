@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
@@ -114,9 +115,11 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
               actions: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(ctx).pop();
-                    Navigator.of(context).pop(); // Back to main submit screen
-                    cubit.setStep(1);
+                    cubit.resetForm();
+                    Navigator.of(ctx, rootNavigator: true).pop();
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
                   child: Text(
@@ -128,15 +131,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
             ),
           );
         } else if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorManager.error,
-              content: Text(
-                state.errorMessage!,
-                style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-              ),
-            ),
-          );
+          AppSnackBar.showError(context, message: state.errorMessage!);
         }
       },
       builder: (context, state) {

@@ -1,3 +1,4 @@
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,25 +142,15 @@ class _RegisterViewState extends State<_RegisterView> {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorManager.success,
-              content: Text(
-                state.response.message,
-                style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-              ),
-            ),
+          AppSnackBar.showSuccess(
+            context,
+            message: state.response.message,
           );
           context.go(Routes.home);
         } else if (state is RegisterFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorManager.error,
-              content: Text(
-                state.errorMessage,
-                style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-              ),
-            ),
+          AppSnackBar.showError(
+            context,
+            message: state.errorMessage,
           );
         }
       },

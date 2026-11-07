@@ -1,3 +1,12 @@
+import 'package:hekayat_3al_raf/features/profile/data/datasources/i_profile_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/repositories/i_profile_repository.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_my_stories_usecase.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/usecases/update_profile_usecase.dart';
+import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
+import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hekayat_3al_raf/features/auth/data/datasources/auth_remote_data_source.dart';
@@ -251,6 +260,34 @@ void setupDependencyInjection() {
 
   getIt.registerFactory<RegisterCubit>(
     () => RegisterCubit(getIt<RegisterUseCase>()),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Profile Feature DI
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<IProfileRemoteDataSource>(
+    () => ProfileRemoteDataSource(getIt<InetworkHelper>()),
+  );
+  getIt.registerLazySingleton<IProfileRepository>(
+    () => ProfileRepositoryImpl(getIt<IProfileRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<GetProfileUseCase>(
+    () => GetProfileUseCase(getIt<IProfileRepository>()),
+  );
+  getIt.registerLazySingleton<UpdateProfileUseCase>(
+    () => UpdateProfileUseCase(getIt<IProfileRepository>()),
+  );
+  getIt.registerLazySingleton<GetMyStoriesUseCase>(
+    () => GetMyStoriesUseCase(getIt<IProfileRepository>()),
+  );
+  getIt.registerFactory<ProfileCubit>(
+    () => ProfileCubit(
+      getIt<GetProfileUseCase>(),
+      getIt<UpdateProfileUseCase>(),
+    ),
+  );
+  getIt.registerFactory<MyStoriesCubit>(
+    () => MyStoriesCubit(getIt<GetMyStoriesUseCase>()),
   );
 
   // ---------------------------------------------------------------------------

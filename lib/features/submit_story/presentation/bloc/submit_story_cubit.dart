@@ -81,6 +81,36 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
     emit(state.copyWith(selectedFormat: format));
   }
 
+  void resetForm() {
+    emit(SubmitStoryState(
+      storyOptions: state.storyOptions,
+      reviewSteps: state.reviewSteps,
+      currentStep: 1,
+      selectedFormat: null,
+      title: '',
+      authorName: '',
+      summary: '',
+      body: '',
+      coverImagePath: null,
+      attachedFilePath: null,
+      recordedAudioPath: null,
+      isAnonymous: false,
+      showAuthor: false,
+      isRecording: false,
+      recordingDurationSeconds: 0,
+      isSubmitting: false,
+      isSubmittedSuccessfully: false,
+      successMessage: null,
+      errorMessage: null,
+      guestName: '',
+      guestPhone: '',
+      guestPhoneRegion: 'EG',
+      isAutosaving: false,
+      isDraftSaved: false,
+      recoverableDraft: null,
+    ));
+  }
+
   void setStep(int step) {
     emit(state.copyWith(currentStep: step));
   }

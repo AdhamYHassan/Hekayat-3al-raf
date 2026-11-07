@@ -28,6 +28,14 @@ class SecureStorageHelper {
     return await _storage.read(key: _tokenKey);
   }
 
+  static Future<String?> getAccessToken() async {
+    return await getToken();
+  }
+
+  static Future<void> saveAccessToken(String token) async {
+    await saveToken(token);
+  }
+
   static Future<void> clearToken() async {
     await _storage.delete(key: _tokenKey);
   }

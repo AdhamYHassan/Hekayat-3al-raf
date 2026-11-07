@@ -4,6 +4,7 @@ import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/features/auth/data/datasources/i_auth_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/login_request_model.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/login_response_model.dart';
+import 'package:hekayat_3al_raf/features/auth/data/models/password_reset_confirm_request_model.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/register_request_model.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/register_response_model.dart';
 import 'package:hekayat_3al_raf/features/auth/domain/repositories/i_auth_repository.dart';
@@ -76,6 +77,27 @@ class AuthRepositoryImpl implements IAuthRepository {
       }
 
       return ApiSuccess(response);
+    } catch (error) {
+      return ApiFailure(NetworkExceptions.getFailure(error));
+    }
+  }
+
+  @override
+  Future<ApiResult<String>> requestPasswordReset(String email) async {
+    try {
+      final message = await _remoteDataSource.requestPasswordReset(email);
+      return ApiSuccess(message);
+    } catch (error) {
+      return ApiFailure(NetworkExceptions.getFailure(error));
+    }
+  }
+
+  @override
+  Future<ApiResult<String>> confirmPasswordReset(
+      PasswordResetConfirmRequestModel request) async {
+    try {
+      final message = await _remoteDataSource.confirmPasswordReset(request);
+      return ApiSuccess(message);
     } catch (error) {
       return ApiFailure(NetworkExceptions.getFailure(error));
     }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -129,14 +130,9 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
     final hasPerm = await _recorderService.hasPermission();
     if (!hasPerm) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: ColorManager.error,
-            content: Text(
-              'submit.recorder.permission_required'.tr(),
-              style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-            ),
-          ),
+        AppSnackBar.showError(
+          context,
+          message: 'submit.recorder.permission_required'.tr(),
         );
       }
       return;

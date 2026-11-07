@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/bloc/ambassador_details_cubit.dart';
@@ -41,25 +42,15 @@ class _AmbassadorDetailsView extends StatelessWidget {
       body: BlocConsumer<AmbassadorDetailsCubit, AmbassadorDetailsState>(
         listener: (context, state) {
           if (state.questionSubmitSuccess != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  state.questionSubmitSuccess!,
-                  style: GoogleFonts.ibmPlexSansArabic(color: ColorManager.paper100),
-                ),
-                backgroundColor: ColorManager.primaryLight,
-              ),
+            AppSnackBar.showSuccess(
+              context,
+              message: state.questionSubmitSuccess!,
             );
           }
           if (state.errorMessage != null && state.status == AmbassadorStatus.failure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  state.errorMessage!,
-                  style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-                ),
-                backgroundColor: Colors.red.shade900,
-              ),
+            AppSnackBar.showError(
+              context,
+              message: state.errorMessage!,
             );
           }
         },

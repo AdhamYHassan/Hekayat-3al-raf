@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -69,14 +70,9 @@ class _ContactUsViewState extends State<_ContactUsView> {
     return BlocListener<ContactUsCubit, ContactUsState>(
       listener: (context, state) {
         if (state is ContactUsSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorManager.success,
-              content: Text(
-                state.message,
-                style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-              ),
-            ),
+          AppSnackBar.showSuccess(
+            context,
+            message: state.message,
           );
           _nameController.clear();
           _emailController.clear();
@@ -86,14 +82,9 @@ class _ContactUsViewState extends State<_ContactUsView> {
             _selectedSubject = '';
           });
         } else if (state is ContactUsFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorManager.error,
-              content: Text(
-                state.errorMessage,
-                style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-              ),
-            ),
+          AppSnackBar.showError(
+            context,
+            message: state.errorMessage,
           );
         }
       },

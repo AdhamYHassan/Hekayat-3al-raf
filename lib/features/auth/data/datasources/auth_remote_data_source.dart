@@ -4,6 +4,7 @@ import 'package:hekayat_3al_raf/core/network/inetwork_helper.dart';
 import 'package:hekayat_3al_raf/features/auth/data/datasources/i_auth_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/login_request_model.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/login_response_model.dart';
+import 'package:hekayat_3al_raf/features/auth/data/models/password_reset_confirm_request_model.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/register_request_model.dart';
 import 'package:hekayat_3al_raf/features/auth/data/models/register_response_model.dart';
 
@@ -44,6 +45,40 @@ class AuthRemoteDataSource implements IAuthRemoteDataSource {
 
     final data = response.data as Map<String, dynamic>;
     return RegisterResponseModel.fromJson(data);
+  }
+
+  @override
+  Future<String> requestPasswordReset(String email) async {
+    final response = await _networkHelper.post(
+      ApiEndpoints.passwordReset,
+      data: {'email': email},
+      options: Options(
+        headers: const {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    final data = response.data as Map<String, dynamic>;
+    return data['message'] as String? ?? 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.';
+  }
+
+  @override
+  Future<String> confirmPasswordReset(PasswordResetConfirmRequestModel request) async {
+    final response = await _networkHelper.post(
+      ApiEndpoints.passwordResetConfirm,
+      data: request.toJson(),
+      options: Options(
+        headers: const {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    final data = response.data as Map<String, dynamic>;
+    return data['message'] as String? ?? 'تم تغيير كلمة المرور بنجاح.';
   }
 }
 

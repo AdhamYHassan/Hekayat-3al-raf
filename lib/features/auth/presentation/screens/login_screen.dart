@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -53,26 +55,16 @@ class _LoginViewState extends State<_LoginView> {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorManager.success,
-              content: Text(
-                'أهلاً بك مجدداً في حكايات على الرف',
-                style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-              ),
-            ),
+          AppSnackBar.showSuccess(
+            context,
+            message: 'auth.welcome_back'.tr(),
           );
           // Navigate to Home or Profile
           context.go(Routes.home);
         } else if (state is LoginFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorManager.error,
-              content: Text(
-                state.errorMessage,
-                style: GoogleFonts.ibmPlexSansArabic(color: Colors.white),
-              ),
-            ),
+          AppSnackBar.showError(
+            context,
+            message: state.errorMessage,
           );
         }
       },

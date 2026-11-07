@@ -3,8 +3,12 @@ class ApiEndpoints {
   static const String baseUrl = 'https://hekayat3alraf.com/ar/api/v1/mobile/';
   static const String home = 'home/';
   static const String contact = 'contact/';
+  static const String profile = 'auth/me/';
   static const String login = 'auth/login/';
   static const String register = 'auth/register/';
+  static const String refreshToken = 'auth/token/refresh/';
+  static const String passwordReset = 'auth/password/reset/';
+  static const String passwordResetConfirm = 'auth/password/reset/confirm/';
   static String storyDetails(String id) => 'stories/$id/';
   static String voteStory(String id) => 'stories/$id/vote/';
   static String ambassadorDetails(String slug) => 'ambassadors/$slug/';
@@ -12,6 +16,7 @@ class ApiEndpoints {
       'ambassadors/?limit=$limit&offset=$offset';
   static const String storyTypes = 'stories/types/';
   static const String submitStory = 'stories/submit/';
+  static const String myStories = 'stories/my/';
   static String stories({
     int limit = 10,
     int offset = 0,
