@@ -3,6 +3,7 @@ import '../../../../core/network/api_endpoints.dart';
 import '../../domain/entities/ambassador_details_entity.dart';
 import '../../domain/entities/paginated_ambassadors_entity.dart';
 import '../models/ambassador_details_dto.dart';
+import '../models/ambassador_question_dto.dart';
 import '../models/paginated_ambassadors_dto.dart';
 import 'i_ambassador_remote_data_source.dart';
 
@@ -66,12 +67,54 @@ class AmbassadorRemoteDataSource implements IAmbassadorRemoteDataSource {
 
   @override
   Future<AmbassadorQaItem> submitQuestion({
-    required String ambassadorId,
-    required String authorName,
-    required String city,
-    required String question,
+    required String ambassadorSlug,
+    required String body,
   }) async {
-    throw UnimplementedError('Question submission is coming in a future update');
+    final response = await _dio.post(
+      ApiEndpoints.ambassadorQuestions(ambassadorSlug),
+      data: {'body': body},
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    final rawData = response.data;
+    if (rawData is Map<String, dynamic>) {
+      final questionData = rawData['data'] is Map<String, dynamic>
+          ? rawData['data'] as Map<String, dynamic>
+          : rawData;
+      return AmbassadorQuestionDto.fromJson(questionData).toDomain();
+    }
+
+    throw Exception('Invalid submit question response format');
+  }
+
+  @override
+  Future<List<AmbassadorQaItem>> getAmbassadorQuestions(
+      String ambassadorSlug) async {
+    final response = await _dio.get(
+      ApiEndpoints.ambassadorQuestions(ambassadorSlug),
+      options: Options(
+        headers: {
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    final rawData = response.data;
+    if (rawData is Map<String, dynamic> &&
+        rawData['data'] is Map<String, dynamic>) {
+      final results = (rawData['data']['results'] as List<dynamic>?) ?? [];
+      return results
+          .map((e) =>
+              AmbassadorQuestionDto.fromJson(e as Map<String, dynamic>).toDomain())
+          .toList();
+    }
+
+    return const [];
   }
 }
 

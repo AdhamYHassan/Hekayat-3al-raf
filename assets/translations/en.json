@@ -40,6 +40,7 @@
     "already_have_account": "Already have an account? Log In",
     "dont_have_account": "Don't have an account? Sign Up",
     "welcome_back": "Welcome Back!",
+    "login_required": "Please log in to continue",
     "create_account": "Create an Account",
     "reset_password": "Reset Password",
     "forgot_password_subtitle": "Enter your registered email and we'll send you a 6-digit verification code.",

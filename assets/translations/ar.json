@@ -40,6 +40,7 @@
     "already_have_account": "لديك حساب بالفعل؟ تسجيل الدخول",
     "dont_have_account": "ليس لديك حساب؟ إنشاء حساب",
     "welcome_back": "مرحباً بعودتك!",
+    "login_required": "يرجى تسجيل الدخول للمتابعة",
     "create_account": "إنشاء حساب جديد",
     "reset_password": "إعادة تعيين كلمة المرور",
     "forgot_password_subtitle": "أدخل بريدك الإلكتروني المسجل وسنرسل لك رمز تحقق مكوّن من 6 أرقام.",

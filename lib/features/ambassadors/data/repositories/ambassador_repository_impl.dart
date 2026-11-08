@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:hekayat_3al_raf/core/network/failure.dart';
+import 'package:hekayat_3al_raf/core/network/network_exceptions.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/data/datasources/i_ambassador_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
@@ -69,6 +70,32 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
     try {
       final details = await _remoteDataSource.getAmbassadorDetails(ambassadorId);
 
+      // Fetch questions concurrently for the ambassador
+      List<AmbassadorQaItem> questions = const [];
+      try {
+        questions = await _remoteDataSource.getAmbassadorQuestions(ambassadorId);
+      } catch (_) {
+        // Fallback to empty questions if endpoint fails
+      }
+
+      final completeEntity = AmbassadorDetailsEntity(
+        id: details.id,
+        name: details.name,
+        role: details.role,
+        city: details.city,
+        joinYear: details.joinYear,
+        coverImageUrl: details.coverImageUrl,
+        quote: details.quote,
+        tags: details.tags,
+        storiesCount: details.storiesCount,
+        answeredQuestionsCount: details.answeredQuestionsCount,
+        bioParagraphs: details.bioParagraphs,
+        pullQuote: details.pullQuote,
+        gallery: details.gallery,
+        selectedStories: details.selectedStories,
+        questions: questions,
+      );
+
       // Evict oldest if capacity exceeded
       if (_cache.length >= _maxCacheSize) {
         final oldestKey = _cache.keys.first;
@@ -76,11 +103,11 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
       }
 
       _cache[ambassadorId] = _CachedAmbassadorDetails(
-        entity: details,
+        entity: completeEntity,
         cachedAt: DateTime.now(),
       );
 
-      return ApiSuccess(details);
+      return ApiSuccess(completeEntity);
     } catch (e) {
       return ApiFailure(ServerFailure('فشل في جلب بيانات السفير: $e'));
     }
@@ -88,21 +115,57 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
 
   @override
   Future<ApiResult<AmbassadorQaItem>> submitQuestion({
-    required String ambassadorId,
-    required String authorName,
-    required String city,
-    required String question,
+    required String ambassadorSlug,
+    required String body,
   }) async {
     try {
       final item = await _remoteDataSource.submitQuestion(
-        ambassadorId: ambassadorId,
-        authorName: authorName,
-        city: city,
-        question: question,
+        ambassadorSlug: ambassadorSlug,
+        body: body,
       );
+
+      // Invalidate or update cache
+      if (_cache.containsKey(ambassadorSlug)) {
+        final cached = _cache[ambassadorSlug]!.entity;
+        final updatedQuestions = [item, ...cached.questions];
+        final updatedEntity = AmbassadorDetailsEntity(
+          id: cached.id,
+          name: cached.name,
+          role: cached.role,
+          city: cached.city,
+          joinYear: cached.joinYear,
+          coverImageUrl: cached.coverImageUrl,
+          quote: cached.quote,
+          tags: cached.tags,
+          storiesCount: cached.storiesCount,
+          answeredQuestionsCount: cached.answeredQuestionsCount,
+          bioParagraphs: cached.bioParagraphs,
+          pullQuote: cached.pullQuote,
+          gallery: cached.gallery,
+          selectedStories: cached.selectedStories,
+          questions: updatedQuestions,
+        );
+        _cache[ambassadorSlug] = _CachedAmbassadorDetails(
+          entity: updatedEntity,
+          cachedAt: DateTime.now(),
+        );
+      }
+
       return ApiSuccess(item);
     } catch (e) {
-      return ApiFailure(ServerFailure('فشل في إرسال السؤال: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<List<AmbassadorQaItem>>> getAmbassadorQuestions(
+      String ambassadorSlug) async {
+    try {
+      final questions =
+          await _remoteDataSource.getAmbassadorQuestions(ambassadorSlug);
+      return ApiSuccess(questions);
+    } catch (e) {
+      return ApiFailure(ServerFailure('فشل في جلب أسئلة السفير: $e'));
     }
   }
 }

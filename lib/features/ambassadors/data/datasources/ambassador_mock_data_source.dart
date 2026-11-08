@@ -179,20 +179,25 @@ class AmbassadorMockDataSource implements IAmbassadorRemoteDataSource {
 
   @override
   Future<AmbassadorQaItem> submitQuestion({
-    required String ambassadorId,
-    required String authorName,
-    required String city,
-    required String question,
+    required String ambassadorSlug,
+    required String body,
   }) async {
     await Future.delayed(const Duration(milliseconds: 200));
     return AmbassadorQaItem(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      authorName: authorName,
-      city: city,
+      authorName: 'مستخدم',
+      city: '',
       timeAgo: 'الآن',
-      question: question,
+      question: body,
       isAnswered: false,
     );
+  }
+
+  @override
+  Future<List<AmbassadorQaItem>> getAmbassadorQuestions(
+      String ambassadorSlug) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    return const [];
   }
 }
 

@@ -5,10 +5,9 @@ abstract class IAmbassadorRemoteDataSource {
   Future<PaginatedAmbassadorsEntity> getAmbassadorsList({int limit = 10, int offset = 0});
   Future<AmbassadorDetailsEntity> getAmbassadorDetails(String ambassadorId);
   Future<AmbassadorQaItem> submitQuestion({
-    required String ambassadorId,
-    required String authorName,
-    required String city,
-    required String question,
+    required String ambassadorSlug,
+    required String body,
   });
+  Future<List<AmbassadorQaItem>> getAmbassadorQuestions(String ambassadorSlug);
 }
 

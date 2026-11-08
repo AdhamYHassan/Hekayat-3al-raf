@@ -34,19 +34,15 @@ class AmbassadorDetailsCubit extends Cubit<AmbassadorDetailsState> {
   }
 
   Future<void> submitQuestion({
-    required String ambassadorId,
-    required String authorName,
-    required String city,
-    required String question,
+    required String ambassadorSlug,
+    required String body,
   }) async {
     if (state.details == null) return;
     emit(state.copyWith(isSubmittingQuestion: true));
 
     final result = await _ambassadorRepository.submitQuestion(
-      ambassadorId: ambassadorId,
-      authorName: authorName,
-      city: city,
-      question: question,
+      ambassadorSlug: ambassadorSlug,
+      body: body,
     );
 
     switch (result) {

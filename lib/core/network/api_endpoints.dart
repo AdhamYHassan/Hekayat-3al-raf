@@ -12,6 +12,7 @@ class ApiEndpoints {
   static String storyDetails(String id) => 'stories/$id/';
   static String voteStory(String id) => 'stories/$id/vote/';
   static String ambassadorDetails(String slug) => 'ambassadors/$slug/';
+  static String ambassadorQuestions(String slug) => 'ambassadors/$slug/questions/';
   static String ambassadors({int limit = 10, int offset = 0}) =>
       'ambassadors/?limit=$limit&offset=$offset';
   static const String storyTypes = 'stories/types/';

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +22,21 @@ enum AppSnackBarType {
 /// - Custom brand icons for Success, Error, Warning, and Info
 class AppSnackBar {
   AppSnackBar._();
+
+  static void showAuthRequired(
+    BuildContext context, {
+    String? message,
+    VoidCallback? onLoginTap,
+  }) {
+    show(
+      context,
+      message: message ?? 'auth.login_required'.tr(),
+      type: AppSnackBarType.warning,
+      duration: const Duration(seconds: 5),
+      actionLabel: 'auth.login'.tr(),
+      onActionTap: onLoginTap,
+    );
+  }
 
   static void showSuccess(
     BuildContext context, {
@@ -88,6 +104,8 @@ class AppSnackBar {
     String? title,
     AppSnackBarType type = AppSnackBarType.info,
     Duration duration = const Duration(seconds: 3),
+    String? actionLabel,
+    VoidCallback? onActionTap,
   }) {
     final messenger = ScaffoldMessenger.maybeOf(context);
     if (messenger == null) return;
@@ -243,6 +261,37 @@ class AppSnackBar {
                           ],
                         ),
                       ),
+                      if (actionLabel != null && actionLabel.isNotEmpty) ...[
+                        SizedBox(width: 10.w),
+                        ElevatedButton(
+                          onPressed: () {
+                            messenger.hideCurrentSnackBar();
+                            onActionTap?.call();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorManager.gold,
+                            foregroundColor: ColorManager.primaryDark,
+                            elevation: 0,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 14.w,
+                              vertical: 6.h,
+                            ),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                          ),
+                          child: Text(
+                            actionLabel,
+                            style: GoogleFonts.alexandria(
+                              fontSize: 11.5.sp,
+                              fontWeight: FontWeight.bold,
+                              color: ColorManager.primaryDark,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

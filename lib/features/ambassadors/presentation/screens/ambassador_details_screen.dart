@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -47,11 +49,24 @@ class _AmbassadorDetailsView extends StatelessWidget {
               message: state.questionSubmitSuccess!,
             );
           }
-          if (state.errorMessage != null && state.status == AmbassadorStatus.failure) {
-            AppSnackBar.showError(
-              context,
-              message: state.errorMessage!,
-            );
+          if (state.errorMessage != null) {
+            final is401 = state.errorMessage!.contains('401') ||
+                state.errorMessage!.contains('بيانات الدخول') ||
+                state.errorMessage!.contains('Given token not valid') ||
+                state.errorMessage!.contains('لم يتم تزويد');
+
+            if (is401) {
+              AppSnackBar.showAuthRequired(
+                context,
+                message: state.errorMessage!,
+                onLoginTap: () => context.push(Routes.login),
+              );
+            } else if (state.status == AmbassadorStatus.failure) {
+              AppSnackBar.showError(
+                context,
+                message: state.errorMessage!,
+              );
+            }
           }
         },
         builder: (context, state) {
@@ -232,12 +247,10 @@ class _AmbassadorDetailsView extends StatelessWidget {
                       child: AmbassadorQaSection(
                         questions: details.questions,
                         isSubmitting: state.isSubmittingQuestion,
-                        onSubmitQuestion: (name, city, question) {
+                        onSubmitQuestion: (question) {
                           context.read<AmbassadorDetailsCubit>().submitQuestion(
-                                ambassadorId: details.id,
-                                authorName: name,
-                                city: city,
-                                question: question,
+                                ambassadorSlug: details.id,
+                                body: question,
                               );
                         },
                       ),

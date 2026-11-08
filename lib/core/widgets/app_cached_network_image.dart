@@ -41,10 +41,13 @@ class AppCachedNetworkImage extends StatelessWidget {
     }
 
     // Determine target decoding resolution:
-    // Multiply layout logical pixels by devicePixelRatio (capped at 2.5x to prevent excessive RAM pressure on high-density devices)
+    // Multiply layout logical pixels by devicePixelRatio (capped at 2.5x to prevent excessive RAM pressure on high-density devices).
+    // Safely check for isFinite (prevents double.infinity or NaN crash on round()).
     final dpr = MediaQuery.devicePixelRatioOf(context).clamp(1.0, 2.5);
-    final targetMemWidth = memCacheWidth ?? (width != null ? (width! * dpr).round() : null);
-    final targetMemHeight = memCacheHeight ?? (height != null ? (height! * dpr).round() : null);
+    final targetMemWidth = memCacheWidth ??
+        ((width != null && width!.isFinite) ? (width! * dpr).round() : null);
+    final targetMemHeight = memCacheHeight ??
+        ((height != null && height!.isFinite) ? (height! * dpr).round() : null);
 
     Widget imageWidget = CachedNetworkImage(
       imageUrl: imageUrl,
@@ -54,8 +57,9 @@ class AppCachedNetworkImage extends StatelessWidget {
       alignment: alignment,
       memCacheWidth: targetMemWidth,
       memCacheHeight: targetMemHeight,
-      fadeInDuration: const Duration(milliseconds: 250),
-      fadeOutDuration: const Duration(milliseconds: 150),
+      fadeInDuration: const Duration(milliseconds: 180),
+      fadeOutDuration: const Duration(milliseconds: 100),
+      placeholderFadeInDuration: Duration.zero,
       placeholder: (context, url) => placeholder ?? _buildPlaceholder(context),
       errorWidget: (context, url, error) => errorWidget ?? _buildErrorWidget(context),
     );

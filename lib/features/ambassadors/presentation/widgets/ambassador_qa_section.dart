@@ -12,7 +12,7 @@ import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_
 class AmbassadorQaSection extends StatefulWidget {
   final List<AmbassadorQaItem> questions;
   final bool isSubmitting;
-  final void Function(String name, String city, String question) onSubmitQuestion;
+  final ValueChanged<String> onSubmitQuestion;
 
   const AmbassadorQaSection({
     super.key,
@@ -26,27 +26,18 @@ class AmbassadorQaSection extends StatefulWidget {
 }
 
 class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
-  final _nameController = TextEditingController();
-  final _cityController = TextEditingController();
   final _questionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _cityController.dispose();
     _questionController.dispose();
     super.dispose();
   }
 
   void _handleSubmit() {
     if (_formKey.currentState?.validate() ?? false) {
-      // TODO(backend): Wire question/comment submission once API endpoint is published.
-      widget.onSubmitQuestion(
-        _nameController.text.trim(),
-        _cityController.text.trim(),
-        _questionController.text.trim(),
-      );
+      widget.onSubmitQuestion(_questionController.text.trim());
       _questionController.clear();
       FocusScope.of(context).unfocus();
     }
@@ -109,28 +100,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _FormField(
-                          controller: _nameController,
-                          hint: 'اسمك',
-                          validator: (v) =>
-                              (v == null || v.trim().isEmpty) ? 'مطلوب' : null,
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      Expanded(
-                        child: _FormField(
-                          controller: _cityController,
-                          hint: 'مدينتك',
-                          validator: (v) =>
-                              (v == null || v.trim().isEmpty) ? 'مطلوب' : null,
-                        ),
-                      ),
-                    ],
-                  ),
+
                   SizedBox(height: 8.h),
                   _FormField(
                     controller: _questionController,
@@ -148,7 +118,9 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                         backgroundColor: ColorManager.gold,
                         foregroundColor: ColorManager.primaryDark,
                         padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 8.h),
+                          horizontal: 20.w,
+                          vertical: 8.h,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6.r),
                         ),
@@ -205,7 +177,9 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${item.authorName} · ${item.city}',
+                        item.city.isNotEmpty
+                            ? '${item.authorName} · ${item.city}'
+                            : item.authorName,
                         style: GoogleFonts.ibmPlexSansArabic(
                           color: ColorManager.goldLight,
                           fontSize: 12.sp,
@@ -326,12 +300,9 @@ class _FormField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.r),
-          borderSide: const BorderSide(
-            color: ColorManager.gold,
-          ),
+          borderSide: const BorderSide(color: ColorManager.gold),
         ),
       ),
     );
   }
 }
-

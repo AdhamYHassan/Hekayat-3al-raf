@@ -12,10 +12,11 @@ abstract class IAmbassadorRepository {
 
   /// Submits a user question to the ambassador
   Future<ApiResult<AmbassadorQaItem>> submitQuestion({
-    required String ambassadorId,
-    required String authorName,
-    required String city,
-    required String question,
+    required String ambassadorSlug,
+    required String body,
   });
+
+  /// Fetches questions asked to the ambassador
+  Future<ApiResult<List<AmbassadorQaItem>>> getAmbassadorQuestions(String ambassadorSlug);
 }
 
