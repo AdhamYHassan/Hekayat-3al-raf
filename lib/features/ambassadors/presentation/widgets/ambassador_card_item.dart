@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_list_item_entity.dart';
 
 class AmbassadorCardItem extends StatelessWidget {
@@ -37,13 +38,12 @@ class AmbassadorCardItem extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 // Background Cover Image with matched decoding dimensions
-                Image.network(
-                  ambassador.imageUrl,
+                AppCachedNetworkImage(
+                  imageUrl: ambassador.imageUrl,
                   fit: BoxFit.cover,
                   alignment: const Alignment(0.0, -0.56), // object-position: 50% 22%
-                  cacheWidth: 800,
-                  errorBuilder: (context, error, stackTrace) =>
-                      Container(color: ColorManager.primaryLight),
+                  memCacheWidth: 600,
+                  memCacheHeight: 480,
                 ),
 
                 // Dark gradient overlay strictly matching prototype DOM

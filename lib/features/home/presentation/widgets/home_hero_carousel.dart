@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_hero_slide.dart';
 
 class HomeHeroCarousel extends StatefulWidget {
@@ -97,34 +98,11 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                 return Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.network(
-                      slide.imageUrl,
+                    AppCachedNetworkImage(
+                      imageUrl: slide.imageUrl,
                       fit: BoxFit.cover,
                       alignment: const Alignment(0.0, -0.2),
-                      cacheWidth: (375 * 2),
-                      frameBuilder:
-                          (context, child, frame, wasSynchronouslyLoaded) {
-                            if (wasSynchronouslyLoaded || frame != null) {
-                              return child;
-                            }
-                            return Container(
-                              color: ColorManager.primaryLight,
-                              child: const Center(
-                                child: SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: ColorManager.gold,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                      errorBuilder: (context, error, stackTrace) {
-                        debugPrint('Failed to load hero slide image: $error');
-                        return Container(color: ColorManager.primaryDark);
-                      },
+                      memCacheWidth: 750,
                     ),
                     Container(
                       decoration: const BoxDecoration(
@@ -271,10 +249,12 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 10.h),
                   child: Center(
-                    child: Image.network(
-                      'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                    child: AppCachedNetworkImage(
+                      imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                       height: 38.h,
-                      errorBuilder: (context, error, stackTrace) => Text(
+                      fit: BoxFit.contain,
+                      memCacheHeight: 100,
+                      errorWidget: Text(
                         'app_name'.tr(),
                         style: GoogleFonts.arefRuqaa(
                           fontSize: 24.sp,

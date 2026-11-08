@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import '../../../../core/theming/colors_manager.dart';
 
 /// Supported story submission types matching backend schema & prototype DOM
@@ -74,14 +75,11 @@ class StoryCardItem extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.network(
-                      coverImageUrl,
+                    AppCachedNetworkImage(
+                      imageUrl: coverImageUrl,
                       fit: BoxFit.cover,
-                      cacheWidth: 200,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: ColorManager.primaryLight,
-                        child: const Icon(CupertinoIcons.photo, color: ColorManager.paper400),
-                      ),
+                      memCacheWidth: 240,
+                      memCacheHeight: 240,
                     ),
                     Container(
                       decoration: BoxDecoration(

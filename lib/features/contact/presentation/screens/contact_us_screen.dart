@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -99,10 +100,12 @@ class _ContactUsViewState extends State<_ContactUsView> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.network(
-                'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+              AppCachedNetworkImage(
+                imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                 height: 32.h,
-                errorBuilder: (context, error, stackTrace) => Text(
+                fit: BoxFit.contain,
+                memCacheHeight: 90,
+                errorWidget: Text(
                   'حكايات على الرف',
                   style: GoogleFonts.arefRuqaa(
                     fontSize: 18.sp,

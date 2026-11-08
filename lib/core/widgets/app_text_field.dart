@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/styles.dart';
 
@@ -174,7 +175,12 @@ class AppTextField extends StatelessWidget {
             obscureText: obscureText ?? false,
             onChanged: onChanged,
             validator: validator,
-            inputFormatters: inputFormatters,
+            inputFormatters: [
+              if (keyboardType == TextInputType.phone ||
+                  keyboardType == TextInputType.number)
+                const ArabicToEnglishDigitsFormatter(),
+              ...?inputFormatters,
+            ],
           ),
         ),
       ],

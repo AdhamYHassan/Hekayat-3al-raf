@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 
 enum StoryMediaType { audio, video, image }
 
@@ -34,12 +35,11 @@ class StoryMediaHero extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            imageUrl,
+          AppCachedNetworkImage(
+            imageUrl: imageUrl,
             fit: BoxFit.cover,
             alignment: const Alignment(0.0, -0.2),
-            cacheWidth: 375 * 2,
-            errorBuilder: (context, error, stackTrace) => Container(color: ColorManager.primaryLight),
+            memCacheWidth: 750,
           ),
           Container(
             decoration: const BoxDecoration(

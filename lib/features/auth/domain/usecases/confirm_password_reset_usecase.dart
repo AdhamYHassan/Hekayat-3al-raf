@@ -11,3 +11,4 @@ class ConfirmPasswordResetUseCase {
     return _repository.confirmPasswordReset(request);
   }
 }
+

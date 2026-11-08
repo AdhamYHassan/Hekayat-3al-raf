@@ -6,9 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_cubit.dart';
@@ -217,10 +219,12 @@ class _ProfileContent extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.network(
-                'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+              AppCachedNetworkImage(
+                imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                 height: 32.h,
-                errorBuilder: (context, error, stackTrace) => Text(
+                fit: BoxFit.contain,
+                memCacheHeight: 90,
+                errorWidget: Text(
                   'app_name'.tr(),
                   style: GoogleFonts.arefRuqaa(
                     fontSize: 18.sp,
@@ -267,15 +271,13 @@ class _ProfileContent extends StatelessWidget {
               Positioned.fill(
                 child: Stack(
                   children: [
-                    Image.network(
-                      'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-bike.webp',
+                    AppCachedNetworkImage(
+                      imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-bike.webp',
                       fit: BoxFit.cover,
                       alignment: const Alignment(0, -0.6),
                       width: double.infinity,
                       height: double.infinity,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: ColorManager.primary,
-                      ),
+                      memCacheWidth: 750,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -325,12 +327,14 @@ class _ProfileContent extends StatelessWidget {
                               child: ClipOval(
                                 child: user.avatar != null &&
                                         user.avatar!.isNotEmpty
-                                    ? Image.network(
-                                        user.avatar!,
+                                    ? AppCachedNetworkImage(
+                                        imageUrl: user.avatar!,
                                         fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                _buildDefaultAvatar(),
+                                        width: 88.r,
+                                        height: 88.r,
+                                        memCacheWidth: 200,
+                                        memCacheHeight: 200,
+                                        errorWidget: _buildDefaultAvatar(),
                                       )
                                     : _buildDefaultAvatar(),
                               ),
@@ -532,10 +536,14 @@ class _ProfileContent extends StatelessWidget {
   Widget _buildDefaultAvatar() {
     return Container(
       color: ColorManager.primaryLight,
-      child: Image.network(
-        'https://hekayat-ala-el-raff-m9tr.bolt.host/amb-1.webp',
+      child: AppCachedNetworkImage(
+        imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/amb-1.webp',
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => Icon(
+        width: 88.r,
+        height: 88.r,
+        memCacheWidth: 200,
+        memCacheHeight: 200,
+        errorWidget: Icon(
           CupertinoIcons.person_fill,
           size: 48.sp,
           color: ColorManager.goldLight,
@@ -869,6 +877,11 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
+      inputFormatters: [
+        if (keyboardType == TextInputType.phone ||
+            keyboardType == TextInputType.number)
+          const ArabicToEnglishDigitsFormatter(),
+      ],
       maxLines: maxLines,
       style: GoogleFonts.ibmPlexSansArabic(
         fontSize: 13.5.sp,

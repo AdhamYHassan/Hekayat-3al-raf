@@ -10,3 +10,4 @@ class RequestPasswordResetUseCase {
     return _repository.requestPasswordReset(email);
   }
 }
+

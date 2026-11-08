@@ -1,11 +1,12 @@
 import 'package:hekayat_3al_raf/features/stories/data/models/paginated_stories_dto.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_type_entity.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/entities/story_vote_result_entity.dart';
 
 abstract class IStoryRemoteDataSource {
   Future<StoryDetailsEntity> getStoryDetails(String storyId);
 
-  Future<StoryDetailsEntity> voteStory({
+  Future<StoryVoteResultEntity> voteStory({
     required String storyId,
     required String value,
   });

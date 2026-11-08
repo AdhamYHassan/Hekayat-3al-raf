@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_story_entity.dart';
 
 class HomeTopStoriesList extends StatelessWidget {
@@ -46,11 +47,11 @@ class HomeTopStoriesList extends StatelessWidget {
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
-                          Image.network(
-                            story.coverImageUrl,
+                          AppCachedNetworkImage(
+                            imageUrl: story.coverImageUrl,
                             fit: BoxFit.cover,
-                            cacheWidth: 180 * 2,
-                            errorBuilder: (context, error, stackTrace) => Container(color: ColorManager.primaryLight),
+                            memCacheWidth: 360,
+                            memCacheHeight: 256,
                           ),
                           Container(
                             decoration: const BoxDecoration(

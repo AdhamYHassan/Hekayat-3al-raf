@@ -1,3 +1,5 @@
+import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -160,12 +162,11 @@ class _RegisterViewState extends State<_RegisterView> {
           children: [
             // 1. Cinematic Background Image
             Positioned.fill(
-              child: Image.network(
-                'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-collage.webp',
+              child: AppCachedNetworkImage(
+                imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-collage.webp',
                 fit: BoxFit.cover,
                 alignment: const Alignment(0, -0.5),
-                errorBuilder: (context, error, stackTrace) =>
-                    Container(color: ColorManager.primaryDark),
+                memCacheWidth: 750,
               ),
             ),
             // Gradient Overlay
@@ -197,10 +198,12 @@ class _RegisterViewState extends State<_RegisterView> {
                       SizedBox(height: 18.h),
 
                       // Logo
-                      Image.network(
-                        'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                      AppCachedNetworkImage(
+                        imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                         height: 48.h,
-                        errorBuilder: (context, error, stackTrace) => Text(
+                        fit: BoxFit.contain,
+                        memCacheHeight: 120,
+                        errorWidget: Text(
                           'حكايات على الرف',
                           style: GoogleFonts.arefRuqaa(
                             fontSize: 22.sp,
@@ -643,6 +646,11 @@ class _RegisterViewState extends State<_RegisterView> {
             controller: controller,
             obscureText: obscureText,
             keyboardType: keyboardType,
+            inputFormatters: [
+              if (keyboardType == TextInputType.phone ||
+                  keyboardType == TextInputType.number)
+                const ArabicToEnglishDigitsFormatter(),
+            ],
             textDirection: textDirection,
             onChanged: onChanged,
             style: GoogleFonts.ibmPlexSansArabic(

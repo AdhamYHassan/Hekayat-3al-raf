@@ -1,5 +1,5 @@
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
-import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/entities/story_vote_result_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/repositories/i_story_repository.dart';
 
 /// [VoteStoryUseCase] encapsulates the voting business logic for stories.
@@ -11,7 +11,7 @@ class VoteStoryUseCase {
 
   const VoteStoryUseCase(this._storyRepository);
 
-  Future<ApiResult<StoryDetailsEntity>> call({
+  Future<ApiResult<StoryVoteResultEntity>> call({
     required String storyId,
     required String value,
   }) async {

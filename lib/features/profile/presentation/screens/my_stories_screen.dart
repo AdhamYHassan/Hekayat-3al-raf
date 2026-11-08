@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/my_story_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_state.dart';
@@ -113,10 +114,12 @@ class MyStoriesScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.network(
-            'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+          AppCachedNetworkImage(
+            imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
             height: 32.h,
-            errorBuilder: (context, error, stackTrace) => Text(
+            fit: BoxFit.contain,
+            memCacheHeight: 90,
+            errorWidget: Text(
               'app_name'.tr(),
               style: GoogleFonts.arefRuqaa(
                 fontSize: 18.sp,
@@ -497,11 +500,14 @@ class _MyStoryCard extends StatelessWidget {
                 height: 80.r,
                 color: ColorManager.primaryLight,
                 child: story.thumbnail != null && story.thumbnail!.isNotEmpty
-                    ? Image.network(
-                        story.thumbnail!,
+                    ? AppCachedNetworkImage(
+                        imageUrl: story.thumbnail!,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            _buildFallbackImage(),
+                        width: 80.r,
+                        height: 80.r,
+                        memCacheWidth: 200,
+                        memCacheHeight: 200,
+                        errorWidget: _buildFallbackImage(),
                       )
                     : _buildFallbackImage(),
               ),

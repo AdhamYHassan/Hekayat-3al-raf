@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 
 class AmbassadorGalleryCarousel extends StatelessWidget {
@@ -73,12 +74,10 @@ class AmbassadorGalleryCarousel extends StatelessWidget {
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
-                              Image.network(
-                                item.imageUrl,
+                              AppCachedNetworkImage(
+                                imageUrl: item.imageUrl,
                                 fit: BoxFit.cover,
-                                cacheWidth: 440,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Container(color: ColorManager.primaryLight),
+                                memCacheWidth: 440,
                               ),
                               if (item.year != null)
                                 Positioned(

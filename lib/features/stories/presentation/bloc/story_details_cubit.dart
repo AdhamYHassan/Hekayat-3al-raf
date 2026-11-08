@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/entities/story_vote_result_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/usecases/get_story_details_usecase.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/usecases/vote_story_usecase.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_state.dart';
@@ -92,9 +93,16 @@ class StoryDetailsCubit extends Cubit<StoryDetailsState> {
 
     // 3. Rollback on failure or update with canonical backend response
     switch (result) {
-      case ApiSuccess<StoryDetailsEntity>(:final data):
-        emit(state.copyWith(story: data));
-      case ApiFailure<StoryDetailsEntity>():
+      case ApiSuccess<StoryVoteResultEntity>(:final data):
+        // Update only the vote-related fields while preserving full story content
+        final updatedStory = (state.story ?? currentStory).copyWith(
+          likes: data.likes,
+          dislikes: data.dislikes,
+          myVote: data.myVote,
+          clearMyVote: data.myVote == null,
+        );
+        emit(state.copyWith(story: updatedStory));
+      case ApiFailure<StoryVoteResultEntity>():
         // Rollback gracefully to previous state
         emit(state.copyWith(story: previousStory));
     }

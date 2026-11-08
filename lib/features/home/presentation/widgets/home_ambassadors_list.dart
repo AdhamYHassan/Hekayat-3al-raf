@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_extra_entities.dart';
 
 class HomeAmbassadorsList extends StatelessWidget {
@@ -37,12 +38,11 @@ class HomeAmbassadorsList extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.network(
-                        ambassador.portraitUrl,
+                      AppCachedNetworkImage(
+                        imageUrl: ambassador.portraitUrl,
                         fit: BoxFit.cover,
                         alignment: const Alignment(0.0, -0.56),
-                        cacheWidth: 140 * 2,
-                        errorBuilder: (context, error, stackTrace) => Container(color: ColorManager.primaryLight),
+                        memCacheWidth: 280,
                       ),
                       Container(
                         decoration: const BoxDecoration(

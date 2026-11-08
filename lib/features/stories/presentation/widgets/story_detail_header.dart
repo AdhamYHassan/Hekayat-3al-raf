@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 
 class StoryDetailHeader extends StatelessWidget {
   final VoidCallback onBackTap;
@@ -30,10 +31,12 @@ class StoryDetailHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.network(
-            'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+          AppCachedNetworkImage(
+            imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
             height: 32.h,
-            errorBuilder: (context, error, stackTrace) => Text(
+            fit: BoxFit.contain,
+            memCacheHeight: 90,
+            errorWidget: Text(
               'app_name'.tr(),
               style: GoogleFonts.arefRuqaa(
                 fontSize: 18.sp,

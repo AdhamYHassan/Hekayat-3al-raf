@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
@@ -45,9 +47,9 @@ class _LoginViewState extends State<_LoginView> {
 
   void _onLoginPressed() {
     context.read<LoginCubit>().login(
-          loginInput: _loginController.text,
-          password: _passwordController.text,
-        );
+      loginInput: _loginController.text,
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -55,17 +57,11 @@ class _LoginViewState extends State<_LoginView> {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          AppSnackBar.showSuccess(
-            context,
-            message: 'auth.welcome_back'.tr(),
-          );
+          AppSnackBar.showSuccess(context, message: 'auth.welcome_back'.tr());
           // Navigate to Home or Profile
           context.go(Routes.home);
         } else if (state is LoginFailure) {
-          AppSnackBar.showError(
-            context,
-            message: state.errorMessage,
-          );
+          AppSnackBar.showError(context, message: state.errorMessage);
         }
       },
       child: Scaffold(
@@ -74,12 +70,12 @@ class _LoginViewState extends State<_LoginView> {
           children: [
             // 1. Cinematic Background Image with Gradient Overlays
             Positioned.fill(
-              child: Image.network(
-                'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-album.webp',
+              child: AppCachedNetworkImage(
+                imageUrl:
+                    'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-album.webp',
                 fit: BoxFit.cover,
                 alignment: const Alignment(0, -0.4),
-                errorBuilder: (context, error, stackTrace) =>
-                    Container(color: ColorManager.primaryDark),
+                memCacheWidth: 750,
               ),
             ),
             // Gradient Overlay 1: Top to Bottom
@@ -127,10 +123,13 @@ class _LoginViewState extends State<_LoginView> {
                       SizedBox(height: 24.h),
 
                       // Logo
-                      Image.network(
-                        'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                      AppCachedNetworkImage(
+                        imageUrl:
+                            'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                         height: 54.h,
-                        errorBuilder: (context, error, stackTrace) => Text(
+                        fit: BoxFit.contain,
+                        memCacheHeight: 140,
+                        errorWidget: Text(
                           'حكايات على الرف',
                           style: GoogleFonts.arefRuqaa(
                             fontSize: 24.sp,
@@ -160,7 +159,9 @@ class _LoginViewState extends State<_LoginView> {
                           textAlign: TextAlign.center,
                           style: GoogleFonts.ibmPlexSansArabic(
                             fontSize: 13.5.sp,
-                            color: ColorManager.paper200.withValues(alpha: 0.65),
+                            color: ColorManager.paper200.withValues(
+                              alpha: 0.65,
+                            ),
                             height: 1.5,
                           ),
                         ),
@@ -182,7 +183,7 @@ class _LoginViewState extends State<_LoginView> {
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                           onPressed: () {
-                            // Forgot Password Action
+                            context.push(Routes.forgotPassword);
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
@@ -190,10 +191,12 @@ class _LoginViewState extends State<_LoginView> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            'نسيت كلمة المرور؟',
+                            'auth.forgot_password'.tr(),
                             style: GoogleFonts.ibmPlexSansArabic(
                               fontSize: 12.sp,
-                              color: ColorManager.goldLight.withValues(alpha: 0.75),
+                              color: ColorManager.goldLight.withValues(
+                                alpha: 0.75,
+                              ),
                             ),
                           ),
                         ),
@@ -232,8 +235,8 @@ class _LoginViewState extends State<_LoginView> {
                                           strokeWidth: 2,
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
-                                            ColorManager.primaryDark,
-                                          ),
+                                                ColorManager.primaryDark,
+                                              ),
                                         ),
                                       )
                                     else ...[
@@ -268,7 +271,9 @@ class _LoginViewState extends State<_LoginView> {
                             Expanded(
                               child: Container(
                                 height: 1,
-                                color: ColorManager.gold.withValues(alpha: 0.15),
+                                color: ColorManager.gold.withValues(
+                                  alpha: 0.15,
+                                ),
                               ),
                             ),
                             Padding(
@@ -284,7 +289,9 @@ class _LoginViewState extends State<_LoginView> {
                             Expanded(
                               child: Container(
                                 height: 1,
-                                color: ColorManager.gold.withValues(alpha: 0.15),
+                                color: ColorManager.gold.withValues(
+                                  alpha: 0.15,
+                                ),
                               ),
                             ),
                           ],
@@ -297,7 +304,9 @@ class _LoginViewState extends State<_LoginView> {
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size(double.infinity, 48.h),
                           side: BorderSide(
-                            color: ColorManager.paper100.withValues(alpha: 0.25),
+                            color: ColorManager.paper100.withValues(
+                              alpha: 0.25,
+                            ),
                             width: 1,
                           ),
                           shape: RoundedRectangleBorder(
@@ -394,6 +403,7 @@ class _LoginViewState extends State<_LoginView> {
       child: TextField(
         controller: _loginController,
         keyboardType: TextInputType.phone,
+        inputFormatters: const [ArabicToEnglishDigitsFormatter()],
         textDirection: TextDirection.ltr,
         style: GoogleFonts.ibmPlexSansArabic(
           color: ColorManager.paper100,
@@ -411,7 +421,10 @@ class _LoginViewState extends State<_LoginView> {
             fontSize: 13.5.sp,
           ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 13.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 14.w,
+            vertical: 13.h,
+          ),
         ),
       ),
     );
@@ -443,9 +456,7 @@ class _LoginViewState extends State<_LoginView> {
           ),
           suffixIcon: IconButton(
             icon: Icon(
-              _obscurePassword
-                  ? CupertinoIcons.eye_slash
-                  : CupertinoIcons.eye,
+              _obscurePassword ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
               color: ColorManager.paper400.withValues(alpha: 0.7),
               size: 18.sp,
             ),
@@ -461,10 +472,12 @@ class _LoginViewState extends State<_LoginView> {
             fontSize: 13.5.sp,
           ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 13.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 14.w,
+            vertical: 13.h,
+          ),
         ),
       ),
     );
   }
 }
-

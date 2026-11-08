@@ -15,8 +15,11 @@ import 'package:hekayat_3al_raf/features/auth/data/repositories/auth_repository_
 import 'package:hekayat_3al_raf/features/auth/domain/repositories/i_auth_repository.dart';
 import 'package:hekayat_3al_raf/features/auth/domain/usecases/login_usecase.dart';
 import 'package:hekayat_3al_raf/features/auth/domain/usecases/register_usecase.dart';
+import 'package:hekayat_3al_raf/features/auth/domain/usecases/request_password_reset_usecase.dart';
+import 'package:hekayat_3al_raf/features/auth/domain/usecases/confirm_password_reset_usecase.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/bloc/login_cubit.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/bloc/register_cubit.dart';
+import 'package:hekayat_3al_raf/features/auth/presentation/bloc/reset_password_cubit.dart';
 import 'package:hekayat_3al_raf/features/contact/data/datasources/contact_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/contact/data/datasources/i_contact_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/contact/data/repositories/contact_repository_impl.dart';
@@ -254,12 +257,27 @@ void setupDependencyInjection() {
     () => RegisterUseCase(getIt<IAuthRepository>()),
   );
 
+  getIt.registerLazySingleton<RequestPasswordResetUseCase>(
+    () => RequestPasswordResetUseCase(getIt<IAuthRepository>()),
+  );
+
+  getIt.registerLazySingleton<ConfirmPasswordResetUseCase>(
+    () => ConfirmPasswordResetUseCase(getIt<IAuthRepository>()),
+  );
+
   getIt.registerFactory<LoginCubit>(
     () => LoginCubit(getIt<LoginUseCase>()),
   );
 
   getIt.registerFactory<RegisterCubit>(
     () => RegisterCubit(getIt<RegisterUseCase>()),
+  );
+
+  getIt.registerFactory<ResetPasswordCubit>(
+    () => ResetPasswordCubit(
+      getIt<RequestPasswordResetUseCase>(),
+      getIt<ConfirmPasswordResetUseCase>(),
+    ),
   );
 
   // ---------------------------------------------------------------------------

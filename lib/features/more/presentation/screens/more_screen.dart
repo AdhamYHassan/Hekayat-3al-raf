@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/more_language_selector.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/more_menu_item_card.dart';
 
@@ -32,10 +33,12 @@ class MoreScreen extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    Image.network(
-                      'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                    AppCachedNetworkImage(
+                      imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                       height: 48.h,
-                      errorBuilder: (context, error, stackTrace) => Text(
+                      fit: BoxFit.contain,
+                      memCacheHeight: 120,
+                      errorWidget: Text(
                         'حكايات على الرف',
                         style: GoogleFonts.arefRuqaa(
                           fontSize: 22.sp,

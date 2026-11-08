@@ -5,6 +5,7 @@ import 'package:hekayat_3al_raf/features/stories/data/models/paginated_stories_d
 import 'package:hekayat_3al_raf/features/stories/data/models/story_details_dto.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_type_entity.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/entities/story_vote_result_entity.dart';
 
 class StoryRemoteDataSource implements IStoryRemoteDataSource {
   final InetworkHelper _networkHelper;
@@ -21,7 +22,7 @@ class StoryRemoteDataSource implements IStoryRemoteDataSource {
   }
 
   @override
-  Future<StoryDetailsEntity> voteStory({
+  Future<StoryVoteResultEntity> voteStory({
     required String storyId,
     required String value,
   }) async {
@@ -30,8 +31,8 @@ class StoryRemoteDataSource implements IStoryRemoteDataSource {
       data: {'value': value},
     );
     final rawData = response.data as Map<String, dynamic>;
-    final dto = StoryDetailsResponseDto.fromJson(rawData);
-    return dto.data.toDomain();
+    final data = rawData['data'] as Map<String, dynamic>? ?? {};
+    return StoryVoteResultEntity.fromJson(data);
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:hekayat_3al_raf/features/stories/data/datasources/i_story_remote
 import 'package:hekayat_3al_raf/features/stories/data/models/paginated_stories_dto.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_type_entity.dart';
+import 'package:hekayat_3al_raf/features/stories/domain/entities/story_vote_result_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/repositories/i_story_repository.dart';
 
 class StoryRepositoryImpl implements IStoryRepository {
@@ -44,19 +45,29 @@ class StoryRepositoryImpl implements IStoryRepository {
   }
 
   @override
-  Future<ApiResult<StoryDetailsEntity>> voteStory({
+  Future<ApiResult<StoryVoteResultEntity>> voteStory({
     required String storyId,
     required String value,
   }) async {
     try {
-      final updatedEntity = await _remoteDataSource.voteStory(
+      final voteResult = await _remoteDataSource.voteStory(
         storyId: storyId,
         value: value,
       );
 
-      // Invalidate / update the in-memory cache with the fresh entity from backend
-      _storyCache[storyId] = (updatedEntity, DateTime.now());
-      return ApiSuccess(updatedEntity);
+      // Invalidate / update the in-memory cache with the updated vote fields if cached
+      if (_storyCache.containsKey(storyId)) {
+        final cached = _storyCache[storyId]!.$1;
+        final updatedCached = cached.copyWith(
+          likes: voteResult.likes,
+          dislikes: voteResult.dislikes,
+          myVote: voteResult.myVote,
+          clearMyVote: voteResult.myVote == null,
+        );
+        _storyCache[storyId] = (updatedCached, DateTime.now());
+      }
+
+      return ApiSuccess(voteResult);
     } catch (e) {
       return ApiFailure(ServerFailure('فشل في تسجيل التفاعل: $e'));
     }

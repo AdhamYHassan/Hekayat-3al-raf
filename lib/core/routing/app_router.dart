@@ -8,6 +8,7 @@ import 'package:hekayat_3al_raf/core/widgets/app_web_view_screen.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/screens/ambassador_details_screen.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/screens/login_screen.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/screens/register_screen.dart';
+import 'package:hekayat_3al_raf/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:hekayat_3al_raf/features/contact/presentation/screens/contact_us_screen.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
@@ -181,6 +182,14 @@ class AppRouter {
           context: context,
           state: state,
           child: const RegisterScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.forgotPassword,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: const ForgotPasswordScreen(),
         ),
       ),
     ],

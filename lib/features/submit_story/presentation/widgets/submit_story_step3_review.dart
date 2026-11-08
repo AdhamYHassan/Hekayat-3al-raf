@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -361,6 +362,11 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
         TextField(
           controller: controller,
           keyboardType: keyboardType,
+          inputFormatters: [
+            if (keyboardType == TextInputType.phone ||
+                keyboardType == TextInputType.number)
+              const ArabicToEnglishDigitsFormatter(),
+          ],
           onChanged: onChanged,
           style: GoogleFonts.ibmPlexSansArabic(fontSize: 13.sp, color: ColorManager.paper100),
           decoration: InputDecoration(

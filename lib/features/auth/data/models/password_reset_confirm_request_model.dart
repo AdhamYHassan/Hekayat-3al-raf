@@ -22,3 +22,4 @@ class PasswordResetConfirmRequestModel extends Equatable {
   @override
   List<Object?> get props => [email, code, newPassword];
 }
+

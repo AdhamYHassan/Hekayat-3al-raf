@@ -176,13 +176,20 @@ class TopStoryDto {
   });
 
   factory TopStoryDto.fromJson(Map<String, dynamic> json) {
+    String? parsedStoryType;
+    if (json['story_type'] is Map<String, dynamic>) {
+      parsedStoryType = (json['story_type'] as Map<String, dynamic>)['name'] as String?;
+    } else if (json['story_type'] is String) {
+      parsedStoryType = json['story_type'] as String;
+    }
+
     return TopStoryDto(
       id: json['id'] as String? ?? '',
       title: json['title'] as String? ?? '',
       summary: json['summary'] as String? ?? '',
       submissionType: json['submission_type'] as String? ?? 'text',
       submissionTypeLabel: json['submission_type_label'] as String? ?? '',
-      storyType: json['story_type'] as String?,
+      storyType: parsedStoryType,
       coverImage: json['cover_image'] as String? ?? '',
       authorName: json['author_name'] as String? ?? '',
       publishedAt: json['published_at'] as String? ?? '',

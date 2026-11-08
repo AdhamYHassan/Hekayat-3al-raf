@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 
 class AmbassadorHeroHeader extends StatelessWidget {
   final String name;
@@ -26,14 +27,12 @@ class AmbassadorHeroHeader extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           // Background Cover Image with physical decoding dimensions
-          Image.network(
-            coverImageUrl,
+          AppCachedNetworkImage(
+            imageUrl: coverImageUrl,
             fit: BoxFit.cover,
             alignment: const Alignment(0.0, -0.56), // object-position: 50% 22%
-            cacheWidth: 800,
-            errorBuilder: (context, error, stackTrace) => Container(
-              color: ColorManager.primaryLight,
-            ),
+            memCacheWidth: 800,
+            memCacheHeight: 640,
           ),
 
           // Gradient overlay strictly matching prototype DOM (only fade to dark at the bottom)
