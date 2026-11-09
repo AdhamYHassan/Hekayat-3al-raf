@@ -8,10 +8,7 @@ import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_sto
 class SubmitStoryReviewInfoCard extends StatelessWidget {
   final List<ReviewStepEntity> steps;
 
-  const SubmitStoryReviewInfoCard({
-    super.key,
-    required this.steps,
-  });
+  const SubmitStoryReviewInfoCard({super.key, required this.steps});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,14 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
             itemCount: steps.length,
             separatorBuilder: (context, index) => SizedBox(height: 12.h),
             itemBuilder: (context, index) {
-              final step = steps[index];
+              final isFirst = index == 0;
+              final title = isFirst
+                  ? 'submit.review_info.step_review_title'.tr()
+                  : 'submit.review_info.step_publish_title'.tr();
+              final description = isFirst
+                  ? 'submit.review_info.step_review_desc'.tr()
+                  : 'submit.review_info.step_publish_desc'.tr();
+
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -61,7 +65,7 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          step.title,
+                          title,
                           style: GoogleFonts.ibmPlexSansArabic(
                             color: ColorManager.paper100,
                             fontSize: 13.sp,
@@ -70,9 +74,11 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
                         ),
                         SizedBox(height: 2.h),
                         Text(
-                          step.description,
+                          description,
                           style: GoogleFonts.ibmPlexSansArabic(
-                            color: ColorManager.paper200.withValues(alpha: 0.55),
+                            color: ColorManager.paper200.withValues(
+                              alpha: 0.55,
+                            ),
                             fontSize: 11.sp,
                             height: 1.4,
                           ),
@@ -89,4 +95,3 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
     );
   }
 }
-

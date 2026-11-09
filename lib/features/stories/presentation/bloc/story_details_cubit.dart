@@ -101,10 +101,13 @@ class StoryDetailsCubit extends Cubit<StoryDetailsState> {
           myVote: data.myVote,
           clearMyVote: data.myVote == null,
         );
-        emit(state.copyWith(story: updatedStory));
-      case ApiFailure<StoryVoteResultEntity>():
-        // Rollback gracefully to previous state
-        emit(state.copyWith(story: previousStory));
+        emit(state.copyWith(story: updatedStory, clearVoteError: true));
+      case ApiFailure<StoryVoteResultEntity>(:final failure):
+        // Rollback gracefully to previous state and emit voteErrorMessage
+        emit(state.copyWith(
+          story: previousStory,
+          voteErrorMessage: failure.message,
+        ));
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,10 +6,8 @@ import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 
 /// Q&A and Community Interaction section for an ambassador profile.
-///
-/// TODO(backend): Connect with the live comments/questions endpoint for ambassadors.
-/// Expected contract: POST /api/v1/mobile/ambassadors/{slug}/comments/ or /questions/
-/// Payload: { "name": String, "city": String, "question": String, "ambassador_slug": String }
+/// Connected with endpoint: POST /ar/api/v1/mobile/ambassadors/{slug}/questions/
+/// Payload: { "body": String }
 class AmbassadorQaSection extends StatefulWidget {
   final List<AmbassadorQaItem> questions;
   final bool isSubmitting;
@@ -53,7 +52,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
           child: Row(
             children: [
               Text(
-                'أسئلة وإجابات',
+                'ambassadors.qa_title'.tr(),
                 style: GoogleFonts.alexandria(
                   color: ColorManager.paper100,
                   fontSize: 16.sp,
@@ -93,7 +92,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'اسأل السفير',
+                    'ambassadors.ask_ambassador'.tr(),
                     style: GoogleFonts.alexandria(
                       color: ColorManager.goldLight,
                       fontSize: 14.sp,
@@ -104,10 +103,10 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                   SizedBox(height: 8.h),
                   _FormField(
                     controller: _questionController,
-                    hint: 'اكتب سؤالك هنا...',
+                    hint: 'ambassadors.ask_hint'.tr(),
                     maxLines: 3,
                     validator: (v) =>
-                        (v == null || v.trim().isEmpty) ? 'اكتب سؤالك' : null,
+                        (v == null || v.trim().isEmpty) ? 'validation.required_field'.tr() : null,
                   ),
                   SizedBox(height: 10.h),
                   Align(
@@ -135,7 +134,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                               ),
                             )
                           : Text(
-                              'إرسال السؤال',
+                              'ambassadors.send_question'.tr(),
                               style: GoogleFonts.ibmPlexSansArabic(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
@@ -223,7 +222,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'رد السفير:',
+                            'ambassadors.ambassador_reply'.tr(),
                             style: GoogleFonts.ibmPlexSansArabic(
                               color: ColorManager.goldLight,
                               fontSize: 11.sp,

@@ -66,8 +66,8 @@ class NetworkExceptions {
           }
           break;
         case DioExceptionType.transformTimeout:
-          // TODO: Handle this case.
-          throw UnimplementedError();
+          errorMessage = "timeout_error".tr();
+          break;
       }
     } else if (error is SocketException) {
       errorMessage = "no_internet_connection".tr();

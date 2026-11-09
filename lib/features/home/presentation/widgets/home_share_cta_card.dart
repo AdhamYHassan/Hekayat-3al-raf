@@ -8,10 +8,7 @@ import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 class HomeShareCtaCard extends StatelessWidget {
   final VoidCallback onSubmitTap;
 
-  const HomeShareCtaCard({
-    super.key,
-    required this.onSubmitTap,
-  });
+  const HomeShareCtaCard({super.key, required this.onSubmitTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +23,12 @@ class HomeShareCtaCard extends StatelessWidget {
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF3B0D1A),
-                  Color(0xFF220610),
-                ],
+                colors: [Color(0xFF3B0D1A), Color(0xFF220610)],
               ),
               borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(color: ColorManager.gold.withValues(alpha: 0.2)),
+              border: Border.all(
+                color: ColorManager.gold.withValues(alpha: 0.2),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,9 +41,15 @@ class HomeShareCtaCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: ColorManager.gold.withValues(alpha: 0.15),
                         shape: BoxShape.circle,
-                        border: Border.all(color: ColorManager.gold.withValues(alpha: 0.3)),
+                        border: Border.all(
+                          color: ColorManager.gold.withValues(alpha: 0.3),
+                        ),
                       ),
-                      child: Icon(CupertinoIcons.mic, size: 20.sp, color: ColorManager.gold),
+                      child: Icon(
+                        CupertinoIcons.mic,
+                        size: 20.sp,
+                        color: ColorManager.gold,
+                      ),
                     ),
                     SizedBox(width: 8.w),
                     Text(
@@ -74,7 +76,10 @@ class HomeShareCtaCard extends StatelessWidget {
                   onTap: onSubmitTap,
                   borderRadius: BorderRadius.circular(24.r),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 10.h,
+                    ),
                     decoration: BoxDecoration(
                       color: ColorManager.gold,
                       borderRadius: BorderRadius.circular(24.r),
@@ -91,7 +96,11 @@ class HomeShareCtaCard extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 6.w),
-                        Icon(CupertinoIcons.arrow_left, size: 14.sp, color: ColorManager.primaryDark),
+                        Icon(
+                          CupertinoIcons.arrow_left,
+                          size: 14.sp,
+                          color: ColorManager.primaryDark,
+                        ),
                       ],
                     ),
                   ),
@@ -108,20 +117,23 @@ class HomeShareCtaCard extends StatelessWidget {
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF4A0F20),
-                  Color(0xFF220610),
-                ],
+                colors: [Color(0xFF4A0F20), Color(0xFF220610)],
               ),
               borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(color: ColorManager.gold.withValues(alpha: 0.2)),
+              border: Border.all(
+                color: ColorManager.gold.withValues(alpha: 0.2),
+              ),
             ),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(width: 20.w, height: 1.h, color: ColorManager.gold),
+                    Container(
+                      width: 20.w,
+                      height: 1.h,
+                      color: ColorManager.gold,
+                    ),
                     SizedBox(width: 8.w),
                     Text(
                       'home.share_kicker'.tr(),
@@ -132,7 +144,11 @@ class HomeShareCtaCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    Container(width: 20.w, height: 1.h, color: ColorManager.gold),
+                    Container(
+                      width: 20.w,
+                      height: 1.h,
+                      color: ColorManager.gold,
+                    ),
                   ],
                 ),
                 SizedBox(height: 8.h),
@@ -161,7 +177,10 @@ class HomeShareCtaCard extends StatelessWidget {
                   onTap: onSubmitTap,
                   borderRadius: BorderRadius.circular(24.r),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24.w,
+                      vertical: 12.h,
+                    ),
                     decoration: BoxDecoration(
                       color: ColorManager.gold,
                       borderRadius: BorderRadius.circular(24.r),
@@ -178,7 +197,11 @@ class HomeShareCtaCard extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 6.w),
-                        Icon(CupertinoIcons.arrow_left, size: 16.sp, color: ColorManager.primaryDark),
+                        Icon(
+                          CupertinoIcons.arrow_left,
+                          size: 16.sp,
+                          color: ColorManager.primaryDark,
+                        ),
                       ],
                     ),
                   ),
@@ -187,17 +210,16 @@ class HomeShareCtaCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 24.h),
-
-          // 3. Stats Grid (3 Columns)
-          Row(
-            children: [
-              _buildStatItem('+٥٠٠', 'home.stats_submitted'.tr()),
-              SizedBox(width: 12.w),
-              _buildStatItem('+١٢٠', 'home.stats_published'.tr()),
-              SizedBox(width: 12.w),
-              _buildStatItem('+١٠آلاف', 'home.stats_readers'.tr()),
-            ],
-          ),
+          // TODO(backend): Implement stats section when backend is ready.
+          // Row(
+          //   children: [
+          //     _buildStatItem('+٥٠٠', 'home.stats_submitted'.tr()),
+          //     SizedBox(width: 12.w),
+          //     _buildStatItem('+١٢٠', 'home.stats_published'.tr()),
+          //     SizedBox(width: 12.w),
+          //     _buildStatItem('+١٠آلاف', 'home.stats_readers'.tr()),
+          //   ],
+          // ),
         ],
       ),
     );

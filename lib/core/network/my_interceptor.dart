@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hekayat_3al_raf/core/helpers/device_helper.dart';
 import 'package:hekayat_3al_raf/core/helpers/digit_converter.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
+import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
 import 'package:hekayat_3al_raf/core/network/api_endpoints.dart';
 import 'package:hekayat_3al_raf/core/network/dio_factory.dart';
 import 'package:hekayat_3al_raf/core/network/token_refresh_manager.dart';
@@ -31,6 +32,11 @@ class MyInterceptor extends Interceptor {
       'REQUEST[${options.method}] => PATH: ${options.path}',
       'Network-Request',
     );
+
+    // 0. Language locale & dynamic base URL injection
+    final currentLang = SharedPrefsHelper.getLocaleCode();
+    options.baseUrl = ApiEndpoints.getBaseUrl(currentLang);
+    options.headers['Accept-Language'] = currentLang;
 
     // 1. Device ID header injection
     try {

@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
+import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_phone_input_field.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +43,7 @@ class _RegisterViewState extends State<_RegisterView> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  CountryPhoneInfo _selectedCountry = CountryPhoneInfo.defaultCountry;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _agreedToTerms = false;
@@ -79,16 +83,19 @@ class _RegisterViewState extends State<_RegisterView> {
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
+    final lang = context.locale.languageCode;
     if (name.isEmpty) {
-      _nameError = 'يرجى إدخال الاسم بالكامل';
+      _nameError = lang == 'ar' ? 'يرجى إدخال الاسم بالكامل' : 'Please enter your full name';
       isValid = false;
     }
 
     if (phone.isEmpty) {
-      _phoneError = 'يرجى إدخال رقم الموبايل';
+      _phoneError = lang == 'ar' ? 'يرجى إدخال رقم الموبايل' : 'Please enter your mobile number';
       isValid = false;
-    } else if (phone.length < 10) {
-      _phoneError = 'يرجى إدخال رقم موبايل صحيح';
+    } else if (!_selectedCountry.isValid(phone)) {
+      _phoneError = lang == 'ar'
+          ? 'رقم هاتف غير صحيح لدولة ${_selectedCountry.nameAr} (مثال: ${_selectedCountry.exampleNumber})'
+          : 'Invalid phone number for ${_selectedCountry.nameEn} (e.g. ${_selectedCountry.exampleNumber})';
       isValid = false;
     }
 
@@ -132,6 +139,7 @@ class _RegisterViewState extends State<_RegisterView> {
     context.read<RegisterCubit>().register(
       name: _nameController.text,
       phone: _phoneController.text,
+      phoneRegion: _selectedCountry.code,
       email: _emailController.text,
       password: _passwordController.text,
       confirmPassword: _confirmPasswordController.text,
@@ -281,13 +289,16 @@ class _RegisterViewState extends State<_RegisterView> {
 
                       // 2. Phone
                       _buildFieldLabel('رقم الموبايل'),
-                      _buildCustomTextField(
+                      AppPhoneInputField(
                         controller: _phoneController,
-                        hintText: '01XXXXXXXXX',
-                        icon: CupertinoIcons.phone,
-                        keyboardType: TextInputType.phone,
-                        textDirection: TextDirection.ltr,
+                        selectedCountry: _selectedCountry,
                         errorMessage: _phoneError,
+                        onCountryChanged: (country) {
+                          setState(() {
+                            _selectedCountry = country;
+                            _phoneError = null;
+                          });
+                        },
                         onChanged: (_) {
                           if (_phoneError != null) {
                             setState(() => _phoneError = null);

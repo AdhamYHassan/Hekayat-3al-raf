@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -115,7 +116,7 @@ class AmbassadorCardItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '${ambassador.storiesCount} حكاية',
+                            'ambassadors.stories_count'.tr(args: ['${ambassador.storiesCount}']),
                             style: GoogleFonts.ibmPlexSansArabic(
                               color: ColorManager.paper400,
                               fontSize: 10.sp,
@@ -132,7 +133,7 @@ class AmbassadorCardItem extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${ambassador.answeredQuestionsCount} سؤال تم الرد',
+                            'ambassadors.answered_count'.tr(args: ['${ambassador.answeredQuestionsCount}']),
                             style: GoogleFonts.ibmPlexSansArabic(
                               color: ColorManager.paper400,
                               fontSize: 10.sp,

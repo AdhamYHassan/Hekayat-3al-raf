@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -78,7 +79,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
           if (state.details == null) {
             return Center(
               child: Text(
-                'تعذر تحميل بيانات السفير',
+                'errors.something_went_wrong'.tr(),
                 style: GoogleFonts.ibmPlexSansArabic(
                   color: ColorManager.paper200,
                   fontSize: 14.sp,

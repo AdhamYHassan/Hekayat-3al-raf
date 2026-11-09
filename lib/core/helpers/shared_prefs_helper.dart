@@ -6,6 +6,7 @@ class SharedPrefsHelper {
 
   static const String _fcmTokenKey = 'fcm_token';
   static const String _themeKey = 'app_theme_mode';
+  static const String _localeKey = 'locale';
 
   // 1. Initialize SharedPreferences once at startup
   static Future<void> init() async {
@@ -13,6 +14,15 @@ class SharedPrefsHelper {
   }
 
   static SharedPreferences? get instance => _prefs;
+
+  // Language Locale preference
+  static Future<void> setLocaleCode(String code) async {
+    await _prefs?.setString(_localeKey, code);
+  }
+
+  static String getLocaleCode() {
+    return _prefs?.getString(_localeKey) ?? 'ar';
+  }
 
   static Future<void> setFcmToken(String token) async {
     await _prefs?.setString(_fcmTokenKey, token);

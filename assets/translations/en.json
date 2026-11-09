@@ -210,6 +210,21 @@
     "share_document": "Share Document",
     "save_to_device": "Save to Device"
   },
+  "ambassadors": {
+    "title": "Ambassadors",
+    "subtitle": "Voices that help stories find their way. Discover their journeys and roles.",
+    "stories_count": "{} Stories",
+    "answered_count": "{} Questions Answered",
+    "qa_title": "Q&A",
+    "ask_ambassador": "Ask the Ambassador",
+    "ask_hint": "Type your question here...",
+    "send_question": "Submit Question",
+    "ambassador_reply": "Ambassador Reply:",
+    "empty_qa": "No questions yet.",
+    "selected_stories": "Selected Stories",
+    "view_profile": "View Profile",
+    "role_default": "Platform Ambassador"
+  },
   "submit": {
     "title": "Tell Your Story",
     "subtitle": "Every experience deserves to be heard. Choose your preferred format, and we'll deliver it to those who need to hear it.",
@@ -276,7 +291,46 @@
       "discard": "Discard Draft"
     },
     "review_info": {
-      "title": "How do we review stories?"
+      "title": "How do we review stories?",
+      "step_review_title": "Review",
+      "step_review_desc": "A dedicated editorial team carefully reads your story, and we reach out if anything needs clarification.",
+      "step_publish_title": "Publishing",
+      "step_publish_desc": "It goes live on the platform to reach those who need it, keeping you in full control of your privacy."
+    },
+    "type_options": {
+      "written_title": "Written Narrative",
+      "written_desc": "Write your story in your own words, at your own pace.",
+      "written_badge1": "Rich Text",
+      "written_badge2": "Add Photos",
+      "written_badge3": "Save as Draft",
+      "audio_title": "Audio Story",
+      "audio_desc": "Record your voice narrating the journey from start to finish.",
+      "audio_badge1": "Direct Recording",
+      "audio_badge2": "Upload Audio File",
+      "audio_badge3": "Edit Before Publish",
+      "video_title": "Visual / Video Story",
+      "video_desc": "Film your story or upload an existing video memory.",
+      "video_badge1": "Upload Video",
+      "video_badge2": "Add Description",
+      "video_badge3": "Visual Aids",
+      "document_title": "Document (PDF / Word)",
+      "document_desc": "Have a letter, journal, or old manuscript? Upload as-is.",
+      "document_badge1": "Upload PDF",
+      "document_badge2": "Upload Word",
+      "document_badge3": "Document Photos"
+    },
+    "step3": {
+      "unspecified_title": "Untitled Story",
+      "author_narrator": "Author / Narrator:",
+      "anonymous_author": "Anonymous (Hidden)",
+      "story_type": "Story Type:",
+      "summary": "Brief Description:",
+      "cover_attached": "Cover photo attached",
+      "guest_info_title": "Guest Details (to link to your account later)",
+      "guest_name_hint": "Full Name",
+      "guest_phone_hint": "Mobile Number (e.g. 01012345678)",
+      "submitting": "Submitting...",
+      "confirm_and_submit": "Confirm & Submit Story"
     }
   }
 }

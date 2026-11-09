@@ -11,6 +11,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> login({
     required String loginInput,
+    String phoneRegion = 'EG',
     required String password,
   }) async {
     final trimmedLogin = loginInput.trim();
@@ -31,7 +32,7 @@ class LoginCubit extends Cubit<LoginState> {
     final request = LoginRequestModel(
       login: trimmedLogin,
       password: trimmedPassword,
-      phoneRegion: 'EG',
+      phoneRegion: phoneRegion,
     );
 
     final result = await _loginUseCase(request);

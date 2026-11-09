@@ -17,24 +17,29 @@ class SubmitStoryStepper extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _StepItem(
-            stepNumber: 1,
-            label: 'submit.stepper.step1'.tr(),
-            isActive: currentStep >= 1,
+          Expanded(
+            child: _StepItem(
+              stepNumber: 1,
+              label: 'submit.stepper.step1'.tr(),
+              isActive: currentStep >= 1,
+            ),
           ),
           _StepDivider(isActive: currentStep >= 2),
-          _StepItem(
-            stepNumber: 2,
-            label: 'submit.stepper.step2'.tr(),
-            isActive: currentStep >= 2,
+          Expanded(
+            child: _StepItem(
+              stepNumber: 2,
+              label: 'submit.stepper.step2'.tr(),
+              isActive: currentStep >= 2,
+            ),
           ),
           _StepDivider(isActive: currentStep >= 3),
-          _StepItem(
-            stepNumber: 3,
-            label: 'submit.stepper.step3'.tr(),
-            isActive: currentStep >= 3,
+          Expanded(
+            child: _StepItem(
+              stepNumber: 3,
+              label: 'submit.stepper.step3'.tr(),
+              isActive: currentStep >= 3,
+            ),
           ),
         ],
       ),
@@ -59,8 +64,8 @@ class _StepItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 28.w,
-          height: 28.w,
+          width: 24.w,
+          height: 24.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: isActive ? ColorManager.gold : ColorManager.primaryLight.withValues(alpha: 0.4),
@@ -70,19 +75,23 @@ class _StepItem extends StatelessWidget {
               stepNumber.toString(),
               style: GoogleFonts.ibmPlexSansArabic(
                 color: isActive ? ColorManager.primaryDark : ColorManager.paper400,
-                fontSize: 12.sp,
+                fontSize: 11.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
-        SizedBox(width: 6.w),
-        Text(
-          label,
-          style: GoogleFonts.ibmPlexSansArabic(
-            color: isActive ? ColorManager.gold : ColorManager.paper400,
-            fontSize: 11.sp,
-            fontWeight: FontWeight.w500,
+        SizedBox(width: 5.w),
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.ibmPlexSansArabic(
+              color: isActive ? ColorManager.gold : ColorManager.paper400,
+              fontSize: 11.sp,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],
@@ -98,9 +107,9 @@ class _StepDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 20.w,
+      width: 14.w,
       height: 1.h,
-      margin: EdgeInsets.symmetric(horizontal: 6.w),
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
       color: isActive ? ColorManager.gold : ColorManager.gold.withValues(alpha: 0.2),
     );
   }

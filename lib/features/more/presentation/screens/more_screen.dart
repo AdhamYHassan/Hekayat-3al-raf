@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
+import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
@@ -162,8 +163,11 @@ class MoreScreen extends StatelessWidget {
               SizedBox(height: 8.h),
               MoreLanguageSelector(
                 currentLocale: locale,
-                onLocaleChanged: (newLang) {
-                  context.setLocale(Locale(newLang));
+                onLocaleChanged: (newLang) async {
+                  await SharedPrefsHelper.setLocaleCode(newLang);
+                  if (context.mounted) {
+                    await context.setLocale(Locale(newLang));
+                  }
                 },
               ),
 

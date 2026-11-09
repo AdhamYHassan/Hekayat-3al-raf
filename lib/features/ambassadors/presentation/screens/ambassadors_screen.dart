@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,7 +67,7 @@ class _AmbassadorsView extends StatelessWidget {
                       onPressed: () => context.read<AmbassadorsListCubit>().loadAmbassadors(),
                       style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
                       child: Text(
-                        'إعادة المحاولة',
+                        'common.retry'.tr(),
                         style: GoogleFonts.alexandria(color: ColorManager.primaryDark),
                       ),
                     ),
@@ -87,7 +88,7 @@ class _AmbassadorsView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'السفراء',
+                            'ambassadors.title'.tr(),
                             style: GoogleFonts.alexandria(
                               color: ColorManager.paper100,
                               fontSize: 22.sp,
@@ -96,7 +97,7 @@ class _AmbassadorsView extends StatelessWidget {
                           ),
                           SizedBox(height: 6.h),
                           Text(
-                            'أصوات بتساعد الحكايات تلاقي طريقها. تعرف عليهم وعلى دورهم.',
+                            'ambassadors.subtitle'.tr(),
                             style: GoogleFonts.ibmPlexSansArabic(
                               color: ColorManager.paper200.withValues(alpha: 0.65),
                               fontSize: 13.sp,

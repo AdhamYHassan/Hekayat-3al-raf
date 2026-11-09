@@ -74,10 +74,7 @@ class HomeFeedScreen extends StatelessWidget {
                 HomeTopStoriesList(
                   stories: homeData.topStories,
                   onStoryTap: (story) {
-                    context.push(
-                      Routes.storyDetails,
-                      extra: {'id': story.id},
-                    );
+                    context.push(Routes.storyDetails, extra: {'id': story.id});
                   },
                 ),
                 SizedBox(height: 32.h),
@@ -98,16 +95,17 @@ class HomeFeedScreen extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 32.h),
-                HomeSectionHeader(
-                  kicker: 'home.regions_kicker'.tr(),
-                  title: 'home.regions_title'.tr(),
-                ),
-                SizedBox(height: 14.h),
-                HomeRegionsSection(
-                  regions: homeData.regions,
-                  onRegionTap: (_) {},
-                ),
+                // TODO(Regions): Implement regions section when backend is ready.
+                // SizedBox(height: 32.h),
+                // HomeSectionHeader(
+                //   kicker: 'home.regions_kicker'.tr(),
+                //   title: 'home.regions_title'.tr(),
+                // ),
+                // SizedBox(height: 14.h),
+                // HomeRegionsSection(
+                //   regions: homeData.regions,
+                //   onRegionTap: (_) {},
+                // ),
                 SizedBox(height: 32.h),
                 HomeShareCtaCard(
                   onSubmitTap: () =>

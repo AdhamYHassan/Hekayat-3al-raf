@@ -12,6 +12,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> register({
     required String name,
     required String phone,
+    String phoneRegion = 'EG',
     required String email,
     required String password,
     required String confirmPassword,
@@ -65,7 +66,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       name: trimmedName,
       phone: trimmedPhone,
       email: trimmedEmail,
-      phoneRegion: 'EG',
+      phoneRegion: phoneRegion,
       password: trimmedPassword,
     );
 

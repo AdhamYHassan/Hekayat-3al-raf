@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
+import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_cubit.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_state.dart';
@@ -40,18 +43,42 @@ class _StoryDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.primaryDark,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // 1. Top Bar with Brand Logo and Back button
-            StoryDetailHeader(onBackTap: () => Navigator.of(context).pop()),
+    return BlocListener<StoryDetailsCubit, StoryDetailsState>(
+      listenWhen: (prev, curr) =>
+          curr.voteErrorMessage != null &&
+          curr.voteErrorMessage != prev.voteErrorMessage,
+      listener: (context, state) {
+        final error = state.voteErrorMessage;
+        if (error == null) return;
 
-            // 2. Body State
-            Expanded(
-              child: BlocBuilder<StoryDetailsCubit, StoryDetailsState>(
-                builder: (context, state) {
+        final is401 = error.contains('401') ||
+            error.contains('بيانات الدخول') ||
+            error.contains('لم يتم تزويد') ||
+            error.contains('Given token not valid') ||
+            error.toLowerCase().contains('unauthorized');
+
+        if (is401) {
+          AppSnackBar.showAuthRequired(
+            context,
+            message: error,
+            onLoginTap: () => context.push(Routes.login),
+          );
+        } else {
+          AppSnackBar.showError(context, message: error);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: ColorManager.primaryDark,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // 1. Top Bar with Brand Logo and Back button
+              StoryDetailHeader(onBackTap: () => Navigator.of(context).pop()),
+
+              // 2. Body State
+              Expanded(
+                child: BlocBuilder<StoryDetailsCubit, StoryDetailsState>(
+                  builder: (context, state) {
                   if (state.status == StoryDetailsStatus.loading ||
                       state.status == StoryDetailsStatus.initial) {
                     return const StoryDetailsShimmerLoading();
@@ -229,6 +256,7 @@ class _StoryDetailsView extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

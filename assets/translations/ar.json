@@ -214,6 +214,21 @@
     "share_document": "مشاركة المستند",
     "save_to_device": "حفظ في الجهاز"
   },
+  "ambassadors": {
+    "title": "السفراء",
+    "subtitle": "أصوات بتساعد الحكايات تلاقي طريقها. تعرف عليهم وعلى دورهم.",
+    "stories_count": "{} حكاية",
+    "answered_count": "{} سؤال تم الرد",
+    "qa_title": "أسئلة وإجابات",
+    "ask_ambassador": "اسأل السفير",
+    "ask_hint": "اكتب سؤالك هنا...",
+    "send_question": "إرسال السؤال",
+    "ambassador_reply": "رد السفير:",
+    "empty_qa": "لا توجد أسئلة بعد.",
+    "selected_stories": "حكايات مختارة",
+    "view_profile": "عرض الملف",
+    "role_default": "سفير المنصة"
+  },
   "submit": {
     "title": "احكي حكايتك",
     "subtitle": "كل تجربة تستحق أن تُسمع. اختار الطريقة اللي تناسبك، وإحنا هنوصلها للي يحتاج يسمعها.",
@@ -280,7 +295,46 @@
       "discard": "تجاهل المسودة"
     },
     "review_info": {
-      "title": "إزاي بنراجع الحكايات؟"
+      "title": "إزاي بنراجع الحكايات؟",
+      "step_review_title": "المراجعة",
+      "step_review_desc": "فريق صغير بيقرا الحكاية بعناية، ولو محتاجة حاجة بنرجعلك.",
+      "step_publish_title": "النشر",
+      "step_publish_desc": "بتظهر في المنصة وتوصل للي محتاجها، مع كامل التحكم في خصوصيتك."
+    },
+    "type_options": {
+      "written_title": "حكاية مكتوبة",
+      "written_desc": "اكتب حكايتك بكلماتك، بالطريقة اللي تريحك.",
+      "written_badge1": "نص حر",
+      "written_badge2": "إضافة صور",
+      "written_badge3": "حفظ كمسودة",
+      "audio_title": "حكاية صوتية",
+      "audio_desc": "سجل صوتك وهو بيحكي الحكاية من أولها لآخرها.",
+      "audio_badge1": "تسجيل مباشر",
+      "audio_badge2": "رفع ملف صوتي",
+      "audio_badge3": "تعديل قبل النشر",
+      "video_title": "حكاية مصورة",
+      "video_desc": "صور حكايتك بالفيديو، أو ارفع فيديو قديم.",
+      "video_badge1": "رفع فيديو",
+      "video_badge2": "إضافة وصف",
+      "video_badge3": "صور توضيحية",
+      "document_title": "وثيقة (PDF / Word)",
+      "document_desc": "عندك جواب، دفتر، أو ورقة قديمة؟ ارفعها زي ما هي.",
+      "document_badge1": "رفع PDF",
+      "document_badge2": "رفع Word",
+      "document_badge3": "صور الورقة"
+    },
+    "step3": {
+      "unspecified_title": "عنوان غير محدد",
+      "author_narrator": "الكاتب / الراوي:",
+      "anonymous_author": "بدون اسم (مخفي)",
+      "story_type": "نوع الحكاية:",
+      "summary": "الوصف المختصر:",
+      "cover_attached": "صورة الغلاف مرفقة",
+      "guest_info_title": "بيانات الزائر (لربط الحكاية بحسابك لاحقاً)",
+      "guest_name_hint": "اسمك الكامل",
+      "guest_phone_hint": "رقم الموبايل (مثال: 01012345678)",
+      "submitting": "جاري الإرسال...",
+      "confirm_and_submit": "تأكيد وإرسال الحكاية"
     }
   }
 }

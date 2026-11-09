@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,14 +21,14 @@ class AmbassadorStatsGrid extends StatelessWidget {
         Expanded(
           child: _StatCard(
             count: storiesCount.toString(),
-            label: 'حكاية',
+            label: 'ambassadors.stories_count'.tr(args: ['']).trim(),
           ),
         ),
         SizedBox(width: 12.w),
         Expanded(
           child: _StatCard(
             count: answeredQuestionsCount.toString(),
-            label: 'سؤال تم الرد',
+            label: 'ambassadors.answered_count'.tr(args: ['']).trim(),
           ),
         ),
       ],
@@ -39,10 +40,7 @@ class _StatCard extends StatelessWidget {
   final String count;
   final String label;
 
-  const _StatCard({
-    required this.count,
-    required this.label,
-  });
+  const _StatCard({required this.count, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -80,4 +78,3 @@ class _StatCard extends StatelessWidget {
     );
   }
 }
-

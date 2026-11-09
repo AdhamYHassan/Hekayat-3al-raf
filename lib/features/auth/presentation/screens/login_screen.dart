@@ -1,16 +1,19 @@
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
-import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
-import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
+import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
+import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_phone_input_field.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/bloc/login_cubit.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/bloc/login_state.dart';
 
@@ -36,7 +39,18 @@ class _LoginView extends StatefulWidget {
 class _LoginViewState extends State<_LoginView> {
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  CountryPhoneInfo _selectedCountry = CountryPhoneInfo.defaultCountry;
   bool _obscurePassword = true;
+  String? _loginError;
+  String? _passwordError;
+
+  bool get _isPhoneInput {
+    final text = _loginController.text.trim();
+    if (text.isEmpty) return false;
+    final firstChar = text.characters.first;
+    // Check if the first character is an ASCII digit or Arabic-Indic numeral
+    return RegExp(r'^[0-9٠-٩۰-۹+]').hasMatch(firstChar);
+  }
 
   @override
   void dispose() {
@@ -45,9 +59,69 @@ class _LoginViewState extends State<_LoginView> {
     super.dispose();
   }
 
+  void _showCountryPicker(BuildContext context) {
+    showCountryPickerSheet(
+      context: context,
+      selectedCountry: _selectedCountry,
+      onSelected: (country) {
+        setState(() {
+          _selectedCountry = country;
+          _loginError = null;
+        });
+      },
+    );
+  }
+
+  bool _validateInputs() {
+    setState(() {
+      _loginError = null;
+      _passwordError = null;
+    });
+
+    final lang = context.locale.languageCode;
+    final text = _loginController.text.trim();
+    final password = _passwordController.text.trim();
+    bool isValid = true;
+
+    if (text.isEmpty) {
+      _loginError = lang == 'ar'
+          ? 'يرجى إدخال رقم الموبايل أو البريد الإلكتروني'
+          : 'Please enter your mobile or email';
+      isValid = false;
+    } else if (_isPhoneInput) {
+      if (!_selectedCountry.isValid(text)) {
+        _loginError = lang == 'ar'
+            ? 'رقم هاتف غير صحيح لدولة ${_selectedCountry.nameAr} (مثال: ${_selectedCountry.exampleNumber})'
+            : 'Invalid phone number for ${_selectedCountry.nameEn} (e.g. ${_selectedCountry.exampleNumber})';
+        isValid = false;
+      }
+    } else {
+      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+      if (!emailRegex.hasMatch(text)) {
+        _loginError = lang == 'ar'
+            ? 'صيغة البريد الإلكتروني غير صحيحة'
+            : 'Invalid email address format';
+        isValid = false;
+      }
+    }
+
+    if (password.isEmpty) {
+      _passwordError = lang == 'ar'
+          ? 'يرجى إدخال كلمة المرور'
+          : 'Please enter your password';
+      isValid = false;
+    }
+
+    setState(() {});
+    return isValid;
+  }
+
   void _onLoginPressed() {
+    if (!_validateInputs()) return;
+
     context.read<LoginCubit>().login(
       loginInput: _loginController.text,
+      phoneRegion: _isPhoneInput ? _selectedCountry.code : 'EG',
       password: _passwordController.text,
     );
   }
@@ -168,14 +242,48 @@ class _LoginViewState extends State<_LoginView> {
                       ),
                       SizedBox(height: 32.h),
 
-                      // Input 1: Phone / Login
-                      _buildFieldLabel('رقم الموبايل'),
+                      // Input 1: Phone / Email Login
+                      _buildFieldLabel(
+                        context.locale.languageCode == 'ar'
+                            ? 'رقم الموبايل أو البريد الإلكتروني'
+                            : 'Mobile Number or Email',
+                      ),
                       _buildLoginField(),
+                      if (_loginError != null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h, right: 6.w, left: 6.w),
+                          child: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              _loginError!,
+                              style: GoogleFonts.ibmPlexSansArabic(
+                                fontSize: 11.sp,
+                                color: ColorManager.error,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 16.h),
 
                       // Input 2: Password
-                      _buildFieldLabel('كلمة المرور'),
+                      _buildFieldLabel('auth.password'.tr()),
                       _buildPasswordField(),
+                      if (_passwordError != null)
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h, right: 6.w, left: 6.w),
+                          child: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              _passwordError!,
+                              style: GoogleFonts.ibmPlexSansArabic(
+                                fontSize: 11.sp,
+                                color: ColorManager.error,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 8.h),
 
                       // Forgot Password Link
@@ -375,7 +483,7 @@ class _LoginViewState extends State<_LoginView> {
 
   Widget _buildFieldLabel(String label) {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: AlignmentDirectional.centerStart,
       child: Padding(
         padding: EdgeInsets.only(bottom: 6.h),
         child: Text(
@@ -391,41 +499,163 @@ class _LoginViewState extends State<_LoginView> {
   }
 
   Widget _buildLoginField() {
+    final lang = context.locale.languageCode;
+    final isPhone = _isPhoneInput;
+    final hasError = _loginError != null;
+
     return Container(
       decoration: BoxDecoration(
         color: ColorManager.primary.withValues(alpha: 0.50),
         borderRadius: BorderRadius.circular(10.r),
         border: Border.all(
-          color: ColorManager.gold.withValues(alpha: 0.15),
-          width: 1,
+          color: hasError
+              ? ColorManager.error
+              : ColorManager.gold.withValues(alpha: 0.15),
+          width: hasError ? 1.4 : 1,
         ),
       ),
-      child: TextField(
-        controller: _loginController,
-        keyboardType: TextInputType.phone,
-        inputFormatters: const [ArabicToEnglishDigitsFormatter()],
-        textDirection: TextDirection.ltr,
-        style: GoogleFonts.ibmPlexSansArabic(
-          color: ColorManager.paper100,
-          fontSize: 14.sp,
-        ),
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            CupertinoIcons.phone,
-            color: ColorManager.gold.withValues(alpha: 0.50),
-            size: 18.sp,
+      child: Row(
+        children: [
+          // If first input character is a digit -> show interactive country selector
+          if (isPhone)
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => _showCountryPicker(context),
+                borderRadius: BorderRadius.horizontal(
+                  right: lang == 'ar' ? Radius.circular(10.r) : Radius.zero,
+                  left: lang != 'ar' ? Radius.circular(10.r) : Radius.zero,
+                ),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 12.h,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: lang == 'ar'
+                          ? BorderSide(
+                              color: ColorManager.gold.withValues(alpha: 0.15),
+                              width: 1,
+                            )
+                          : BorderSide.none,
+                      right: lang != 'ar'
+                          ? BorderSide(
+                              color: ColorManager.gold.withValues(alpha: 0.15),
+                              width: 1,
+                            )
+                          : BorderSide.none,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _selectedCountry.flag,
+                        style: TextStyle(fontSize: 18.sp),
+                      ),
+                      SizedBox(width: 4.w),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 80.w),
+                        child: Text(
+                          _selectedCountry.localizedName(lang),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.ibmPlexSansArabic(
+                            fontSize: 11.5.sp,
+                            fontWeight: FontWeight.w600,
+                            color: ColorManager.paper100,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Text(
+                        '(${_selectedCountry.dialCode})',
+                        textDirection: TextDirection.ltr,
+                        style: GoogleFonts.ibmPlexSansArabic(
+                          fontSize: 11.sp,
+                          color: ColorManager.gold,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                      Icon(
+                        CupertinoIcons.chevron_down,
+                        size: 11.sp,
+                        color: ColorManager.paper400.withValues(alpha: 0.7),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          else
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Icon(
+                CupertinoIcons.mail,
+                color: ColorManager.gold.withValues(alpha: 0.50),
+                size: 18.sp,
+              ),
+            ),
+
+          // Input field
+          Expanded(
+            child: TextField(
+              controller: _loginController,
+              keyboardType: isPhone ? TextInputType.phone : TextInputType.emailAddress,
+              inputFormatters: [
+                const ArabicToEnglishDigitsFormatter(),
+                if (isPhone)
+                  LengthLimitingTextInputFormatter(
+                    _selectedCountry.maxLength + 6,
+                  ),
+              ],
+              textDirection: TextDirection.ltr,
+              onChanged: (val) {
+                // If user pastes/enters '+' or dial code prefix (e.g. +966..., 0020...)
+                if (val.startsWith('+') || val.startsWith('00')) {
+                  final detected = CountryPhoneInfo.findByLeadingDialCode(val);
+                  if (detected != null) {
+                    final normalized = detected.normalizeNumber(val);
+                    setState(() {
+                      _selectedCountry = detected;
+                      _loginController.value = TextEditingValue(
+                        text: normalized,
+                        selection: TextSelection.collapsed(offset: normalized.length),
+                      );
+                      if (_loginError != null) _loginError = null;
+                    });
+                    return;
+                  }
+                }
+
+                setState(() {
+                  if (_loginError != null) _loginError = null;
+                });
+              },
+              style: GoogleFonts.ibmPlexSansArabic(
+                color: ColorManager.paper100,
+                fontSize: 14.sp,
+              ),
+              decoration: InputDecoration(
+                hintText: isPhone
+                    ? _selectedCountry.exampleNumber
+                    : (lang == 'ar' ? '01012345678 أو name@example.com' : '01012345678 or name@example.com'),
+                hintTextDirection: TextDirection.ltr,
+                hintStyle: GoogleFonts.ibmPlexSansArabic(
+                  color: ColorManager.paper400.withValues(alpha: 0.5),
+                  fontSize: 12.5.sp,
+                ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                  vertical: 13.h,
+                ),
+              ),
+            ),
           ),
-          hintText: '01XXXXXXXXX',
-          hintStyle: GoogleFonts.ibmPlexSansArabic(
-            color: ColorManager.paper400.withValues(alpha: 0.6),
-            fontSize: 13.5.sp,
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 14.w,
-            vertical: 13.h,
-          ),
-        ),
+        ],
       ),
     );
   }

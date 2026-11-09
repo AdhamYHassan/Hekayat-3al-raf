@@ -97,7 +97,11 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
               ),
               title: Row(
                 children: [
-                  Icon(CupertinoIcons.checkmark_seal_fill, color: ColorManager.gold, size: 24.sp),
+                  Icon(
+                    CupertinoIcons.checkmark_seal_fill,
+                    color: ColorManager.gold,
+                    size: 24.sp,
+                  ),
                   SizedBox(width: 8.w),
                   Text(
                     'تم بنجاح',
@@ -110,8 +114,12 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                 ],
               ),
               content: Text(
-                state.successMessage ?? 'تم إرسال حكايتك بنجاح ومراجعتها قريباً.',
-                style: GoogleFonts.ibmPlexSansArabic(color: ColorManager.paper200, fontSize: 13.sp),
+                state.successMessage ??
+                    'تم إرسال حكايتك بنجاح ومراجعتها قريباً.',
+                style: GoogleFonts.ibmPlexSansArabic(
+                  color: ColorManager.paper200,
+                  fontSize: 13.sp,
+                ),
               ),
               actions: [
                 ElevatedButton(
@@ -122,10 +130,15 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                       Navigator.of(context).pop();
                     }
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorManager.gold,
+                  ),
                   child: Text(
                     'common.ok'.tr(),
-                    style: GoogleFonts.alexandria(color: ColorManager.primaryDark, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.alexandria(
+                      color: ColorManager.primaryDark,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -148,18 +161,26 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                 decoration: BoxDecoration(
                   color: ColorManager.primaryLight.withValues(alpha: 0.35),
                   borderRadius: BorderRadius.circular(14.r),
-                  border: Border.all(color: ColorManager.gold.withValues(alpha: 0.2)),
+                  border: Border.all(
+                    color: ColorManager.gold.withValues(alpha: 0.2),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Icon(CupertinoIcons.doc_text_fill, color: ColorManager.gold, size: 20.sp),
+                        Icon(
+                          CupertinoIcons.doc_text_fill,
+                          color: ColorManager.gold,
+                          size: 20.sp,
+                        ),
                         SizedBox(width: 8.w),
                         Expanded(
                           child: Text(
-                            state.title.isNotEmpty ? state.title : 'عنوان غير محدد',
+                            state.title.isNotEmpty
+                                ? state.title
+                                : 'submit.step3.unspecified_title'.tr(),
                             style: GoogleFonts.alexandria(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
@@ -170,20 +191,38 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                       ],
                     ),
                     SizedBox(height: 10.h),
-                    _buildReviewItem('الكاتب / الراوي:', state.showAuthor ? state.authorName : 'بدون اسم (مخفي)'),
+                    _buildReviewItem(
+                      'submit.step3.author_narrator'.tr(),
+                      state.showAuthor
+                          ? state.authorName
+                          : 'submit.step3.anonymous_author'.tr(),
+                    ),
                     SizedBox(height: 6.h),
-                    _buildReviewItem('نوع الحكاية:', _getFormatLabel(widget.format)),
+                    _buildReviewItem(
+                      'submit.step3.story_type'.tr(),
+                      _getFormatLabel(widget.format),
+                    ),
                     SizedBox(height: 6.h),
-                    _buildReviewItem('الوصف المختصر:', state.summary.isNotEmpty ? state.summary : '—'),
+                    _buildReviewItem(
+                      'submit.step3.summary'.tr(),
+                      state.summary.isNotEmpty ? state.summary : '—',
+                    ),
                     if (state.coverImagePath != null) ...[
                       SizedBox(height: 10.h),
                       Row(
                         children: [
-                          Icon(CupertinoIcons.photo, color: ColorManager.goldLight, size: 14.sp),
+                          Icon(
+                            CupertinoIcons.photo,
+                            color: ColorManager.goldLight,
+                            size: 14.sp,
+                          ),
                           SizedBox(width: 6.w),
                           Text(
-                            'صورة الغلاف مرفقة',
-                            style: GoogleFonts.ibmPlexSansArabic(fontSize: 12.sp, color: ColorManager.goldLight),
+                            'submit.step3.cover_attached'.tr(),
+                            style: GoogleFonts.ibmPlexSansArabic(
+                              fontSize: 12.sp,
+                              color: ColorManager.goldLight,
+                            ),
                           ),
                         ],
                       ),
@@ -200,17 +239,23 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                   decoration: BoxDecoration(
                     color: ColorManager.gold.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: ColorManager.gold.withValues(alpha: 0.25)),
+                    border: Border.all(
+                      color: ColorManager.gold.withValues(alpha: 0.25),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Icon(CupertinoIcons.person_badge_plus, color: ColorManager.gold, size: 18.sp),
+                          Icon(
+                            CupertinoIcons.person_badge_plus,
+                            color: ColorManager.gold,
+                            size: 18.sp,
+                          ),
                           SizedBox(width: 6.w),
                           Text(
-                            'بيانات الزائر (لربط الحكاية بحسابك لاحقاً)',
+                            'submit.step3.guest_info_title'.tr(),
                             style: GoogleFonts.alexandria(
                               fontSize: 12.5.sp,
                               fontWeight: FontWeight.bold,
@@ -222,7 +267,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                       SizedBox(height: 12.h),
                       _buildGuestTextField(
                         controller: _guestNameController,
-                        hint: 'اسمك الكامل',
+                        hint: 'submit.step3.guest_name_hint'.tr(),
                         icon: CupertinoIcons.person,
                         errorMessage: _guestNameError,
                         onChanged: (val) {
@@ -235,7 +280,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                       SizedBox(height: 10.h),
                       _buildGuestTextField(
                         controller: _guestPhoneController,
-                        hint: 'رقم الموبايل (مثال: 01012345678)',
+                        hint: 'submit.step3.guest_phone_hint'.tr(),
                         icon: CupertinoIcons.phone,
                         keyboardType: TextInputType.phone,
                         errorMessage: _guestPhoneError,
@@ -259,11 +304,22 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                   OutlinedButton.icon(
                     onPressed: () => cubit.setStep(2),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: ColorManager.paper100.withValues(alpha: 0.3)),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
-                      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
+                      side: BorderSide(
+                        color: ColorManager.paper100.withValues(alpha: 0.3),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 18.w,
+                        vertical: 12.h,
+                      ),
                     ),
-                    icon: Icon(Icons.chevron_right_rounded, color: ColorManager.paper100, size: 18.sp),
+                    icon: Icon(
+                      Icons.chevron_right_rounded,
+                      color: ColorManager.paper100,
+                      size: 18.sp,
+                    ),
                     label: Text(
                       'submit.prev'.tr(),
                       style: GoogleFonts.ibmPlexSansArabic(
@@ -287,7 +343,9 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorManager.gold,
                         padding: EdgeInsets.symmetric(vertical: 12.h),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.r),
+                        ),
                         elevation: 0,
                       ),
                       icon: state.isSubmitting
@@ -299,9 +357,15 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                                 color: ColorManager.primaryDark,
                               ),
                             )
-                          : Icon(CupertinoIcons.paperplane_fill, color: ColorManager.primaryDark, size: 18.sp),
+                          : Icon(
+                              CupertinoIcons.paperplane_fill,
+                              color: ColorManager.primaryDark,
+                              size: 18.sp,
+                            ),
                       label: Text(
-                        state.isSubmitting ? 'جاري الإرسال...' : 'تأكيد وإرسال الحكاية',
+                        state.isSubmitting
+                            ? 'submit.step3.submitting'.tr()
+                            : 'submit.step3.confirm_and_submit'.tr(),
                         style: GoogleFonts.alexandria(
                           fontSize: 13.5.sp,
                           fontWeight: FontWeight.bold,
@@ -368,7 +432,10 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
               const ArabicToEnglishDigitsFormatter(),
           ],
           onChanged: onChanged,
-          style: GoogleFonts.ibmPlexSansArabic(fontSize: 13.sp, color: ColorManager.paper100),
+          style: GoogleFonts.ibmPlexSansArabic(
+            fontSize: 13.sp,
+            color: ColorManager.paper100,
+          ),
           decoration: InputDecoration(
             prefixIcon: Icon(
               icon,
@@ -382,25 +449,34 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
             ),
             filled: true,
             fillColor: ColorManager.primaryDark,
-            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 12.w,
+              vertical: 10.h,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(
-                color: hasError ? ColorManager.error : ColorManager.gold.withValues(alpha: 0.2),
+                color: hasError
+                    ? ColorManager.error
+                    : ColorManager.gold.withValues(alpha: 0.2),
                 width: hasError ? 1.2 : 1.0,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(
-                color: hasError ? ColorManager.error : ColorManager.gold.withValues(alpha: 0.2),
+                color: hasError
+                    ? ColorManager.error
+                    : ColorManager.gold.withValues(alpha: 0.2),
                 width: hasError ? 1.2 : 1.0,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(
-                color: hasError ? ColorManager.error : ColorManager.gold.withValues(alpha: 0.4),
+                color: hasError
+                    ? ColorManager.error
+                    : ColorManager.gold.withValues(alpha: 0.4),
                 width: hasError ? 1.5 : 1.0,
               ),
             ),

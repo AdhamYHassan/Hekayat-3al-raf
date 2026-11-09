@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +25,7 @@ class AmbassadorSelectedStoriesList extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Text(
-            'حكايات مختارة',
+            'ambassadors.selected_stories'.tr(),
             style: GoogleFonts.alexandria(
               color: ColorManager.paper100,
               fontSize: 16.sp,
@@ -99,8 +100,11 @@ class AmbassadorSelectedStoriesList extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: 12.w),
-                              Icon(Icons.visibility_outlined,
-                                  size: 13.sp, color: ColorManager.paper400),
+                              Icon(
+                                Icons.visibility_outlined,
+                                size: 13.sp,
+                                color: ColorManager.paper400,
+                              ),
                               SizedBox(width: 4.w),
                               Text(
                                 story.viewsCount,
@@ -129,4 +133,3 @@ class AmbassadorSelectedStoriesList extends StatelessWidget {
     );
   }
 }
-

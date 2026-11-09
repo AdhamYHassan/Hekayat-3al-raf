@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +23,49 @@ class StoryTypeCard extends StatelessWidget {
       StorySubmissionFormat.audio => Icons.headphones_rounded,
       StorySubmissionFormat.video => Icons.videocam_rounded,
       StorySubmissionFormat.document => Icons.description_rounded,
+    };
+  }
+
+  String _getTitle(StorySubmissionFormat format) {
+    return switch (format) {
+      StorySubmissionFormat.written => 'submit.type_options.written_title'.tr(),
+      StorySubmissionFormat.audio => 'submit.type_options.audio_title'.tr(),
+      StorySubmissionFormat.video => 'submit.type_options.video_title'.tr(),
+      StorySubmissionFormat.document => 'submit.type_options.document_title'.tr(),
+    };
+  }
+
+  String _getDescription(StorySubmissionFormat format) {
+    return switch (format) {
+      StorySubmissionFormat.written => 'submit.type_options.written_desc'.tr(),
+      StorySubmissionFormat.audio => 'submit.type_options.audio_desc'.tr(),
+      StorySubmissionFormat.video => 'submit.type_options.video_desc'.tr(),
+      StorySubmissionFormat.document => 'submit.type_options.document_desc'.tr(),
+    };
+  }
+
+  List<String> _getBadges(StorySubmissionFormat format) {
+    return switch (format) {
+      StorySubmissionFormat.written => [
+          'submit.type_options.written_badge1'.tr(),
+          'submit.type_options.written_badge2'.tr(),
+          'submit.type_options.written_badge3'.tr(),
+        ],
+      StorySubmissionFormat.audio => [
+          'submit.type_options.audio_badge1'.tr(),
+          'submit.type_options.audio_badge2'.tr(),
+          'submit.type_options.audio_badge3'.tr(),
+        ],
+      StorySubmissionFormat.video => [
+          'submit.type_options.video_badge1'.tr(),
+          'submit.type_options.video_badge2'.tr(),
+          'submit.type_options.video_badge3'.tr(),
+        ],
+      StorySubmissionFormat.document => [
+          'submit.type_options.document_badge1'.tr(),
+          'submit.type_options.document_badge2'.tr(),
+          'submit.type_options.document_badge3'.tr(),
+        ],
     };
   }
 
@@ -78,7 +122,7 @@ class StoryTypeCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          option.title,
+                          _getTitle(option.format),
                           style: GoogleFonts.alexandria(
                             color: ColorManager.paper100,
                             fontSize: 15.sp,
@@ -95,7 +139,7 @@ class StoryTypeCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      option.description,
+                      _getDescription(option.format),
                       style: GoogleFonts.ibmPlexSansArabic(
                         color: ColorManager.paper200.withValues(alpha: 0.65),
                         fontSize: 12.sp,
@@ -106,7 +150,7 @@ class StoryTypeCard extends StatelessWidget {
                     Wrap(
                       spacing: 6.w,
                       runSpacing: 4.h,
-                      children: option.badges.map((badge) {
+                      children: _getBadges(option.format).map((badge) {
                         return Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 8.w, vertical: 2.h),
