@@ -23,6 +23,18 @@
 -keep class com.mr.flutter.plugin.filepicker.** { *; }
 -dontwarn com.mr.flutter.plugin.filepicker.**
 
+# 5. Video Player & WebView
+-keep class io.flutter.plugins.videoplayer.** { *; }
+-dontwarn io.flutter.plugins.videoplayer.**
+
+-keep class io.flutter.plugins.webviewflutter.** { *; }
+-dontwarn io.flutter.plugins.webviewflutter.**
+
+# 6. Flutter Secure Storage (KeyStore and Encrypted Preferences)
+-keep class androidx.security.crypto.** { *; }
+-dontwarn androidx.security.crypto.**
+
+# 7. Media Compat & Support Libraries
 -keep class android.support.v4.media.** { *; }
 -dontwarn android.support.v4.media.**
 

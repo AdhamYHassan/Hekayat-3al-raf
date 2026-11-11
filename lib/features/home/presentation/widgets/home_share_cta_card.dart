@@ -225,39 +225,39 @@ class HomeShareCtaCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String count, String label) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
-        decoration: BoxDecoration(
-          color: ColorManager.primaryLight.withValues(alpha: 0.4),
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: ColorManager.gold.withValues(alpha: 0.1)),
-        ),
-        child: Column(
-          children: [
-            Text(
-              count,
-              style: GoogleFonts.alexandria(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.w700,
-                color: ColorManager.gold,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              label,
-              style: GoogleFonts.ibmPlexSansArabic(
-                fontSize: 10.sp,
-                color: ColorManager.paper200.withValues(alpha: 0.6),
-                height: 1.2,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildStatItem(String count, String label) {
+  //   return Expanded(
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+  //       decoration: BoxDecoration(
+  //         color: ColorManager.primaryLight.withValues(alpha: 0.4),
+  //         borderRadius: BorderRadius.circular(8.r),
+  //         border: Border.all(color: ColorManager.gold.withValues(alpha: 0.1)),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           Text(
+  //             count,
+  //             style: GoogleFonts.alexandria(
+  //               fontSize: 22.sp,
+  //               fontWeight: FontWeight.w700,
+  //               color: ColorManager.gold,
+  //             ),
+  //           ),
+  //           SizedBox(height: 4.h),
+  //           Text(
+  //             label,
+  //             style: GoogleFonts.ibmPlexSansArabic(
+  //               fontSize: 10.sp,
+  //               color: ColorManager.paper200.withValues(alpha: 0.6),
+  //               height: 1.2,
+  //             ),
+  //             textAlign: TextAlign.center,
+  //             maxLines: 2,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

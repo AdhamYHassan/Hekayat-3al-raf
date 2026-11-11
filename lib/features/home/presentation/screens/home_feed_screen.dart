@@ -11,7 +11,6 @@ import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_shimmer_
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_ambassadors_list.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_featured_card.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_hero_carousel.dart';
-import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_regions_section.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_section_header.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_share_cta_card.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_top_stories_list.dart';

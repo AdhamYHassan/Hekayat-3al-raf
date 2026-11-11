@@ -3,7 +3,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class SecureStorageHelper {
   SecureStorageHelper._();
 
-  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+  static const _androidOptions = AndroidOptions(
+    resetOnError: true,
+  );
+
+  static const _iosOptions = IOSOptions(
+    accessibility: KeychainAccessibility.first_unlock,
+  );
+
+  static const FlutterSecureStorage _storage = FlutterSecureStorage(
+    aOptions: _androidOptions,
+    iOptions: _iosOptions,
+  );
   static const String _tokenKey = 'auth_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _phoneNumber = 'phone_number';
