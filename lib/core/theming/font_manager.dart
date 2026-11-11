@@ -15,6 +15,110 @@ class FontManager {
   static const String arefRuqaa = 'ArefRuqaa';
 }
 
+/// Helper functions to construct local offline TextStyles with full parameter support.
+class AppFonts {
+  AppFonts._();
+
+  static TextStyle ibmPlexSansArabic({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    double? wordSpacing,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    TextOverflow? overflow,
+    FontStyle? fontStyle,
+    Paint? foreground,
+    Paint? background,
+    List<Shadow>? shadows,
+  }) {
+    return TextStyle(
+      fontFamily: FontManager.ibmPlexSansArabic,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+      wordSpacing: wordSpacing,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      overflow: overflow,
+      fontStyle: fontStyle,
+      foreground: foreground,
+      background: background,
+      shadows: shadows,
+    );
+  }
+
+  static TextStyle alexandria({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    double? wordSpacing,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    TextOverflow? overflow,
+    FontStyle? fontStyle,
+    Paint? foreground,
+    Paint? background,
+    List<Shadow>? shadows,
+  }) {
+    return TextStyle(
+      fontFamily: FontManager.alexandria,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+      wordSpacing: wordSpacing,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      overflow: overflow,
+      fontStyle: fontStyle,
+      foreground: foreground,
+      background: background,
+      shadows: shadows,
+    );
+  }
+
+  static TextStyle arefRuqaa({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    double? wordSpacing,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    TextOverflow? overflow,
+    FontStyle? fontStyle,
+    Paint? foreground,
+    Paint? background,
+    List<Shadow>? shadows,
+  }) {
+    return TextStyle(
+      fontFamily: FontManager.arefRuqaa,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+      wordSpacing: wordSpacing,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      overflow: overflow,
+      fontStyle: fontStyle,
+      foreground: foreground,
+      background: background,
+      shadows: shadows,
+    );
+  }
+}
+
 /// Font weights helper conforming to Clean Code standards.
 class FontWeightHelper {
   FontWeightHelper._();

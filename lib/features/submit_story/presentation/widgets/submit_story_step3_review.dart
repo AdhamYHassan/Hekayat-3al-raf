@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
@@ -105,7 +105,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                   SizedBox(width: 8.w),
                   Text(
                     'تم بنجاح',
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       color: ColorManager.paper100,
                       fontWeight: FontWeight.bold,
                       fontSize: 16.sp,
@@ -116,7 +116,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
               content: Text(
                 state.successMessage ??
                     'تم إرسال حكايتك بنجاح ومراجعتها قريباً.',
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.paper200,
                   fontSize: 13.sp,
                 ),
@@ -135,7 +135,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                   ),
                   child: Text(
                     'common.ok'.tr(),
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       color: ColorManager.primaryDark,
                       fontWeight: FontWeight.bold,
                     ),
@@ -181,7 +181,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                             state.title.isNotEmpty
                                 ? state.title
                                 : 'submit.step3.unspecified_title'.tr(),
-                            style: GoogleFonts.alexandria(
+                            style: AppFonts.alexandria(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
                               color: ColorManager.paper100,
@@ -219,7 +219,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                           SizedBox(width: 6.w),
                           Text(
                             'submit.step3.cover_attached'.tr(),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 12.sp,
                               color: ColorManager.goldLight,
                             ),
@@ -256,7 +256,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                           SizedBox(width: 6.w),
                           Text(
                             'submit.step3.guest_info_title'.tr(),
-                            style: GoogleFonts.alexandria(
+                            style: AppFonts.alexandria(
                               fontSize: 12.5.sp,
                               fontWeight: FontWeight.bold,
                               color: ColorManager.gold,
@@ -322,7 +322,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                     ),
                     label: Text(
                       'submit.prev'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
                         color: ColorManager.paper100,
@@ -366,7 +366,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                         state.isSubmitting
                             ? 'submit.step3.submitting'.tr()
                             : 'submit.step3.confirm_and_submit'.tr(),
-                        style: GoogleFonts.alexandria(
+                        style: AppFonts.alexandria(
                           fontSize: 13.5.sp,
                           fontWeight: FontWeight.bold,
                           color: ColorManager.primaryDark,
@@ -390,7 +390,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
       children: [
         Text(
           title,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 12.sp,
             color: ColorManager.paper400,
           ),
@@ -399,7 +399,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
         Expanded(
           child: Text(
             value,
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               fontSize: 12.sp,
               color: ColorManager.paper100,
               fontWeight: FontWeight.w600,
@@ -432,7 +432,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
               const ArabicToEnglishDigitsFormatter(),
           ],
           onChanged: onChanged,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 13.sp,
             color: ColorManager.paper100,
           ),
@@ -443,7 +443,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
               size: 16.sp,
             ),
             hintText: hint,
-            hintStyle: GoogleFonts.ibmPlexSansArabic(
+            hintStyle: AppFonts.ibmPlexSansArabic(
               fontSize: 12.sp,
               color: ColorManager.paper400.withValues(alpha: 0.5),
             ),
@@ -487,7 +487,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
             padding: EdgeInsets.only(top: 4.h, right: 4.w, left: 4.w),
             child: Text(
               errorMessage,
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 color: ColorManager.error,
                 fontSize: 11.sp,
                 fontWeight: FontWeight.w500,

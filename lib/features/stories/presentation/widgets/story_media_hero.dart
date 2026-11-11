@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 
@@ -106,7 +106,7 @@ class StoryMediaHero extends StatelessWidget {
                                 : (mediaType == StoryMediaType.video
                                     ? 'stories.type_visual'.tr()
                                     : 'stories.type_video'.tr()),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 10.sp,
                               fontWeight: FontWeight.w500,
                               color: ColorManager.goldLight,
@@ -116,15 +116,15 @@ class StoryMediaHero extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    Text(category, style: GoogleFonts.ibmPlexSansArabic(fontSize: 11.sp, color: ColorManager.paper200)),
+                    Text(category, style: AppFonts.ibmPlexSansArabic(fontSize: 11.sp, color: ColorManager.paper200)),
                     SizedBox(width: 4.w),
-                    Text('· $year', style: GoogleFonts.ibmPlexSansArabic(fontSize: 11.sp, color: ColorManager.paper400)),
+                    Text('· $year', style: AppFonts.ibmPlexSansArabic(fontSize: 11.sp, color: ColorManager.paper400)),
                   ],
                 ),
                 SizedBox(height: 8.h),
                 Text(
                   title,
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                     color: ColorManager.paper100,
@@ -132,7 +132,7 @@ class StoryMediaHero extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 6.h),
-                Text(authorInfo, style: GoogleFonts.ibmPlexSansArabic(fontSize: 12.sp, color: ColorManager.paper200.withValues(alpha: 0.7))),
+                Text(authorInfo, style: AppFonts.ibmPlexSansArabic(fontSize: 12.sp, color: ColorManager.paper200.withValues(alpha: 0.7))),
               ],
             ),
           ),

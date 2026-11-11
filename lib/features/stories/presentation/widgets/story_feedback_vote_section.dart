@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_cubit.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/bloc/story_details_state.dart';
@@ -35,7 +35,7 @@ class StoryFeedbackVoteSection extends StatelessWidget {
             // Title: وصلتك الحكاية؟
             Text(
               'stories.feedback_title'.tr(),
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
                 color: ColorManager.paper100,
@@ -47,7 +47,7 @@ class StoryFeedbackVoteSection extends StatelessWidget {
             // Subtitle: صوتك بيخليها توصل لناس أكثر.
             Text(
               'stories.feedback_subtitle'.tr(),
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 fontSize: 12.5.sp,
                 color: ColorManager.paper200.withValues(alpha: 0.7),
                 height: 1.4,
@@ -184,7 +184,7 @@ class _VoteButton extends StatelessWidget {
             children: [
               Text(
                 count > 0 ? '$count' : '٠',
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                   color: isActive ? activeColor : ColorManager.paper200,

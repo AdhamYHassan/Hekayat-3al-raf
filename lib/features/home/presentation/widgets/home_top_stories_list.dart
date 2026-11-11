@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_story_entity.dart';
@@ -96,7 +96,7 @@ class HomeTopStoriesList extends StatelessWidget {
                                             : (story.contentType == StoryContentType.video
                                                 ? 'stories.type_video'.tr()
                                                 : 'stories.type_text'.tr())),
-                                    style: GoogleFonts.ibmPlexSansArabic(
+                                    style: AppFonts.ibmPlexSansArabic(
                                       fontSize: 10.sp,
                                       fontWeight: FontWeight.w500,
                                       color: ColorManager.goldLight,
@@ -113,7 +113,7 @@ class HomeTopStoriesList extends StatelessWidget {
                   SizedBox(height: 6.h),
                   Text(
                     story.title,
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w700,
                       color: ColorManager.paper100,
@@ -131,7 +131,7 @@ class HomeTopStoriesList extends StatelessWidget {
                         story.viewsCount >= 1000
                             ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ${'stories.thousand'.tr()}'
                             : '${story.viewsCount}',
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 11.sp,
                           color: ColorManager.paper400,
                         ),
@@ -142,7 +142,7 @@ class HomeTopStoriesList extends StatelessWidget {
                         SizedBox(width: 3.w),
                         Text(
                           '${story.rating}',
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper400,
                           ),
@@ -153,7 +153,7 @@ class HomeTopStoriesList extends StatelessWidget {
                         SizedBox(width: 3.w),
                         Text(
                           '${story.likes}',
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper400,
                           ),

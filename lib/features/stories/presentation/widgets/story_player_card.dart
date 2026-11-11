@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/media/audio/cubit/audio_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/audio/model/audio_playback_state.dart';
 import 'package:hekayat_3al_raf/core/media/audio/model/audio_track.dart';
@@ -83,7 +83,7 @@ class StoryPlayerCard extends StatelessWidget {
                       // Static Title: never rebuilt on playback position ticks
                       Text(
                         title,
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
                           color: ColorManager.paper100,
@@ -268,14 +268,14 @@ class _AudioSliderSectionState extends State<_AudioSliderSection> {
               children: [
                 Text(
                   _formatDuration(displayDuration),
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 10.sp,
                     color: ColorManager.paper400,
                   ),
                 ),
                 Text(
                   _formatDuration(state.duration),
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 10.sp,
                     color: ColorManager.paper400,
                   ),
@@ -323,7 +323,7 @@ class _AudioStatusFooter extends StatelessWidget {
 
         return Text(
           message,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 10.sp,
             fontWeight: isError ? FontWeight.w500 : FontWeight.normal,
             color: color,

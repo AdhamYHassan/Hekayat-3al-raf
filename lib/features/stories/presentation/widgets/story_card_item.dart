@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import '../../../../core/theming/colors_manager.dart';
 
@@ -125,7 +125,7 @@ class StoryCardItem extends StatelessWidget {
                             SizedBox(width: 4.w),
                             Text(
                               submissionTypeLabel,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w500,
                                 color: ColorManager.goldLight,
@@ -138,7 +138,7 @@ class StoryCardItem extends StatelessWidget {
                         SizedBox(width: 6.w),
                         Text(
                           category,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 10.sp,
                             color: ColorManager.paper400,
                           ),
@@ -154,7 +154,7 @@ class StoryCardItem extends StatelessWidget {
                     title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.paper100,
@@ -169,7 +169,7 @@ class StoryCardItem extends StatelessWidget {
                     summary,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 11.sp,
                       color: ColorManager.paper200.withValues(alpha: 0.65),
                       height: 1.4,
@@ -187,7 +187,7 @@ class StoryCardItem extends StatelessWidget {
                           '$authorName · $city',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 10.sp,
                             color: ColorManager.paper400,
                           ),
@@ -200,7 +200,7 @@ class StoryCardItem extends StatelessWidget {
                           SizedBox(width: 3.w),
                           Text(
                             viewsFormatted,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 10.sp,
                               color: ColorManager.paper400,
                             ),
@@ -210,7 +210,7 @@ class StoryCardItem extends StatelessWidget {
                           SizedBox(width: 2.w),
                           Text(
                             ratingFormatted,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 10.sp,
                               fontWeight: FontWeight.bold,
                               color: ColorManager.paper100,

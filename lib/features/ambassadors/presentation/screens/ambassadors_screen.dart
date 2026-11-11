@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -57,7 +57,7 @@ class _AmbassadorsView extends StatelessWidget {
                   children: [
                     Text(
                       state.errorMessage ?? 'تعذر تحميل السفراء',
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         color: ColorManager.paper200,
                         fontSize: 14.sp,
                       ),
@@ -68,7 +68,7 @@ class _AmbassadorsView extends StatelessWidget {
                       style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
                       child: Text(
                         'common.retry'.tr(),
-                        style: GoogleFonts.alexandria(color: ColorManager.primaryDark),
+                        style: AppFonts.alexandria(color: ColorManager.primaryDark),
                       ),
                     ),
                   ],
@@ -89,7 +89,7 @@ class _AmbassadorsView extends StatelessWidget {
                         children: [
                           Text(
                             'ambassadors.title'.tr(),
-                            style: GoogleFonts.alexandria(
+                            style: AppFonts.alexandria(
                               color: ColorManager.paper100,
                               fontSize: 22.sp,
                               fontWeight: FontWeight.bold,
@@ -98,7 +98,7 @@ class _AmbassadorsView extends StatelessWidget {
                           SizedBox(height: 6.h),
                           Text(
                             'ambassadors.subtitle'.tr(),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper200.withValues(alpha: 0.65),
                               fontSize: 13.sp,
                               height: 1.5,

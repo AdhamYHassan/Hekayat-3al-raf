@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
@@ -107,7 +107,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                 memCacheHeight: 90,
                 errorWidget: Text(
                   'حكايات على الرف',
-                  style: GoogleFonts.arefRuqaa(
+                  style: AppFonts.arefRuqaa(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
                     color: ColorManager.gold,
@@ -124,7 +124,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                     children: [
                       Text(
                         'رجوع',
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 13.5.sp,
                           fontWeight: FontWeight.w500,
                           color: ColorManager.goldLight,
@@ -162,7 +162,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                 // 1. Title & Subtitle
                 Text(
                   'تواصل معنا',
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                     color: ColorManager.paper100,
@@ -171,7 +171,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                 SizedBox(height: 6.h),
                 Text(
                   'سؤال، اقتراح، أو فكرة تعاون. اكتبلنا وإحنا هنقرا كل كلمة.',
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 13.sp,
                     color: ColorManager.paper200.withValues(alpha: 0.60),
                     height: 1.5,
@@ -282,7 +282,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                               else ...[
                                 Text(
                                   'ابعت الرسالة',
-                                  style: GoogleFonts.alexandria(
+                                  style: AppFonts.alexandria(
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: ColorManager.primaryDark,
@@ -317,7 +317,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
       padding: EdgeInsets.only(bottom: 6.h),
       child: Text(
         label,
-        style: GoogleFonts.ibmPlexSansArabic(
+        style: AppFonts.ibmPlexSansArabic(
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
           color: ColorManager.paper300,
@@ -347,13 +347,13 @@ class _ContactUsViewState extends State<_ContactUsView> {
         maxLines: maxLines,
         keyboardType: keyboardType,
         textDirection: textDirection,
-        style: GoogleFonts.ibmPlexSansArabic(
+        style: AppFonts.ibmPlexSansArabic(
           color: ColorManager.paper100,
           fontSize: 14.sp,
         ),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: GoogleFonts.ibmPlexSansArabic(
+          hintStyle: AppFonts.ibmPlexSansArabic(
             color: ColorManager.paper400.withValues(alpha: 0.6),
             fontSize: 13.5.sp,
           ),
@@ -380,7 +380,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
           value: _selectedSubject.isEmpty ? null : _selectedSubject,
           hint: Text(
             'اختار موضوع',
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               color: ColorManager.paper400.withValues(alpha: 0.6),
               fontSize: 13.5.sp,
             ),
@@ -396,7 +396,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
               value: item['value'],
               child: Text(
                 item['label']!,
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.paper100,
                   fontSize: 13.5.sp,
                 ),
@@ -441,7 +441,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
             children: [
               Text(
                 title,
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.paper200.withValues(alpha: 0.60),
                   fontSize: 12.sp,
                 ),
@@ -449,7 +449,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
               SizedBox(height: 4.h),
               Text(
                 actionText,
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.gold,
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,

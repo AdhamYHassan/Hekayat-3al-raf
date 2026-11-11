@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 class AmbassadorStatsGrid extends StatelessWidget {
@@ -59,7 +59,7 @@ class _StatCard extends StatelessWidget {
         children: [
           Text(
             count,
-            style: GoogleFonts.alexandria(
+            style: AppFonts.alexandria(
               color: ColorManager.gold,
               fontSize: 22.sp,
               fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class _StatCard extends StatelessWidget {
           SizedBox(height: 2.h),
           Text(
             label,
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               color: ColorManager.paper400,
               fontSize: 10.sp,
             ),

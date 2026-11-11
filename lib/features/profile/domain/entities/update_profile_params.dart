@@ -6,6 +6,7 @@ class UpdateProfileParams extends Equatable {
   final String phoneRegion;
   final String bio;
   final String? avatar;
+  final String? avatarFilePath;
 
   const UpdateProfileParams({
     required this.name,
@@ -13,6 +14,7 @@ class UpdateProfileParams extends Equatable {
     this.phoneRegion = 'EG',
     required this.bio,
     this.avatar,
+    this.avatarFilePath,
   });
 
   Map<String, dynamic> toJson() {
@@ -22,13 +24,13 @@ class UpdateProfileParams extends Equatable {
       'phone_region': phoneRegion,
       'bio': bio,
     };
-    if (avatar != null) {
+    if (avatar != null && avatar!.isNotEmpty) {
       map['avatar'] = avatar;
     }
     return map;
   }
 
   @override
-  List<Object?> get props => [name, phone, phoneRegion, bio, avatar];
+  List<Object?> get props => [name, phone, phoneRegion, bio, avatar, avatarFilePath];
 }
 

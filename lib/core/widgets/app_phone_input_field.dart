@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -123,7 +123,7 @@ class AppPhoneInputField extends StatelessWidget {
                             selectedCountry.localizedName(lang),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w600,
                               color: ColorManager.paper100,
@@ -134,7 +134,7 @@ class AppPhoneInputField extends StatelessWidget {
                         Text(
                           '(${selectedCountry.dialCode})',
                           textDirection: TextDirection.ltr,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.gold,
                             fontWeight: FontWeight.w500,
@@ -167,7 +167,7 @@ class AppPhoneInputField extends StatelessWidget {
                     ),
                   ],
                   onChanged: _handleTextChange,
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 14.sp,
                     color: ColorManager.paper100,
                     fontWeight: FontWeight.w500,
@@ -175,7 +175,7 @@ class AppPhoneInputField extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: selectedCountry.exampleNumber,
                     hintTextDirection: TextDirection.ltr,
-                    hintStyle: GoogleFonts.ibmPlexSansArabic(
+                    hintStyle: AppFonts.ibmPlexSansArabic(
                       fontSize: 13.sp,
                       color: ColorManager.paper400.withValues(alpha: 0.4),
                     ),
@@ -197,7 +197,7 @@ class AppPhoneInputField extends StatelessWidget {
             padding: EdgeInsets.only(top: 4.h, right: 6.w, left: 6.w),
             child: Text(
               errorMessage!,
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 fontSize: 11.sp,
                 color: ColorManager.error,
                 fontWeight: FontWeight.w500,
@@ -315,7 +315,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                 children: [
                   Text(
                     lang == 'ar' ? 'اختر الدولة' : 'Select Country',
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.paper100,
@@ -339,7 +339,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
               child: TextField(
                 controller: _searchController,
                 onChanged: _onSearch,
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   fontSize: 13.sp,
                   color: ColorManager.paper100,
                 ),
@@ -347,7 +347,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                   hintText: lang == 'ar'
                       ? 'ابحث باسم الدولة أو كود الاتصال...'
                       : 'Search by country or dial code...',
-                  hintStyle: GoogleFonts.ibmPlexSansArabic(
+                  hintStyle: AppFonts.ibmPlexSansArabic(
                     fontSize: 12.sp,
                     color: ColorManager.paper400.withValues(alpha: 0.5),
                   ),
@@ -423,7 +423,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                           Expanded(
                             child: Text(
                               country.localizedName(lang),
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 13.5.sp,
                                 fontWeight: isSelected
                                     ? FontWeight.bold
@@ -437,7 +437,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                           Text(
                             '(${country.dialCode})',
                             textDirection: TextDirection.ltr,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 12.5.sp,
                               color: isSelected
                                   ? ColorManager.gold

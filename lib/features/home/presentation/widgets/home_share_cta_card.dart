@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 class HomeShareCtaCard extends StatelessWidget {
@@ -54,7 +54,7 @@ class HomeShareCtaCard extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Text(
                       'home.podcast_kicker'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w500,
                         color: ColorManager.gold,
@@ -65,7 +65,7 @@ class HomeShareCtaCard extends StatelessWidget {
                 SizedBox(height: 16.h),
                 Text(
                   'home.podcast_body'.tr(),
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 14.sp,
                     color: ColorManager.paper100,
                     height: 1.85,
@@ -89,7 +89,7 @@ class HomeShareCtaCard extends StatelessWidget {
                       children: [
                         Text(
                           'home.podcast_cta'.tr(),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
                             color: ColorManager.primaryDark,
@@ -137,7 +137,7 @@ class HomeShareCtaCard extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Text(
                       'home.share_kicker'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w500,
                         color: ColorManager.gold,
@@ -154,7 +154,7 @@ class HomeShareCtaCard extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   'home.share_title'.tr(),
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                     color: ColorManager.paper100,
@@ -165,7 +165,7 @@ class HomeShareCtaCard extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   'home.share_body'.tr(),
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 13.sp,
                     color: ColorManager.paper200.withValues(alpha: 0.7),
                     height: 1.6,
@@ -190,7 +190,7 @@ class HomeShareCtaCard extends StatelessWidget {
                       children: [
                         Text(
                           'home.share_cta'.tr(),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: ColorManager.primaryDark,
@@ -238,7 +238,7 @@ class HomeShareCtaCard extends StatelessWidget {
   //         children: [
   //           Text(
   //             count,
-  //             style: GoogleFonts.alexandria(
+  //             style: AppFonts.alexandria(
   //               fontSize: 22.sp,
   //               fontWeight: FontWeight.w700,
   //               color: ColorManager.gold,
@@ -247,7 +247,7 @@ class HomeShareCtaCard extends StatelessWidget {
   //           SizedBox(height: 4.h),
   //           Text(
   //             label,
-  //             style: GoogleFonts.ibmPlexSansArabic(
+  //             style: AppFonts.ibmPlexSansArabic(
   //               fontSize: 10.sp,
   //               color: ColorManager.paper200.withValues(alpha: 0.6),
   //               height: 1.2,

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/media/video/cubit/video_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/video/model/video_playback_state.dart';
@@ -88,7 +88,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                     SizedBox(height: 8.h),
                     Text(
                       state.errorMessage ?? 'stories.video_load_error'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         color: ColorManager.paper200,
                         fontSize: 12.sp,
                       ),
@@ -140,7 +140,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                                 Expanded(
                                   child: Text(
                                     widget.title,
-                                    style: GoogleFonts.ibmPlexSansArabic(
+                                    style: AppFonts.ibmPlexSansArabic(
                                       color: ColorManager.paper100,
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.w500,
@@ -284,7 +284,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                                             Text(
                                               _formatDuration(displayDuration),
                                               style:
-                                                  GoogleFonts.ibmPlexSansArabic(
+                                                  AppFonts.ibmPlexSansArabic(
                                                     color:
                                                         ColorManager.paper200,
                                                     fontSize: 10.sp,
@@ -297,7 +297,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                                                     timeState.duration,
                                                   ),
                                                   style:
-                                                      GoogleFonts.ibmPlexSansArabic(
+                                                      AppFonts.ibmPlexSansArabic(
                                                         color:
                                                             ColorManager.paper400,
                                                         fontSize: 10.sp,

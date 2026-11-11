@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
@@ -31,10 +33,7 @@ class ProfileScreen extends StatelessWidget {
               message: state.updateSuccessMessage!,
             );
           } else if (state.updateErrorMessage != null) {
-            AppSnackBar.showError(
-              context,
-              message: state.updateErrorMessage!,
-            );
+            AppSnackBar.showError(context, message: state.updateErrorMessage!);
           }
         }
       },
@@ -45,49 +44,50 @@ class ProfileScreen extends StatelessWidget {
             top: false,
             bottom: false,
             child: switch (state) {
-              ProfileInitial() || ProfileLoading() => const ProfileShimmerLoading(),
+              ProfileInitial() ||
+              ProfileLoading() => const ProfileShimmerLoading(),
               ProfileError(:final message) => Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(24.r),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          CupertinoIcons.exclamationmark_triangle,
-                          color: ColorManager.gold,
-                          size: 48.sp,
+                child: Padding(
+                  padding: EdgeInsets.all(24.r),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        CupertinoIcons.exclamationmark_triangle,
+                        color: ColorManager.gold,
+                        size: 48.sp,
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        message,
+                        textAlign: TextAlign.center,
+                        style: AppFonts.ibmPlexSansArabic(
+                          color: ColorManager.paper200,
+                          fontSize: 14.sp,
                         ),
-                        SizedBox(height: 12.h),
-                        Text(
-                          message,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.ibmPlexSansArabic(
-                            color: ColorManager.paper200,
-                            fontSize: 14.sp,
+                      ),
+                      SizedBox(height: 16.h),
+                      ElevatedButton(
+                        onPressed: () =>
+                            context.read<ProfileCubit>().loadProfile(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.gold,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24.r),
                           ),
                         ),
-                        SizedBox(height: 16.h),
-                        ElevatedButton(
-                          onPressed: () =>
-                              context.read<ProfileCubit>().loadProfile(),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorManager.gold,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24.r),
-                            ),
-                          ),
-                          child: Text(
-                            'common.retry'.tr(),
-                            style: GoogleFonts.alexandria(
-                              color: ColorManager.primaryDark,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        child: Text(
+                          'common.retry'.tr(),
+                          style: AppFonts.alexandria(
+                            color: ColorManager.primaryDark,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
+              ),
               ProfileLoaded(:final user) => _ProfileContent(user: user),
             },
           ),
@@ -126,7 +126,7 @@ class _ProfileContent extends StatelessWidget {
         ),
         title: Text(
           'profile.logout_confirm_title'.tr(),
-          style: GoogleFonts.alexandria(
+          style: AppFonts.alexandria(
             color: ColorManager.paper100,
             fontSize: 16.sp,
             fontWeight: FontWeight.bold,
@@ -134,7 +134,7 @@ class _ProfileContent extends StatelessWidget {
         ),
         content: Text(
           'profile.logout_confirm_desc'.tr(),
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             color: ColorManager.paper200,
             fontSize: 13.sp,
           ),
@@ -144,7 +144,7 @@ class _ProfileContent extends StatelessWidget {
             onPressed: () => Navigator.of(ctx).pop(false),
             child: Text(
               'common.cancel'.tr(),
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 color: ColorManager.paper400,
                 fontSize: 13.sp,
               ),
@@ -160,7 +160,7 @@ class _ProfileContent extends StatelessWidget {
             ),
             child: Text(
               'profile.logout'.tr(),
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 13.sp,
@@ -220,13 +220,14 @@ class _ProfileContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppCachedNetworkImage(
-                imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                imageUrl:
+                    'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                 height: 32.h,
                 fit: BoxFit.contain,
                 memCacheHeight: 90,
                 errorWidget: Text(
                   'app_name'.tr(),
-                  style: GoogleFonts.arefRuqaa(
+                  style: AppFonts.arefRuqaa(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
                     color: ColorManager.gold,
@@ -243,7 +244,7 @@ class _ProfileContent extends StatelessWidget {
                     children: [
                       Text(
                         'common.back'.tr(),
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
                           color: ColorManager.goldLight,
@@ -272,7 +273,8 @@ class _ProfileContent extends StatelessWidget {
                 child: Stack(
                   children: [
                     AppCachedNetworkImage(
-                      imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-bike.webp',
+                      imageUrl:
+                          'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-bike.webp',
                       fit: BoxFit.cover,
                       alignment: const Alignment(0, -0.6),
                       width: double.infinity,
@@ -313,7 +315,9 @@ class _ProfileContent extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: ColorManager.gold.withValues(alpha: 0.40),
+                                  color: ColorManager.gold.withValues(
+                                    alpha: 0.40,
+                                  ),
                                   width: 2.5,
                                 ),
                                 boxShadow: [
@@ -325,7 +329,8 @@ class _ProfileContent extends StatelessWidget {
                                 ],
                               ),
                               child: ClipOval(
-                                child: user.avatar != null &&
+                                child:
+                                    user.avatar != null &&
                                         user.avatar!.isNotEmpty
                                     ? AppCachedNetworkImage(
                                         imageUrl: user.avatar!,
@@ -347,7 +352,10 @@ class _ProfileContent extends StatelessWidget {
                                 height: 28.r,
                                 decoration: BoxDecoration(
                                   gradient: const LinearGradient(
-                                    colors: [Color(0xFFE8CB7D), Color(0xFFC9A24B)],
+                                    colors: [
+                                      Color(0xFFE8CB7D),
+                                      Color(0xFFC9A24B),
+                                    ],
                                   ),
                                   shape: BoxShape.circle,
                                   border: Border.all(
@@ -371,7 +379,7 @@ class _ProfileContent extends StatelessWidget {
                     // User Name
                     Text(
                       displayName,
-                      style: GoogleFonts.alexandria(
+                      style: AppFonts.alexandria(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                         color: ColorManager.paper100,
@@ -382,7 +390,7 @@ class _ProfileContent extends StatelessWidget {
                     // Location & Dynamic Join date from API
                     Text(
                       '${'profile.default_city'.tr()} · ${_formatJoinDate(context, user.dateJoined)}',
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 12.sp,
                         color: ColorManager.goldLight,
                       ),
@@ -393,11 +401,9 @@ class _ProfileContent extends StatelessWidget {
                     SizedBox(
                       width: 280.w,
                       child: Text(
-                        user.bio.isNotEmpty
-                            ? user.bio
-                            : 'profile.no_bio'.tr(),
+                        user.bio.isNotEmpty ? user.bio : 'profile.no_bio'.tr(),
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 12.5.sp,
                           height: 1.5,
                           color: user.bio.isNotEmpty
@@ -465,7 +471,9 @@ class _ProfileContent extends StatelessWidget {
                 _buildMenuItemCard(
                   icon: CupertinoIcons.book_fill,
                   title: 'profile.my_stories'.tr(),
-                  subtitle: 'profile.stories_count'.tr(args: ['${user.storiesCount}']),
+                  subtitle: 'profile.stories_count'.tr(
+                    args: ['${user.storiesCount}'],
+                  ),
                   onTap: () {
                     context.push(Routes.myStories);
                   },
@@ -482,15 +490,15 @@ class _ProfileContent extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 8.h),
-                _buildMenuItemCard(
-                  icon: CupertinoIcons.gear_alt_fill,
-                  title: 'profile.settings'.tr(),
-                  subtitle: 'profile.settings_sub'.tr(),
-                  onTap: () {
-                    Navigator.of(context).pop(); // Back to More Screen
-                  },
-                ),
+                // SizedBox(height: 8.h),
+                // _buildMenuItemCard(
+                //   icon: CupertinoIcons.gear_alt_fill,
+                //   title: 'profile.settings'.tr(),
+                //   subtitle: 'profile.settings_sub'.tr(),
+                //   onTap: () {
+                //     Navigator.of(context).pop(); // Back to More Screen
+                //   },
+                // ),
                 SizedBox(height: 24.h),
 
                 // Logout Button
@@ -516,7 +524,7 @@ class _ProfileContent extends StatelessWidget {
                     ),
                     label: Text(
                       'profile.logout'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 13.5.sp,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFFF87171),
@@ -559,7 +567,7 @@ class _ProfileContent extends StatelessWidget {
         SizedBox(width: 8.w),
         Text(
           title,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             color: ColorManager.gold,
             fontSize: 11.5.sp,
             fontWeight: FontWeight.w600,
@@ -580,9 +588,7 @@ class _ProfileContent extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorManager.primaryLight.withValues(alpha: 0.30),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: ColorManager.gold.withValues(alpha: 0.08),
-        ),
+        border: Border.all(color: ColorManager.gold.withValues(alpha: 0.08)),
       ),
       child: Row(
         children: [
@@ -593,11 +599,7 @@ class _ProfileContent extends StatelessWidget {
               color: ColorManager.gold.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: ColorManager.goldLight,
-              size: 16.sp,
-            ),
+            child: Icon(icon, color: ColorManager.goldLight, size: 16.sp),
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -606,7 +608,7 @@ class _ProfileContent extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 10.5.sp,
                     color: ColorManager.paper400,
                   ),
@@ -616,7 +618,7 @@ class _ProfileContent extends StatelessWidget {
                   value,
                   textDirection: isLtr ? ui.TextDirection.ltr : null,
                   textAlign: isLtr ? TextAlign.right : null,
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 13.5.sp,
                     color: ColorManager.paper100,
                     fontWeight: FontWeight.w500,
@@ -645,9 +647,7 @@ class _ProfileContent extends StatelessWidget {
         decoration: BoxDecoration(
           color: ColorManager.primaryLight.withValues(alpha: 0.30),
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(
-            color: ColorManager.gold.withValues(alpha: 0.08),
-          ),
+          border: Border.all(color: ColorManager.gold.withValues(alpha: 0.08)),
         ),
         child: Row(
           children: [
@@ -658,11 +658,7 @@ class _ProfileContent extends StatelessWidget {
                 color: ColorManager.gold.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                color: ColorManager.goldLight,
-                size: 18.sp,
-              ),
+              child: Icon(icon, color: ColorManager.goldLight, size: 18.sp),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -671,7 +667,7 @@ class _ProfileContent extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       fontSize: 13.5.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.paper100,
@@ -680,7 +676,7 @@ class _ProfileContent extends StatelessWidget {
                   SizedBox(height: 2.h),
                   Text(
                     subtitle,
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 11.sp,
                       color: ColorManager.paper400,
                     ),
@@ -713,6 +709,8 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
   late final TextEditingController _nameController;
   late final TextEditingController _phoneController;
   late final TextEditingController _bioController;
+  XFile? _selectedAvatar;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -734,6 +732,22 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
     super.dispose();
   }
 
+  Future<void> _pickAvatar() async {
+    try {
+      final picked = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+      if (picked != null && mounted) {
+        setState(() {
+          _selectedAvatar = picked;
+        });
+      }
+    } catch (_) {}
+  }
+
   void _onSave() {
     final name = _nameController.text.trim();
     final phone = _phoneController.text.trim();
@@ -749,11 +763,12 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
 
     Navigator.of(context).pop();
     context.read<ProfileCubit>().updateProfile(
-          name: name,
-          phone: phone,
-          bio: bio,
-          avatar: widget.user.avatar,
-        );
+      name: name,
+      phone: phone,
+      bio: bio,
+      avatar: widget.user.avatar,
+      avatarFilePath: _selectedAvatar?.path,
+    );
   }
 
   @override
@@ -774,7 +789,7 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
             children: [
               Text(
                 'profile.edit_profile'.tr(),
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                   color: ColorManager.paper100,
@@ -790,12 +805,75 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
               ),
             ],
           ),
+          SizedBox(height: 12.h),
+
+          // Avatar picker preview
+          Center(
+            child: GestureDetector(
+              onTap: _pickAvatar,
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  Container(
+                    width: 76.r,
+                    height: 76.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: ColorManager.gold,
+                        width: 1.5,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: _selectedAvatar != null
+                          ? Image.file(
+                              File(_selectedAvatar!.path),
+                              fit: BoxFit.cover,
+                            )
+                          : widget.user.avatar != null &&
+                                  widget.user.avatar!.isNotEmpty
+                              ? AppCachedNetworkImage(
+                                  imageUrl: widget.user.avatar!,
+                                  width: 76.r,
+                                  height: 76.r,
+                                  fit: BoxFit.cover,
+                                )
+                              : Container(
+                                  color: ColorManager.primaryLight,
+                                  child: Icon(
+                                    CupertinoIcons.person_fill,
+                                    size: 40.sp,
+                                    color: ColorManager.gold,
+                                  ),
+                                ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(5.r),
+                    decoration: BoxDecoration(
+                      color: ColorManager.gold,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: ColorManager.primaryDark,
+                        width: 2,
+                      ),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.camera_fill,
+                      size: 14.sp,
+                      color: ColorManager.primaryDark,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           SizedBox(height: 16.h),
 
           // Name field
           Text(
             'profile.name_label'.tr(),
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               fontSize: 12.sp,
               color: ColorManager.paper300,
             ),
@@ -810,7 +888,7 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
           // Phone field
           Text(
             'profile.phone_label'.tr(),
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               fontSize: 12.sp,
               color: ColorManager.paper300,
             ),
@@ -827,7 +905,7 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
           // Bio field
           Text(
             'profile.bio_label'.tr(),
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               fontSize: 12.sp,
               color: ColorManager.paper300,
             ),
@@ -854,7 +932,7 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
               ),
               child: Text(
                 'profile.save_changes'.tr(),
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: ColorManager.primaryDark,
@@ -883,14 +961,14 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
           const ArabicToEnglishDigitsFormatter(),
       ],
       maxLines: maxLines,
-      style: GoogleFonts.ibmPlexSansArabic(
+      style: AppFonts.ibmPlexSansArabic(
         fontSize: 13.5.sp,
         color: ColorManager.paper100,
       ),
       textDirection: isLtr ? ui.TextDirection.ltr : null,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.ibmPlexSansArabic(
+        hintStyle: AppFonts.ibmPlexSansArabic(
           fontSize: 13.sp,
           color: ColorManager.paper400.withValues(alpha: 0.5),
         ),
@@ -911,9 +989,7 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(
-            color: ColorManager.gold,
-          ),
+          borderSide: BorderSide(color: ColorManager.gold),
         ),
       ),
     );

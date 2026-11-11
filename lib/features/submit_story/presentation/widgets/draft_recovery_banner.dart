@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/story_draft_entity.dart';
 
@@ -48,7 +48,7 @@ class DraftRecoveryBanner extends StatelessWidget {
               Expanded(
                 child: Text(
                   'submit.draft.banner_title'.tr(),
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     color: ColorManager.paper100,
                     fontSize: 13.sp,
                     fontWeight: FontWeight.bold,
@@ -71,7 +71,7 @@ class DraftRecoveryBanner extends StatelessWidget {
           SizedBox(height: 6.h),
           Text(
             'submit.draft.banner_body'.tr(args: [title]),
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               color: ColorManager.paper200.withValues(alpha: 0.75),
               fontSize: 11.5.sp,
               height: 1.4,
@@ -86,7 +86,7 @@ class DraftRecoveryBanner extends StatelessWidget {
                   icon: Icon(Icons.restore_page_rounded, size: 16.sp, color: ColorManager.primaryDark),
                   label: Text(
                     'submit.draft.restore'.tr(),
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       color: ColorManager.primaryDark,
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
@@ -110,7 +110,7 @@ class DraftRecoveryBanner extends StatelessWidget {
                 ),
                 child: Text(
                   'submit.draft.discard'.tr(),
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     color: ColorManager.paper200.withValues(alpha: 0.6),
                     fontSize: 11.5.sp,
                   ),

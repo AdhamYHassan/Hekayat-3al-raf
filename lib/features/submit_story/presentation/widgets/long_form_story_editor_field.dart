@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 /// [LongFormStoryEditorField] provides an elite typing experience for long-form narratives.
@@ -140,7 +140,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                               isSaved
                                   ? 'submit.editor.saved_auto'.tr()
                                   : 'submit.editor.saving'.tr(),
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 10.5.sp,
                                 color: isSaved
                                     ? ColorManager.gold.withValues(alpha: 0.8)
@@ -167,7 +167,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                           children: [
                             Text(
                               'submit.editor.focus_mode'.tr(),
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 11.sp,
                                 color: ColorManager.gold,
                                 fontWeight: FontWeight.w500,
@@ -193,7 +193,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                 minLines: 8,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   fontSize: 14.sp,
                   height: 1.85,
                   color: ColorManager.paper100,
@@ -201,7 +201,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                 cursorColor: ColorManager.gold,
                 decoration: InputDecoration(
                   hintText: widget.hintText ?? 'submit.form.story_hint'.tr(),
-                  hintStyle: GoogleFonts.ibmPlexSansArabic(
+                  hintStyle: AppFonts.ibmPlexSansArabic(
                     fontSize: 13.5.sp,
                     color: ColorManager.paper400.withValues(alpha: 0.45),
                   ),
@@ -230,7 +230,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                       children: [
                         Text(
                           'submit.editor.words_count'.tr(args: [words.toString()]),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper300.withValues(
                               alpha: 0.75,
@@ -242,7 +242,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                           words > 0
                               ? 'submit.editor.reading_time'.tr(args: [readingTimeMinutes.toString()])
                               : '',
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 10.5.sp,
                             color: ColorManager.paper400.withValues(alpha: 0.6),
                           ),
@@ -292,7 +292,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                             isSaved
                                 ? 'submit.editor.saved_auto'.tr()
                                 : 'submit.editor.saving'.tr(),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 11.5.sp,
                               color: ColorManager.gold.withValues(alpha: 0.85),
                             ),
@@ -310,7 +310,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                     ),
                     label: Text(
                       'submit.editor.exit_focus_mode'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 12.sp,
                         color: ColorManager.paper100,
                         fontWeight: FontWeight.w500,
@@ -331,7 +331,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                   maxLines: null,
                   autofocus: true,
                   keyboardType: TextInputType.multiline,
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 15.sp,
                     height: 1.9,
                     color: ColorManager.paper100,
@@ -339,7 +339,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                   cursorColor: ColorManager.gold,
                   decoration: InputDecoration(
                     hintText: 'submit.editor.deep_dive_hint'.tr(),
-                    hintStyle: GoogleFonts.ibmPlexSansArabic(
+                    hintStyle: AppFonts.ibmPlexSansArabic(
                       fontSize: 14.5.sp,
                       color: ColorManager.paper400.withValues(alpha: 0.4),
                     ),
@@ -363,7 +363,7 @@ class _ZenFullscreenEditor extends StatelessWidget {
                     children: [
                       Text(
                         'submit.editor.words_written'.tr(args: [words.toString()]),
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 12.sp,
                           color: ColorManager.gold,
                           fontWeight: FontWeight.w600,

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -91,7 +91,7 @@ class _StoryDetailsView extends StatelessWidget {
                         child: Text(
                           state.errorMessage ?? 'stories.details_load_error'.tr(),
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             color: ColorManager.paper200,
                             fontSize: 14.sp,
                           ),
@@ -142,7 +142,7 @@ class _StoryDetailsView extends StatelessWidget {
                                   story.viewsCount >= 1000
                                       ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ${'stories.thousand'.tr()}'
                                       : '${story.viewsCount}',
-                                  style: GoogleFonts.ibmPlexSansArabic(
+                                  style: AppFonts.ibmPlexSansArabic(
                                     fontSize: 12.sp,
                                     color: ColorManager.paper200,
                                   ),
@@ -156,7 +156,7 @@ class _StoryDetailsView extends StatelessWidget {
                                 SizedBox(width: 4.w),
                                 Text(
                                   '${story.likes}',
-                                  style: GoogleFonts.ibmPlexSansArabic(
+                                  style: AppFonts.ibmPlexSansArabic(
                                     fontSize: 12.sp,
                                     color: ColorManager.paper200,
                                   ),
@@ -171,7 +171,7 @@ class _StoryDetailsView extends StatelessWidget {
                               ),
                               child: Text(
                                 story.submissionTypeLabel,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   fontSize: 11.sp,
                                   color: ColorManager.goldLight,
                                 ),
@@ -224,7 +224,7 @@ class _StoryDetailsView extends StatelessWidget {
                           children: [
                             Text(
                               story.summary,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                                 color: ColorManager.paper100,
@@ -234,7 +234,7 @@ class _StoryDetailsView extends StatelessWidget {
                             SizedBox(height: 12.h),
                             Text(
                               story.body,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 13.5.sp,
                                 color: ColorManager.paper200.withValues(alpha: 0.8),
                                 height: 1.9,

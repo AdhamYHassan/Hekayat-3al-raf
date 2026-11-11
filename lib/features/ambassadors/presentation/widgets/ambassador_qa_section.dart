@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 
@@ -53,7 +53,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
             children: [
               Text(
                 'ambassadors.qa_title'.tr(),
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   color: ColorManager.paper100,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
               SizedBox(width: 8.w),
               Text(
                 '(${widget.questions.length})',
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.gold,
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
@@ -93,7 +93,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                 children: [
                   Text(
                     'ambassadors.ask_ambassador'.tr(),
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       color: ColorManager.goldLight,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                             )
                           : Text(
                               'ambassadors.send_question'.tr(),
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -179,7 +179,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                         item.city.isNotEmpty
                             ? '${item.authorName} · ${item.city}'
                             : item.authorName,
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           color: ColorManager.goldLight,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
@@ -187,7 +187,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                       ),
                       Text(
                         item.timeAgo,
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           color: ColorManager.paper400,
                           fontSize: 10.sp,
                         ),
@@ -197,7 +197,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                   SizedBox(height: 6.h),
                   Text(
                     item.question,
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       color: ColorManager.paper100,
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
@@ -223,7 +223,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                         children: [
                           Text(
                             'ambassadors.ambassador_reply'.tr(),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.goldLight,
                               fontSize: 11.sp,
                               fontWeight: FontWeight.bold,
@@ -232,7 +232,7 @@ class _AmbassadorQaSectionState extends State<AmbassadorQaSection> {
                           SizedBox(height: 4.h),
                           Text(
                             item.answer!,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper200,
                               fontSize: 12.sp,
                               height: 1.4,
@@ -271,13 +271,13 @@ class _FormField extends StatelessWidget {
       controller: controller,
       maxLines: maxLines,
       validator: validator,
-      style: GoogleFonts.ibmPlexSansArabic(
+      style: AppFonts.ibmPlexSansArabic(
         color: ColorManager.paper100,
         fontSize: 12.sp,
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.ibmPlexSansArabic(
+        hintStyle: AppFonts.ibmPlexSansArabic(
           color: ColorManager.paper400,
           fontSize: 11.sp,
         ),

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
 
@@ -27,7 +27,7 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
         children: [
           Text(
             'submit.review_info.title'.tr(),
-            style: GoogleFonts.alexandria(
+            style: AppFonts.alexandria(
               color: ColorManager.gold,
               fontSize: 13.sp,
               fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             color: ColorManager.paper100,
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
@@ -75,7 +75,7 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
                         SizedBox(height: 2.h),
                         Text(
                           description,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             color: ColorManager.paper200.withValues(
                               alpha: 0.55,
                             ),

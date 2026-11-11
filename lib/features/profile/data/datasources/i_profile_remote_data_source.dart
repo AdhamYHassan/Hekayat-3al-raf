@@ -6,5 +6,6 @@ abstract class IProfileRemoteDataSource {
   Future<ProfileUserModel> getProfile();
   Future<ProfileUserModel> updateProfile(UpdateProfileParams params);
   Future<List<MyStoryModel>> getMyStories();
+  Future<void> deleteAccount(String password);
 }
 

@@ -5,6 +5,7 @@ import 'package:hekayat_3al_raf/features/profile/domain/repositories/i_profile_r
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_my_stories_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/update_profile_usecase.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/usecases/delete_account_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_cubit.dart';
 import 'package:dio/dio.dart';
@@ -297,6 +298,9 @@ void setupDependencyInjection() {
   );
   getIt.registerLazySingleton<GetMyStoriesUseCase>(
     () => GetMyStoriesUseCase(getIt<IProfileRepository>()),
+  );
+  getIt.registerLazySingleton<DeleteAccountUseCase>(
+    () => DeleteAccountUseCase(getIt<IProfileRepository>()),
   );
   getIt.registerFactory<ProfileCubit>(
     () => ProfileCubit(

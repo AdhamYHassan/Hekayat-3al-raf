@@ -3,14 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
+import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
+import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
+import 'package:hekayat_3al_raf/features/more/presentation/widgets/delete_account_dialog.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/more_language_selector.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/more_menu_item_card.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/usecases/delete_account_usecase.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -41,7 +46,7 @@ class MoreScreen extends StatelessWidget {
                       memCacheHeight: 120,
                       errorWidget: Text(
                         'حكايات على الرف',
-                        style: GoogleFonts.arefRuqaa(
+                        style: AppFonts.arefRuqaa(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.w700,
                           color: ColorManager.gold,
@@ -52,7 +57,7 @@ class MoreScreen extends StatelessWidget {
                     SizedBox(height: 6.h),
                     Text(
                       'Advice Media Solutions',
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 12.sp,
                         color: ColorManager.paper400,
                       ),
@@ -155,6 +160,53 @@ class MoreScreen extends StatelessWidget {
                   );
                 },
               ),
+              SizedBox(height: 8.h),
+
+              // Card 6: حذف الحساب (Apple Privacy Compliance)
+              FutureBuilder<String?>(
+                future: SecureStorageHelper.getToken(),
+                builder: (context, snapshot) {
+                  final hasToken = snapshot.data != null && snapshot.data!.trim().isNotEmpty;
+                  if (!hasToken) return const SizedBox.shrink();
+
+                  return Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: MoreMenuItemCard(
+                      icon: CupertinoIcons.trash_fill,
+                      title: 'settings.delete_account'.tr(),
+                      subtitle: 'settings.delete_account_sub'.tr(),
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) => DeleteAccountDialog(
+                            onConfirmDelete: (password) async {
+                              final deleteUseCase = getIt<DeleteAccountUseCase>();
+                              final result = await deleteUseCase(password);
+                              if (!context.mounted) return false;
+
+                              switch (result) {
+                                case ApiSuccess():
+                                  AppSnackBar.showSuccess(
+                                    context,
+                                    message: 'settings.delete_account_success'.tr(),
+                                  );
+                                  context.go(Routes.home);
+                                  return true;
+                                case ApiFailure(:final failure):
+                                  AppSnackBar.showError(
+                                    context,
+                                    message: failure.message,
+                                  );
+                                  return false;
+                              }
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
 
               SizedBox(height: 24.h),
 
@@ -176,7 +228,7 @@ class MoreScreen extends StatelessWidget {
               // 4. Footer Note
               Text(
                 'settings.footer_version'.tr(),
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   fontSize: 10.5.sp,
                   color: ColorManager.paper400.withValues(alpha: 0.6),
                 ),
@@ -198,7 +250,7 @@ class MoreScreen extends StatelessWidget {
         SizedBox(width: 8.w),
         Text(
           title,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             color: ColorManager.gold,
             fontSize: 11.5.sp,
             fontWeight: FontWeight.w600,

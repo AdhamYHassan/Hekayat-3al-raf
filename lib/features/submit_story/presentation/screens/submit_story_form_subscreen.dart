@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
@@ -48,7 +48,7 @@ class SubmitStoryFormSubscreen extends StatelessWidget {
           children: [
             Text(
               _getFormatTitle(format),
-              style: GoogleFonts.alexandria(
+              style: AppFonts.alexandria(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 color: ColorManager.paper100,
@@ -64,7 +64,7 @@ class SubmitStoryFormSubscreen extends StatelessWidget {
                   children: [
                     Text(
                       'submit.back'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 13.5.sp,
                         fontWeight: FontWeight.w500,
                         color: ColorManager.goldLight,

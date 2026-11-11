@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
@@ -177,7 +177,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                         ? 'auth.reset_password'.tr()
                         : 'auth.verify_code_title'.tr(),
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.paper100,
@@ -191,7 +191,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                             args: [_emailController.text.trim()],
                           ),
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 13.sp,
                       color: ColorManager.paper300,
                       height: 1.5,
@@ -229,7 +229,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
         TextFormField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 14.sp,
             color: ColorManager.paper100,
           ),
@@ -274,7 +274,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
               },
               child: Text(
                 'تغيير البريد الإلكتروني',
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   fontSize: 12.sp,
                   color: ColorManager.goldLight.withValues(alpha: 0.8),
                 ),
@@ -283,7 +283,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
             if (_secondsRemaining > 0)
               Text(
                 'auth.resend_in'.tr(args: ['$_secondsRemaining']),
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   fontSize: 12.sp,
                   color: ColorManager.paper400,
                 ),
@@ -293,7 +293,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                 onPressed: _onRequestCode,
                 child: Text(
                   'auth.resend_code'.tr(),
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.bold,
                     color: ColorManager.gold,
@@ -311,7 +311,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
         TextFormField(
           controller: _passwordController,
           obscureText: _obscurePassword,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 14.sp,
             color: ColorManager.paper100,
           ),
@@ -340,7 +340,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
         TextFormField(
           controller: _confirmPasswordController,
           obscureText: _obscureConfirmPassword,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 14.sp,
             color: ColorManager.paper100,
           ),
@@ -376,7 +376,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
   Widget _buildFieldLabel(String label) {
     return Text(
       label,
-      style: GoogleFonts.ibmPlexSansArabic(
+      style: AppFonts.ibmPlexSansArabic(
         fontSize: 12.5.sp,
         fontWeight: FontWeight.w600,
         color: ColorManager.paper200,
@@ -391,7 +391,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
   }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: GoogleFonts.ibmPlexSansArabic(
+      hintStyle: AppFonts.ibmPlexSansArabic(
         fontSize: 13.sp,
         color: ColorManager.paper400,
       ),
@@ -451,7 +451,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                 else ...[
                   Text(
                     title,
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.primaryDark,

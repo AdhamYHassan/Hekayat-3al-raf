@@ -133,7 +133,13 @@
     "profile": "Profile",
     "profile_sub": "My account, my stories, my questions",
     "footer_version": "Hekayat 3al Raf · Mobile Preview",
-    "change_password": "Change Password"
+    "change_password": "Change Password",
+    "delete_account": "Delete Account",
+    "delete_account_sub": "Permanently erase your account & data",
+    "delete_account_warning": "Warning: Your account, published stories, and associated data will be permanently and irreversibly deleted. Please confirm your password to proceed.",
+    "delete_account_confirm": "Permanently Delete Account",
+    "delete_account_success": "Your account has been deleted successfully.",
+    "enter_password_to_delete": "Enter your password to confirm deletion"
   },
   "profile": {
     "title": "Profile",

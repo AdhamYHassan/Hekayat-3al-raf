@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_extra_entities.dart';
@@ -69,7 +69,7 @@ class HomeRegionsSection extends StatelessWidget {
                                 children: [
                                   Text(
                                     region.name,
-                                    style: GoogleFonts.alexandria(
+                                    style: AppFonts.alexandria(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w700,
                                       color: ColorManager.paper100,
@@ -78,7 +78,7 @@ class HomeRegionsSection extends StatelessWidget {
                                   SizedBox(height: 2.h),
                                   Text(
                                     region.citiesSummary,
-                                    style: GoogleFonts.ibmPlexSansArabic(
+                                    style: AppFonts.ibmPlexSansArabic(
                                       fontSize: 10.sp,
                                       color: ColorManager.paper200.withValues(alpha: 0.7),
                                     ),
@@ -88,7 +88,7 @@ class HomeRegionsSection extends StatelessWidget {
                                   SizedBox(height: 4.h),
                                   Text(
                                     region.tagline,
-                                    style: GoogleFonts.ibmPlexSansArabic(
+                                    style: AppFonts.ibmPlexSansArabic(
                                       fontSize: 11.sp,
                                       color: ColorManager.goldLight,
                                     ),

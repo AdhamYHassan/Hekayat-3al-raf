@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 class MoreLanguageSelector extends StatelessWidget {
@@ -42,7 +42,7 @@ class MoreLanguageSelector extends StatelessWidget {
                 ),
                 child: Text(
                   'العربية',
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     fontSize: 13.sp,
                     fontWeight: isArabic ? FontWeight.bold : FontWeight.w500,
                     color: isArabic ? ColorManager.gold : ColorManager.paper400,
@@ -76,7 +76,7 @@ class MoreLanguageSelector extends StatelessWidget {
                 ),
                 child: Text(
                   'English',
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     fontSize: 13.sp,
                     fontWeight: !isArabic ? FontWeight.bold : FontWeight.w500,
                     color:

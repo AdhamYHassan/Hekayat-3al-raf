@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -83,7 +83,7 @@ class _AppWebViewScreenState extends State<AppWebViewScreen> {
             Expanded(
               child: Text(
                 widget.title,
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
                   color: ColorManager.paper100,
@@ -102,7 +102,7 @@ class _AppWebViewScreenState extends State<AppWebViewScreen> {
                   children: [
                     Text(
                       'common.back'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 13.5.sp,
                         fontWeight: FontWeight.w500,
                         color: ColorManager.goldLight,
@@ -148,7 +148,7 @@ class _AppWebViewScreenState extends State<AppWebViewScreen> {
                     Text(
                       'errors.no_internet_connection'.tr(),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 14.sp,
                         color: ColorManager.paper200,
                       ),
@@ -179,7 +179,7 @@ class _AppWebViewScreenState extends State<AppWebViewScreen> {
                       ),
                       label: Text(
                         'common.retry'.tr(),
-                        style: GoogleFonts.alexandria(
+                        style: AppFonts.alexandria(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                           color: ColorManager.primaryDark,

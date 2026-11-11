@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_list_item_entity.dart';
@@ -85,7 +85,7 @@ class AmbassadorCardItem extends StatelessWidget {
                     children: [
                       Text(
                         ambassador.name,
-                        style: GoogleFonts.alexandria(
+                        style: AppFonts.alexandria(
                           color: ColorManager.paper100,
                           fontSize: 17.sp,
                           fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class AmbassadorCardItem extends StatelessWidget {
                       SizedBox(height: 2.h),
                       Text(
                         ambassador.role,
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           color: ColorManager.goldLight,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
@@ -104,7 +104,7 @@ class AmbassadorCardItem extends StatelessWidget {
                       SizedBox(height: 4.h),
                       Text(
                         ambassador.quote,
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           color: ColorManager.paper200.withValues(alpha: 0.7),
                           fontSize: 12.sp,
                           height: 1.4,
@@ -117,7 +117,7 @@ class AmbassadorCardItem extends StatelessWidget {
                         children: [
                           Text(
                             'ambassadors.stories_count'.tr(args: ['${ambassador.storiesCount}']),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper400,
                               fontSize: 10.sp,
                             ),
@@ -134,7 +134,7 @@ class AmbassadorCardItem extends StatelessWidget {
                           ),
                           Text(
                             'ambassadors.answered_count'.tr(args: ['${ambassador.answeredQuestionsCount}']),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper400,
                               fontSize: 10.sp,
                             ),
@@ -151,7 +151,7 @@ class AmbassadorCardItem extends StatelessWidget {
                           ),
                           Text(
                             ambassador.city,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper400,
                               fontSize: 10.sp,
                             ),

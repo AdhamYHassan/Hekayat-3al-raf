@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/media/audio/model/audio_playback_state.dart';
@@ -308,7 +308,7 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
         SizedBox(height: 14.h),
         Text(
           'submit.recorder.start_prompt'.tr(),
-          style: GoogleFonts.alexandria(
+          style: AppFonts.alexandria(
             fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: ColorManager.paper100,
@@ -317,7 +317,7 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
         SizedBox(height: 4.h),
         Text(
           'submit.recorder.start_subtitle'.tr(),
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 11.5.sp,
             color: ColorManager.paper400,
           ),
@@ -352,7 +352,7 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
                   isPaused
                       ? 'submit.recorder.paused'.tr()
                       : 'submit.recorder.recording_now'.tr(),
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                     color: isPaused
@@ -380,7 +380,7 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
                   ),
                   child: Text(
                     _formatTime(seconds),
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.goldLight,
@@ -497,7 +497,7 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
               ),
               label: Text(
                 'submit.recorder.save_recording'.tr(),
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   fontSize: 12.5.sp,
                   fontWeight: FontWeight.bold,
                   color: ColorManager.primaryDark,
@@ -526,7 +526,7 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
             Expanded(
               child: Text(
                 'submit.recorder.ready_for_review'.tr(),
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.bold,
                   color: ColorManager.paper100,
@@ -616,14 +616,14 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
                         children: [
                           Text(
                             _formatTime(displayDuration.inSeconds),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 11.sp,
                               color: ColorManager.paper400,
                             ),
                           ),
                           Text(
                             _formatTime(totalDuration.inSeconds),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 11.sp,
                               color: ColorManager.paper400,
                             ),
@@ -715,7 +715,7 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
               ),
               label: Text(
                 'submit.recorder.re_record'.tr(),
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   fontSize: 12.sp,
                   color: ColorManager.goldLight,
                   fontWeight: FontWeight.w500,

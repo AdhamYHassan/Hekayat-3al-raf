@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
@@ -222,7 +222,7 @@ class _SubmitStoryStep2FormState extends State<SubmitStoryStep2Form> {
                   padding: EdgeInsets.only(top: 6.h, right: 4.w, left: 4.w),
                   child: Text(
                     _bodyError!,
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       color: ColorManager.error,
                       fontSize: 11.5.sp,
                       fontWeight: FontWeight.w500,
@@ -260,7 +260,7 @@ class _SubmitStoryStep2FormState extends State<SubmitStoryStep2Form> {
                           padding: EdgeInsets.only(top: 6.h, right: 4.w, left: 4.w),
                           child: Text(
                             _attachmentError!,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.error,
                               fontSize: 11.5.sp,
                               fontWeight: FontWeight.w500,
@@ -287,7 +287,7 @@ class _SubmitStoryStep2FormState extends State<SubmitStoryStep2Form> {
                   padding: EdgeInsets.only(top: 6.h, right: 4.w, left: 4.w),
                   child: Text(
                     _attachmentError!,
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       color: ColorManager.error,
                       fontSize: 11.5.sp,
                       fontWeight: FontWeight.w500,
@@ -328,7 +328,7 @@ class _SubmitStoryStep2FormState extends State<SubmitStoryStep2Form> {
                   ),
                   label: Text(
                     'submit.prev'.tr(),
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
                       color: ColorManager.paper100,
@@ -364,7 +364,7 @@ class _SubmitStoryStep2FormState extends State<SubmitStoryStep2Form> {
                           children: [
                             Text(
                               'submit.review'.tr(),
-                              style: GoogleFonts.alexandria(
+                              style: AppFonts.alexandria(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                                 color: ColorManager.primaryDark,
@@ -410,7 +410,7 @@ class _FormFieldLabel extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
               color: ColorManager.paper300,
@@ -420,7 +420,7 @@ class _FormFieldLabel extends StatelessWidget {
             SizedBox(width: 4.w),
             Text(
               '*',
-              style: GoogleFonts.alexandria(
+              style: AppFonts.alexandria(
                 fontSize: 13.sp,
                 color: ColorManager.gold,
                 fontWeight: FontWeight.bold,
@@ -459,14 +459,14 @@ class _CustomTextField extends StatelessWidget {
           controller: controller,
           maxLines: maxLines,
           onChanged: onChanged,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 14.sp,
             color: ColorManager.paper100,
           ),
           cursorColor: ColorManager.gold,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: GoogleFonts.ibmPlexSansArabic(
+            hintStyle: AppFonts.ibmPlexSansArabic(
               fontSize: 13.5.sp,
               color: ColorManager.paper400.withValues(alpha: 0.5),
             ),
@@ -507,7 +507,7 @@ class _CustomTextField extends StatelessWidget {
             padding: EdgeInsets.only(top: 5.h, right: 4.w, left: 4.w),
             child: Text(
               errorMessage!,
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 color: ColorManager.error,
                 fontSize: 11.sp,
                 fontWeight: FontWeight.w500,
@@ -601,7 +601,7 @@ class _CustomPlaceholderBox extends StatelessWidget {
                 Expanded(
                   child: Text(
                     hasFile ? fileName! : 'submit.form.choose_file'.tr(),
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 13.5.sp,
                       color: hasFile
                           ? ColorManager.paper100
@@ -705,7 +705,7 @@ class _CustomCoverPlaceholderBox extends StatelessWidget {
                 Expanded(
                   child: Text(
                     hasImage ? imageName! : 'submit.form.choose_image'.tr(),
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 13.5.sp,
                       color: hasImage
                           ? ColorManager.paper100
@@ -791,7 +791,7 @@ class _AnonymousConsentCard extends StatelessWidget {
                       },
                       child: Text(
                         'submit.anonymous_toggle'.tr(),
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 12.sp,
                           color: ColorManager.paper200.withValues(alpha: 0.75),
                           height: 1.5,
@@ -813,7 +813,7 @@ class _AnonymousConsentCard extends StatelessWidget {
                     SizedBox(width: 6.w),
                     Text(
                       'submit.anonymous_hint'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 11.sp,
                         color: ColorManager.gold.withValues(alpha: 0.8),
                         fontWeight: FontWeight.w500,

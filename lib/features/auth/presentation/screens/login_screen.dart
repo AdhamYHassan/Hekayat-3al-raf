@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
@@ -205,7 +205,7 @@ class _LoginViewState extends State<_LoginView> {
                         memCacheHeight: 140,
                         errorWidget: Text(
                           'حكايات على الرف',
-                          style: GoogleFonts.arefRuqaa(
+                          style: AppFonts.arefRuqaa(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.w700,
                             color: ColorManager.gold,
@@ -217,7 +217,7 @@ class _LoginViewState extends State<_LoginView> {
                       // Welcome Title
                       Text(
                         'أهلاً بيكم تاني',
-                        style: GoogleFonts.alexandria(
+                        style: AppFonts.alexandria(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
                           color: ColorManager.paper100,
@@ -231,7 +231,7 @@ class _LoginViewState extends State<_LoginView> {
                         child: Text(
                           'كل حكاية بتبدأ بحد بيفتح الباب. ادخل واكمل من حيث وقفت.',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 13.5.sp,
                             color: ColorManager.paper200.withValues(
                               alpha: 0.65,
@@ -256,7 +256,7 @@ class _LoginViewState extends State<_LoginView> {
                             alignment: AlignmentDirectional.centerStart,
                             child: Text(
                               _loginError!,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 11.sp,
                                 color: ColorManager.error,
                                 fontWeight: FontWeight.w500,
@@ -276,7 +276,7 @@ class _LoginViewState extends State<_LoginView> {
                             alignment: AlignmentDirectional.centerStart,
                             child: Text(
                               _passwordError!,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 11.sp,
                                 color: ColorManager.error,
                                 fontWeight: FontWeight.w500,
@@ -300,7 +300,7 @@ class _LoginViewState extends State<_LoginView> {
                           ),
                           child: Text(
                             'auth.forgot_password'.tr(),
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 12.sp,
                               color: ColorManager.goldLight.withValues(
                                 alpha: 0.75,
@@ -350,7 +350,7 @@ class _LoginViewState extends State<_LoginView> {
                                     else ...[
                                       Text(
                                         'تسجيل الدخول',
-                                        style: GoogleFonts.alexandria(
+                                        style: AppFonts.alexandria(
                                           fontSize: 14.5.sp,
                                           fontWeight: FontWeight.bold,
                                           color: ColorManager.primaryDark,
@@ -388,7 +388,7 @@ class _LoginViewState extends State<_LoginView> {
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                               child: Text(
                                 'أو',
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   fontSize: 11.5.sp,
                                   color: ColorManager.paper400,
                                 ),
@@ -423,7 +423,7 @@ class _LoginViewState extends State<_LoginView> {
                         ),
                         child: Text(
                           'الدخول كزائر',
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 13.5.sp,
                             fontWeight: FontWeight.w500,
                             color: ColorManager.paper100,
@@ -438,7 +438,7 @@ class _LoginViewState extends State<_LoginView> {
                         children: [
                           Text(
                             'ماعندكش حساب؟ ',
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 13.sp,
                               color: ColorManager.paper300,
                             ),
@@ -449,7 +449,7 @@ class _LoginViewState extends State<_LoginView> {
                             },
                             child: Text(
                               'أنشئ حساب',
-                              style: GoogleFonts.alexandria(
+                              style: AppFonts.alexandria(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
                                 color: ColorManager.gold,
@@ -464,7 +464,7 @@ class _LoginViewState extends State<_LoginView> {
                       // Footer Note
                       Text(
                         'حكايات على الرف · نسخة تجريبية للعرض',
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 10.5.sp,
                           color: ColorManager.paper400.withValues(alpha: 0.5),
                         ),
@@ -488,7 +488,7 @@ class _LoginViewState extends State<_LoginView> {
         padding: EdgeInsets.only(bottom: 6.h),
         child: Text(
           label,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
             color: ColorManager.paper300,
@@ -561,7 +561,7 @@ class _LoginViewState extends State<_LoginView> {
                           _selectedCountry.localizedName(lang),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.5.sp,
                             fontWeight: FontWeight.w600,
                             color: ColorManager.paper100,
@@ -572,7 +572,7 @@ class _LoginViewState extends State<_LoginView> {
                       Text(
                         '(${_selectedCountry.dialCode})',
                         textDirection: TextDirection.ltr,
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 11.sp,
                           color: ColorManager.gold,
                           fontWeight: FontWeight.w500,
@@ -634,7 +634,7 @@ class _LoginViewState extends State<_LoginView> {
                   if (_loginError != null) _loginError = null;
                 });
               },
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 color: ColorManager.paper100,
                 fontSize: 14.sp,
               ),
@@ -643,7 +643,7 @@ class _LoginViewState extends State<_LoginView> {
                     ? _selectedCountry.exampleNumber
                     : (lang == 'ar' ? '01012345678 أو name@example.com' : '01012345678 or name@example.com'),
                 hintTextDirection: TextDirection.ltr,
-                hintStyle: GoogleFonts.ibmPlexSansArabic(
+                hintStyle: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.paper400.withValues(alpha: 0.5),
                   fontSize: 12.5.sp,
                 ),
@@ -674,7 +674,7 @@ class _LoginViewState extends State<_LoginView> {
         controller: _passwordController,
         obscureText: _obscurePassword,
         textDirection: TextDirection.ltr,
-        style: GoogleFonts.ibmPlexSansArabic(
+        style: AppFonts.ibmPlexSansArabic(
           color: ColorManager.paper100,
           fontSize: 14.sp,
         ),
@@ -697,7 +697,7 @@ class _LoginViewState extends State<_LoginView> {
             },
           ),
           hintText: '••••••••',
-          hintStyle: GoogleFonts.ibmPlexSansArabic(
+          hintStyle: AppFonts.ibmPlexSansArabic(
             color: ColorManager.paper400.withValues(alpha: 0.6),
             fontSize: 13.5.sp,
           ),

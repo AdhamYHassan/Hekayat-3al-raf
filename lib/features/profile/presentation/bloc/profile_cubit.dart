@@ -30,6 +30,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String phone,
     required String bio,
     String? avatar,
+    String? avatarFilePath,
   }) async {
     final currentState = state;
     if (currentState is! ProfileLoaded) return;
@@ -41,6 +42,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       phone: phone,
       bio: bio,
       avatar: avatar,
+      avatarFilePath: avatarFilePath,
     );
 
     final result = await _updateProfileUseCase(params);

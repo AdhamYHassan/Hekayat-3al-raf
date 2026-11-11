@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_story_entity.dart';
@@ -83,7 +83,7 @@ class HomeFeaturedCard extends StatelessWidget {
                             SizedBox(width: 4.w),
                             Text(
                               'stories.type_audio'.tr(),
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w500,
                                 color: ColorManager.goldLight,
@@ -103,7 +103,7 @@ class HomeFeaturedCard extends StatelessWidget {
                         children: [
                           Text(
                             story.category,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 11.sp,
                               fontWeight: FontWeight.w500,
                               color: ColorManager.gold,
@@ -112,7 +112,7 @@ class HomeFeaturedCard extends StatelessWidget {
                           SizedBox(height: 3.h),
                           Text(
                             story.title,
-                            style: GoogleFonts.alexandria(
+                            style: AppFonts.alexandria(
                               fontSize: 17.sp,
                               fontWeight: FontWeight.w700,
                               color: ColorManager.paper100,
@@ -124,7 +124,7 @@ class HomeFeaturedCard extends StatelessWidget {
                           SizedBox(height: 4.h),
                           Text(
                             story.excerpt,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 12.sp,
                               color: ColorManager.paper200.withValues(alpha: 0.7),
                               height: 1.45,
@@ -141,7 +141,7 @@ class HomeFeaturedCard extends StatelessWidget {
                                   SizedBox(width: 4.w),
                                   Text(
                                     '48.2 ${'stories.thousand'.tr()}',
-                                    style: GoogleFonts.ibmPlexSansArabic(
+                                    style: AppFonts.ibmPlexSansArabic(
                                       fontSize: 11.sp,
                                       color: ColorManager.paper400,
                                     ),
@@ -151,7 +151,7 @@ class HomeFeaturedCard extends StatelessWidget {
                                   SizedBox(width: 4.w),
                                   Text(
                                     '4.6',
-                                    style: GoogleFonts.ibmPlexSansArabic(
+                                    style: AppFonts.ibmPlexSansArabic(
                                       fontSize: 11.sp,
                                       color: ColorManager.paper400,
                                     ),
@@ -161,7 +161,7 @@ class HomeFeaturedCard extends StatelessWidget {
                               SizedBox(width: 12.w),
                               Text(
                                 story.authorName,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   fontSize: 11.sp,
                                   color: ColorManager.paper400,
                                 ),
@@ -187,7 +187,7 @@ class HomeFeaturedCard extends StatelessWidget {
             ),
             child: Text(
               featured.pullQuote,
-              style: GoogleFonts.arefRuqaa(
+              style: AppFonts.arefRuqaa(
                 fontSize: 15.sp,
                 fontStyle: FontStyle.italic,
                 color: ColorManager.goldLight,

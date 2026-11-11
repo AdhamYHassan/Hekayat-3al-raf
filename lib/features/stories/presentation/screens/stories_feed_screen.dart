@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theming/colors_manager.dart';
@@ -98,7 +98,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                         padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                         child: Text(
                           'stories.stories_count'.tr(args: [state.totalCount.toString()]),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper400,
                           ),
@@ -118,7 +118,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                           children: [
                             Text(
                               state.errorMessage ?? 'stories.load_error'.tr(),
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 color: ColorManager.paper200,
                                 fontSize: 14.sp,
                               ),
@@ -129,7 +129,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                               style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
                               child: Text(
                                 'common.retry'.tr(),
-                                style: GoogleFonts.alexandria(color: ColorManager.primaryDark),
+                                style: AppFonts.alexandria(color: ColorManager.primaryDark),
                               ),
                             ),
                           ],
@@ -142,7 +142,7 @@ class _StoriesFeedViewState extends State<_StoriesFeedView> {
                       child: Center(
                         child: Text(
                           'stories.no_stories_match'.tr(),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             color: ColorManager.paper300,
                             fontSize: 13.sp,
                           ),

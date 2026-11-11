@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 
@@ -26,7 +26,7 @@ class AmbassadorSelectedStoriesList extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Text(
             'ambassadors.selected_stories'.tr(),
-            style: GoogleFonts.alexandria(
+            style: AppFonts.alexandria(
               color: ColorManager.paper100,
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class AmbassadorSelectedStoriesList extends StatelessWidget {
                         children: [
                           Text(
                             story.title,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper100,
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
@@ -94,7 +94,7 @@ class AmbassadorSelectedStoriesList extends StatelessWidget {
                             children: [
                               Text(
                                 story.category,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   color: ColorManager.goldLight,
                                   fontSize: 11.sp,
                                 ),
@@ -108,7 +108,7 @@ class AmbassadorSelectedStoriesList extends StatelessWidget {
                               SizedBox(width: 4.w),
                               Text(
                                 story.viewsCount,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   color: ColorManager.paper400,
                                   fontSize: 11.sp,
                                 ),

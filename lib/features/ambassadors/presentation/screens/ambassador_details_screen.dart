@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
@@ -80,7 +80,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
             return Center(
               child: Text(
                 'errors.something_went_wrong'.tr(),
-                style: GoogleFonts.ibmPlexSansArabic(
+                style: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.paper200,
                   fontSize: 14.sp,
                 ),
@@ -125,7 +125,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
                             ),
                             child: Text(
                               details.quote,
-                              style: GoogleFonts.arefRuqaa(
+                              style: AppFonts.arefRuqaa(
                                 color: ColorManager.goldLight,
                                 fontSize: 16.sp,
                                 fontStyle: FontStyle.italic,
@@ -155,7 +155,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
                                   ),
                                   child: Text(
                                     tag,
-                                    style: GoogleFonts.ibmPlexSansArabic(
+                                    style: AppFonts.ibmPlexSansArabic(
                                       color: ColorManager.goldLight,
                                       fontSize: 11.sp,
                                       fontWeight: FontWeight.w500,
@@ -182,7 +182,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
                               padding: EdgeInsets.only(bottom: 10.h),
                               child: Text(
                                 p,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   color: ColorManager.paper200.withValues(alpha: 0.8),
                                   fontSize: 13.5.sp,
                                   height: 1.8,
@@ -207,7 +207,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
                             ),
                             child: Text(
                               '«${details.pullQuote}»',
-                              style: GoogleFonts.arefRuqaa(
+                              style: AppFonts.arefRuqaa(
                                 color: ColorManager.goldLight,
                                 fontSize: 15.sp,
                                 height: 1.6,
@@ -292,7 +292,7 @@ class _AmbassadorDetailsView extends StatelessWidget {
                                 SizedBox(width: 4.w),
                                 Text(
                                   'رجوع',
-                                  style: GoogleFonts.ibmPlexSansArabic(
+                                  style: AppFonts.ibmPlexSansArabic(
                                     color: ColorManager.goldLight,
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w600,

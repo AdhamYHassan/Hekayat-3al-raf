@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_extra_entities.dart';
@@ -65,7 +65,7 @@ class HomeAmbassadorsList extends StatelessWidget {
                           children: [
                             Text(
                               ambassador.name,
-                              style: GoogleFonts.alexandria(
+                              style: AppFonts.alexandria(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w700,
                                 color: ColorManager.paper100,
@@ -77,7 +77,7 @@ class HomeAmbassadorsList extends StatelessWidget {
                             SizedBox(height: 2.h),
                             Text(
                               ambassador.role,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 10.sp,
                                 color: ColorManager.goldLight,
                               ),

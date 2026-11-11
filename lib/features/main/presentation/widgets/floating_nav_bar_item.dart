@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 
 class FloatingNavBarItem extends StatelessWidget {
   final IconData icon;
@@ -59,7 +59,7 @@ class FloatingNavBarItem extends StatelessWidget {
                           maxLines: 1,
                           softWrap: false,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.alexandria(
+                          style: AppFonts.alexandria(
                             fontSize: 9.5.sp,
                             fontWeight: isActive
                                 ? FontWeight.w700

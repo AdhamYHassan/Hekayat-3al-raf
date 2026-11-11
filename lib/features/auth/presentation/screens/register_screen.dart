@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:flutter/gestures.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -47,6 +48,8 @@ class _RegisterViewState extends State<_RegisterView> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _agreedToTerms = false;
+  late final TapGestureRecognizer _termsRecognizer;
+  late final TapGestureRecognizer _privacyRecognizer;
 
   // Validation Error Messages per field
   String? _nameError;
@@ -57,7 +60,38 @@ class _RegisterViewState extends State<_RegisterView> {
   String? _termsError;
 
   @override
+  void initState() {
+    super.initState();
+    _termsRecognizer = TapGestureRecognizer()..onTap = _navigateToTerms;
+    _privacyRecognizer = TapGestureRecognizer()..onTap = _navigateToPrivacy;
+  }
+
+  void _navigateToTerms() {
+    final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+    context.push(
+      Routes.webView,
+      extra: {
+        'title': 'settings.terms_conditions'.tr(),
+        'url': 'https://hekayat3alraf.com/$lang/terms/',
+      },
+    );
+  }
+
+  void _navigateToPrivacy() {
+    final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+    context.push(
+      Routes.webView,
+      extra: {
+        'title': 'settings.privacy_policy'.tr(),
+        'url': 'https://hekayat3alraf.com/$lang/privacy/',
+      },
+    );
+  }
+
+  @override
   void dispose() {
+    _termsRecognizer.dispose();
+    _privacyRecognizer.dispose();
     _nameController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
@@ -213,7 +247,7 @@ class _RegisterViewState extends State<_RegisterView> {
                         memCacheHeight: 120,
                         errorWidget: Text(
                           'حكايات على الرف',
-                          style: GoogleFonts.arefRuqaa(
+                          style: AppFonts.arefRuqaa(
                             fontSize: 22.sp,
                             fontWeight: FontWeight.w700,
                             color: ColorManager.gold,
@@ -234,7 +268,7 @@ class _RegisterViewState extends State<_RegisterView> {
                           SizedBox(width: 8.w),
                           Text(
                             'حساب جديد',
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.gold,
                               fontSize: 11.5.sp,
                               fontWeight: FontWeight.w600,
@@ -247,7 +281,7 @@ class _RegisterViewState extends State<_RegisterView> {
                       // Welcome Title
                       Text(
                         'احكي حكايتك من اليوم',
-                        style: GoogleFonts.alexandria(
+                        style: AppFonts.alexandria(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
                           color: ColorManager.paper100,
@@ -261,7 +295,7 @@ class _RegisterViewState extends State<_RegisterView> {
                         child: Text(
                           'أنشئ حسابك وابدأ تشارك حكاياتك مع الناس اللي عايزة تسمع.',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 13.sp,
                             color: ColorManager.paper200.withValues(
                               alpha: 0.65,
@@ -453,7 +487,7 @@ class _RegisterViewState extends State<_RegisterView> {
                                     child: Text.rich(
                                       TextSpan(
                                         text: 'أوافق على ',
-                                        style: GoogleFonts.ibmPlexSansArabic(
+                                        style: AppFonts.ibmPlexSansArabic(
                                           fontSize: 11.5.sp,
                                           color: ColorManager.paper200
                                               .withValues(alpha: 0.70),
@@ -461,19 +495,25 @@ class _RegisterViewState extends State<_RegisterView> {
                                         children: [
                                           TextSpan(
                                             text: 'الشروط والأحكام',
+                                            recognizer: _termsRecognizer,
                                             style:
-                                                GoogleFonts.ibmPlexSansArabic(
+                                                AppFonts.ibmPlexSansArabic(
                                                   color: ColorManager.goldLight,
                                                   fontWeight: FontWeight.bold,
+                                                  decoration: TextDecoration.underline,
+                                                  decorationColor: ColorManager.goldLight,
                                                 ),
                                           ),
                                           const TextSpan(text: ' و'),
                                           TextSpan(
                                             text: 'سياسة الخصوصية',
+                                            recognizer: _privacyRecognizer,
                                             style:
-                                                GoogleFonts.ibmPlexSansArabic(
+                                                AppFonts.ibmPlexSansArabic(
                                                   color: ColorManager.goldLight,
                                                   fontWeight: FontWeight.bold,
+                                                  decoration: TextDecoration.underline,
+                                                  decorationColor: ColorManager.goldLight,
                                                 ),
                                           ),
                                         ],
@@ -489,7 +529,7 @@ class _RegisterViewState extends State<_RegisterView> {
                               padding: EdgeInsets.only(top: 5.h, right: 8.w),
                               child: Text(
                                 _termsError!,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   color: ColorManager.error,
                                   fontSize: 11.sp,
                                 ),
@@ -538,7 +578,7 @@ class _RegisterViewState extends State<_RegisterView> {
                                     else ...[
                                       Text(
                                         'إنشاء الحساب',
-                                        style: GoogleFonts.alexandria(
+                                        style: AppFonts.alexandria(
                                           fontSize: 14.5.sp,
                                           fontWeight: FontWeight.bold,
                                           color: ColorManager.primaryDark,
@@ -566,7 +606,7 @@ class _RegisterViewState extends State<_RegisterView> {
                         children: [
                           Text(
                             'عندك حساب بالفعل؟ ',
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 13.sp,
                               color: ColorManager.paper300,
                             ),
@@ -577,7 +617,7 @@ class _RegisterViewState extends State<_RegisterView> {
                             },
                             child: Text(
                               'سجل دخولك',
-                              style: GoogleFonts.alexandria(
+                              style: AppFonts.alexandria(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
                                 color: ColorManager.gold,
@@ -592,7 +632,7 @@ class _RegisterViewState extends State<_RegisterView> {
                       // Footer Note
                       Text(
                         'حكايات على الرف · نسخة تجريبية للعرض',
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 10.5.sp,
                           color: ColorManager.paper400.withValues(alpha: 0.5),
                         ),
@@ -616,7 +656,7 @@ class _RegisterViewState extends State<_RegisterView> {
         padding: EdgeInsets.only(bottom: 6.h),
         child: Text(
           label,
-          style: GoogleFonts.ibmPlexSansArabic(
+          style: AppFonts.ibmPlexSansArabic(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
             color: ColorManager.paper300,
@@ -664,7 +704,7 @@ class _RegisterViewState extends State<_RegisterView> {
             ],
             textDirection: textDirection,
             onChanged: onChanged,
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               color: ColorManager.paper100,
               fontSize: 14.sp,
             ),
@@ -678,7 +718,7 @@ class _RegisterViewState extends State<_RegisterView> {
               ),
               suffixIcon: suffixIcon,
               hintText: hintText,
-              hintStyle: GoogleFonts.ibmPlexSansArabic(
+              hintStyle: AppFonts.ibmPlexSansArabic(
                 color: ColorManager.paper400.withValues(alpha: 0.6),
                 fontSize: 13.5.sp,
               ),
@@ -695,7 +735,7 @@ class _RegisterViewState extends State<_RegisterView> {
             padding: EdgeInsets.only(top: 5.h, right: 8.w),
             child: Text(
               errorMessage,
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 color: ColorManager.error,
                 fontSize: 11.sp,
               ),

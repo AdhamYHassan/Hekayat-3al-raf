@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 enum AppSnackBarType {
@@ -18,7 +18,7 @@ enum AppSnackBarType {
 /// Features:
 /// - Floating behavior positioned safely above bottom navigation bar
 /// - Translucent backdrop blur / glassmorphism finish with glowing brand border
-/// - Consistent GoogleFonts typography (Alexandria / IBM Plex Sans Arabic)
+/// - Consistent AppFonts typography (Alexandria / IBM Plex Sans Arabic)
 /// - Custom brand icons for Success, Error, Warning, and Info
 class AppSnackBar {
   AppSnackBar._();
@@ -239,7 +239,7 @@ class AppSnackBar {
                             if (title != null && title.trim().isNotEmpty) ...[
                               Text(
                                 title,
-                                style: GoogleFonts.alexandria(
+                                style: AppFonts.alexandria(
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.bold,
                                   color: ColorManager.paper100,
@@ -249,7 +249,7 @@ class AppSnackBar {
                             ],
                             Text(
                               message,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 12.5.sp,
                                 fontWeight: FontWeight.w400,
                                 color: ColorManager.paper200,
@@ -284,7 +284,7 @@ class AppSnackBar {
                           ),
                           child: Text(
                             actionLabel,
-                            style: GoogleFonts.alexandria(
+                            style: AppFonts.alexandria(
                               fontSize: 11.5.sp,
                               fontWeight: FontWeight.bold,
                               color: ColorManager.primaryDark,

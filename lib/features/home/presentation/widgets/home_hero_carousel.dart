@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_hero_slide.dart';
@@ -134,7 +134,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                               SizedBox(width: 8.w),
                               Text(
                                 slide.subtitle,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                   color: ColorManager.gold,
@@ -145,7 +145,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                           SizedBox(height: 10.h),
                           Text(
                             slide.title,
-                            style: GoogleFonts.alexandria(
+                            style: AppFonts.alexandria(
                               fontSize: 26.sp,
                               fontWeight: FontWeight.w700,
                               color: ColorManager.paper100,
@@ -155,7 +155,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                           SizedBox(height: 10.h),
                           Text(
                             slide.description,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               fontSize: 14.sp,
                               color: ColorManager.paper200.withValues(
                                 alpha: 0.8,
@@ -184,7 +184,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                                     children: [
                                       Text(
                                         slide.ctaLabel,
-                                        style: GoogleFonts.ibmPlexSansArabic(
+                                        style: AppFonts.ibmPlexSansArabic(
                                           fontSize: 13.sp,
                                           fontWeight: FontWeight.w600,
                                           color: ColorManager.primaryDark,
@@ -220,7 +220,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                                     ),
                                     child: Text(
                                       slide.secondaryCtaLabel!,
-                                      style: GoogleFonts.ibmPlexSansArabic(
+                                      style: AppFonts.ibmPlexSansArabic(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w500,
                                         color: ColorManager.paper100,
@@ -256,7 +256,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                       memCacheHeight: 100,
                       errorWidget: Text(
                         'app_name'.tr(),
-                        style: GoogleFonts.arefRuqaa(
+                        style: AppFonts.arefRuqaa(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w700,
                           color: ColorManager.gold,

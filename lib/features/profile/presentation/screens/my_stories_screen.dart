@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
@@ -53,7 +53,7 @@ class MyStoriesScreen extends StatelessWidget {
                               Text(
                                 message,
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.ibmPlexSansArabic(
+                                style: AppFonts.ibmPlexSansArabic(
                                   color: ColorManager.paper200,
                                   fontSize: 14.sp,
                                 ),
@@ -70,7 +70,7 @@ class MyStoriesScreen extends StatelessWidget {
                                 ),
                                 child: Text(
                                   'common.retry'.tr(),
-                                  style: GoogleFonts.alexandria(
+                                  style: AppFonts.alexandria(
                                     color: ColorManager.primaryDark,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -121,7 +121,7 @@ class MyStoriesScreen extends StatelessWidget {
             memCacheHeight: 90,
             errorWidget: Text(
               'app_name'.tr(),
-              style: GoogleFonts.arefRuqaa(
+              style: AppFonts.arefRuqaa(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
                 color: ColorManager.gold,
@@ -138,7 +138,7 @@ class MyStoriesScreen extends StatelessWidget {
                 children: [
                   Text(
                     'common.back'.tr(),
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
                       color: ColorManager.goldLight,
@@ -206,7 +206,7 @@ class _MyStoriesContent extends StatelessWidget {
                       SizedBox(width: 4.w),
                       Text(
                         'profile.my_stories_screen.back_to_profile'.tr(),
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 12.5.sp,
                           color: ColorManager.goldLight.withValues(alpha: 0.75),
                         ),
@@ -223,7 +223,7 @@ class _MyStoriesContent extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Text(
                       'profile.my_stories_screen.kicker'.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         color: ColorManager.gold,
                         fontSize: 11.5.sp,
                         fontWeight: FontWeight.w600,
@@ -236,7 +236,7 @@ class _MyStoriesContent extends StatelessWidget {
                 // Page Heading
                 Text(
                   'profile.my_stories_screen.title'.tr(),
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                     color: ColorManager.paper100,
@@ -266,7 +266,7 @@ class _MyStoriesContent extends StatelessWidget {
                       children: [
                         Text(
                           '$totalCount',
-                          style: GoogleFonts.alexandria(
+                          style: AppFonts.alexandria(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: ColorManager.paper100,
@@ -275,7 +275,7 @@ class _MyStoriesContent extends StatelessWidget {
                         SizedBox(height: 2.h),
                         Text(
                           'profile.my_stories_screen.stat_all'.tr(),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper400,
                           ),
@@ -301,7 +301,7 @@ class _MyStoriesContent extends StatelessWidget {
                       children: [
                         Text(
                           '$inReviewCount',
-                          style: GoogleFonts.alexandria(
+                          style: AppFonts.alexandria(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: ColorManager.gold,
@@ -310,7 +310,7 @@ class _MyStoriesContent extends StatelessWidget {
                         SizedBox(height: 2.h),
                         Text(
                           'profile.my_stories_screen.stat_in_review'.tr(),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper400,
                           ),
@@ -336,7 +336,7 @@ class _MyStoriesContent extends StatelessWidget {
                       children: [
                         Text(
                           '$publishedCount',
-                          style: GoogleFonts.alexandria(
+                          style: AppFonts.alexandria(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF34D399),
@@ -345,7 +345,7 @@ class _MyStoriesContent extends StatelessWidget {
                         SizedBox(height: 2.h),
                         Text(
                           'profile.my_stories_screen.stat_published'.tr(),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
                             color: ColorManager.paper400,
                           ),
@@ -374,7 +374,7 @@ class _MyStoriesContent extends StatelessWidget {
                     SizedBox(height: 14.h),
                     Text(
                       'profile.my_stories_screen.empty_title'.tr(),
-                      style: GoogleFonts.alexandria(
+                      style: AppFonts.alexandria(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                         color: ColorManager.paper100,
@@ -384,7 +384,7 @@ class _MyStoriesContent extends StatelessWidget {
                     Text(
                       'profile.my_stories_screen.empty_subtitle'.tr(),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 12.5.sp,
                         color: ColorManager.paper400,
                         height: 1.5,
@@ -443,7 +443,7 @@ class _MyStoriesContent extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'profile.my_stories_screen.tell_new_story'.tr(),
-                      style: GoogleFonts.alexandria(
+                      style: AppFonts.alexandria(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         color: ColorManager.primaryDark,
@@ -543,7 +543,7 @@ class _MyStoryCard extends StatelessWidget {
                             SizedBox(width: 4.w),
                             Text(
                               story.submissionTypeLabel,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 10.sp,
                                 color: ColorManager.goldLight,
                                 fontWeight: FontWeight.w500,
@@ -594,7 +594,7 @@ class _MyStoryCard extends StatelessWidget {
                             SizedBox(width: 4.w),
                             Text(
                               story.statusLabel,
-                              style: GoogleFonts.ibmPlexSansArabic(
+                              style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w500,
                                 color: isPublished
@@ -616,7 +616,7 @@ class _MyStoryCard extends StatelessWidget {
                     story.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.alexandria(
+                    style: AppFonts.alexandria(
                       fontSize: 13.5.sp,
                       fontWeight: FontWeight.bold,
                       color: ColorManager.paper100,
@@ -628,7 +628,7 @@ class _MyStoryCard extends StatelessWidget {
                   // Date Created
                   Text(
                     formattedDate,
-                    style: GoogleFonts.ibmPlexSansArabic(
+                    style: AppFonts.ibmPlexSansArabic(
                       fontSize: 11.sp,
                       color: ColorManager.paper400,
                     ),

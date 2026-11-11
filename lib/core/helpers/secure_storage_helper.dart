@@ -7,9 +7,7 @@ class SecureStorageHelper {
     resetOnError: true,
   );
 
-  static const _iosOptions = IOSOptions(
-    accessibility: KeychainAccessibility.first_unlock,
-  );
+  static const _iosOptions = IOSOptions();
 
   static const FlutterSecureStorage _storage = FlutterSecureStorage(
     aOptions: _androidOptions,
@@ -23,8 +21,21 @@ class SecureStorageHelper {
   static const String _userEmailKey = 'user_email';
   static const String _deviceIdKey = 'device_id';
 
+  static Future<void> _safeWrite(String key, String value) async {
+    try {
+      await _storage.write(key: key, value: value);
+    } catch (_) {
+      // In iOS Keychain, if accessibility attribute changed from previous install
+      // or duplicate item exists (-25299), delete the existing key and re-write.
+      try {
+        await _storage.delete(key: key);
+        await _storage.write(key: key, value: value);
+      } catch (_) {}
+    }
+  }
+
   static Future<void> saveDeviceId(String deviceId) async {
-    await _storage.write(key: _deviceIdKey, value: deviceId);
+    await _safeWrite(_deviceIdKey, deviceId);
   }
 
   static Future<String?> getDeviceId() async {
@@ -32,7 +43,7 @@ class SecureStorageHelper {
   }
 
   static Future<void> saveToken(String token) async {
-    await _storage.write(key: _tokenKey, value: token);
+    await _safeWrite(_tokenKey, token);
   }
 
   static Future<String?> getToken() async {
@@ -52,7 +63,7 @@ class SecureStorageHelper {
   }
 
   static Future<void> saveRefreshToken(String token) async {
-    await _storage.write(key: _refreshTokenKey, value: token);
+    await _safeWrite(_refreshTokenKey, token);
   }
 
   static Future<String?> getRefreshToken() async {
@@ -64,7 +75,7 @@ class SecureStorageHelper {
   }
 
   static Future<void> savePhoneNumber(String phoneNumber) async {
-    await _storage.write(key: _phoneNumber, value: phoneNumber);
+    await _safeWrite(_phoneNumber, phoneNumber);
   }
 
   static Future<String?> getPhoneNumber() async {
@@ -72,7 +83,7 @@ class SecureStorageHelper {
   }
 
   static Future<void> saveUserRole(String role) async {
-    await _storage.write(key: _userRoleKey, value: role);
+    await _safeWrite(_userRoleKey, role);
   }
 
   static Future<String?> getUserRole() async {
@@ -80,7 +91,7 @@ class SecureStorageHelper {
   }
 
   static Future<void> saveUserName(String name) async {
-    await _storage.write(key: _userNameKey, value: name);
+    await _safeWrite(_userNameKey, name);
   }
 
   static Future<String?> getUserName() async {
@@ -88,7 +99,7 @@ class SecureStorageHelper {
   }
 
   static Future<void> saveUserEmail(String email) async {
-    await _storage.write(key: _userEmailKey, value: email);
+    await _safeWrite(_userEmailKey, email);
   }
 
   static Future<String?> getUserEmail() async {

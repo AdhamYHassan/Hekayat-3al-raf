@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
 
@@ -123,7 +123,7 @@ class StoryTypeCard extends StatelessWidget {
                       children: [
                         Text(
                           _getTitle(option.format),
-                          style: GoogleFonts.alexandria(
+                          style: AppFonts.alexandria(
                             color: ColorManager.paper100,
                             fontSize: 15.sp,
                             fontWeight: FontWeight.bold,
@@ -140,7 +140,7 @@ class StoryTypeCard extends StatelessWidget {
                     SizedBox(height: 4.h),
                     Text(
                       _getDescription(option.format),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         color: ColorManager.paper200.withValues(alpha: 0.65),
                         fontSize: 12.sp,
                         height: 1.4,
@@ -160,7 +160,7 @@ class StoryTypeCard extends StatelessWidget {
                           ),
                           child: Text(
                             badge,
-                            style: GoogleFonts.ibmPlexSansArabic(
+                            style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper300,
                               fontSize: 10.sp,
                             ),

@@ -7,5 +7,6 @@ abstract class IProfileRepository {
   Future<ApiResult<ProfileUserEntity>> getProfile();
   Future<ApiResult<ProfileUserEntity>> updateProfile(UpdateProfileParams params);
   Future<ApiResult<List<MyStoryEntity>>> getMyStories();
+  Future<ApiResult<void>> deleteAccount(String password);
 }
 

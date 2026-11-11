@@ -137,7 +137,13 @@
     "profile": "الملف الشخصي",
     "profile_sub": "حسابي، حكاياتي، أسئلتي",
     "footer_version": "حكايات على الرف · نسخة تجريبية للهاتف",
-    "change_password": "تغيير كلمة المرور"
+    "change_password": "تغيير كلمة المرور",
+    "delete_account": "حذف الحساب",
+    "delete_account_sub": "حذف حسابك وبياناتك نهائياً",
+    "delete_account_warning": "تحذير: سيتم حذف حسابك وجميع الحكايات والبيانات المرتبطة به نهائياً وبلا رجعة. يرجى تأكيد كلمة المرور للمتابعة.",
+    "delete_account_confirm": "حذف الحساب نهائياً",
+    "delete_account_success": "تم حذف حسابك بنجاح.",
+    "enter_password_to_delete": "أدخل كلمة المرور لتأكيد الحذف"
   },
   "profile": {
     "title": "الملف الشخصي",

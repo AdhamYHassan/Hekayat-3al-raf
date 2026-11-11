@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 class SubmitStoryStepper extends StatelessWidget {
@@ -73,7 +73,7 @@ class _StepItem extends StatelessWidget {
           child: Center(
             child: Text(
               stepNumber.toString(),
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 color: isActive ? ColorManager.primaryDark : ColorManager.paper400,
                 fontSize: 11.sp,
                 fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class _StepItem extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.ibmPlexSansArabic(
+            style: AppFonts.ibmPlexSansArabic(
               color: isActive ? ColorManager.gold : ColorManager.paper400,
               fontSize: 11.sp,
               fontWeight: FontWeight.w500,

@@ -46,6 +46,17 @@ class ProfileRepositoryImpl implements IProfileRepository {
     }
   }
 
+  @override
+  Future<ApiResult<void>> deleteAccount(String password) async {
+    try {
+      await _remoteDataSource.deleteAccount(password);
+      await SecureStorageHelper.clearAll();
+      return const ApiSuccess(null);
+    } catch (error) {
+      return ApiFailure(NetworkExceptions.getFailure(error));
+    }
+  }
+
   Future<void> _cacheUserLocally(ProfileUserEntity user) async {
     if (user.displayName.isNotEmpty) {
       await SecureStorageHelper.saveUserName(user.displayName);

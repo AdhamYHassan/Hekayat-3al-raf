@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 
@@ -64,7 +64,7 @@ class AmbassadorHeroHeader extends StatelessWidget {
                 Text(
                   name,
                   textAlign: TextAlign.right,
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     color: ColorManager.paper100,
                     fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class AmbassadorHeroHeader extends StatelessWidget {
                 Text(
                   role,
                   textAlign: TextAlign.right,
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     color: ColorManager.goldLight,
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
@@ -85,7 +85,7 @@ class AmbassadorHeroHeader extends StatelessWidget {
                 Text(
                   cityAndJoin,
                   textAlign: TextAlign.right,
-                  style: GoogleFonts.ibmPlexSansArabic(
+                  style: AppFonts.ibmPlexSansArabic(
                     color: ColorManager.paper400,
                     fontSize: 11.sp,
                   ),

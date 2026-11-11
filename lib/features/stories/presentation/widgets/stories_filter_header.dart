@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import '../../../../core/theming/colors_manager.dart';
 import '../../domain/entities/story_type_entity.dart';
 
@@ -64,7 +64,7 @@ class StoriesFilterHeader extends StatelessWidget {
               children: [
                 Text(
                   'stories.content_type'.tr(),
-                  style: GoogleFonts.alexandria(
+                  style: AppFonts.alexandria(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: ColorManager.paper100,
@@ -92,7 +92,7 @@ class StoriesFilterHeader extends StatelessWidget {
                         ),
                         child: Text(
                           opt.labelKey.tr(),
-                          style: GoogleFonts.ibmPlexSansArabic(
+                          style: AppFonts.ibmPlexSansArabic(
                             fontSize: 12.sp,
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                             color: isSelected ? ColorManager.primaryDark : ColorManager.paper200,
@@ -124,7 +124,7 @@ class StoriesFilterHeader extends StatelessWidget {
             children: [
               Text(
                 'stories.title'.tr(),
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   color: ColorManager.paper100,
@@ -160,7 +160,7 @@ class StoriesFilterHeader extends StatelessWidget {
                         selectedType != null
                             ? _typeOptions.firstWhere((t) => t.value == selectedType).labelKey.tr()
                             : 'stories.story_type'.tr(),
-                        style: GoogleFonts.ibmPlexSansArabic(
+                        style: AppFonts.ibmPlexSansArabic(
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w500,
                           color: selectedType != null ? ColorManager.gold : ColorManager.paper300,
@@ -189,14 +189,14 @@ class StoriesFilterHeader extends StatelessWidget {
             child: TextField(
               controller: searchController,
               onChanged: onSearchChanged,
-              style: GoogleFonts.ibmPlexSansArabic(
+              style: AppFonts.ibmPlexSansArabic(
                 fontSize: 13.sp,
                 color: ColorManager.paper100,
               ),
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'stories.search_hint'.tr(),
-                hintStyle: GoogleFonts.ibmPlexSansArabic(
+                hintStyle: AppFonts.ibmPlexSansArabic(
                   fontSize: 13.sp,
                   color: ColorManager.paper400,
                 ),
@@ -242,7 +242,7 @@ class StoriesFilterHeader extends StatelessWidget {
                     ),
                     child: Text(
                       sort.labelKey.tr(),
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 12.sp,
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                         color: isSelected ? ColorManager.primaryDark : ColorManager.paper300,
@@ -276,7 +276,7 @@ class StoriesFilterHeader extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                     child: Text(
                       name,
-                      style: GoogleFonts.ibmPlexSansArabic(
+                      style: AppFonts.ibmPlexSansArabic(
                         fontSize: 11.sp,
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         color: isSelected ? ColorManager.gold : ColorManager.paper400,

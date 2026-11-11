@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/helpers/digit_converter.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -98,7 +98,7 @@ class _SixDigitPinFieldState extends State<SixDigitPinField> {
                 textInputAction: index == _codeLength - 1
                     ? TextInputAction.done
                     : TextInputAction.next,
-                style: GoogleFonts.alexandria(
+                style: AppFonts.alexandria(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: ColorManager.goldLight,
