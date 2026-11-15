@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.base_app"
+    namespace = "com.beefirst.hekayat3alraf"
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
@@ -16,13 +16,13 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.base_app"
+        applicationId = "com.beefirst.hekayat3alraf"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionCode = 1
+        versionName = "1.0.0"
     }
 
     buildTypes {

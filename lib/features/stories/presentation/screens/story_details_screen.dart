@@ -118,7 +118,6 @@ class _StoryDetailsView extends StatelessWidget {
                           StoryMediaType.video => hero.StoryMediaType.video,
                           _ => hero.StoryMediaType.image,
                         },
-                        onShareTap: () {},
                       ),
 
                       // Stats bar

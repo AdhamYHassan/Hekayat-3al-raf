@@ -8,9 +8,9 @@ import '../screens/document_viewer_screen.dart';
 /// Card displayed on the story details screen when the story media is a document.
 ///
 /// Features:
-/// - Heritage design palette with warm maroon & gold border.
-/// - Document badge and informative iconography.
-/// - Direct CTA to launch [DocumentViewerScreen].
+/// - Supports PDF natively via [DocumentViewerScreen].
+/// - Supports Word (.docx, .doc) via high-speed in-app WebView (Office Viewer).
+/// - Zero external CocoaPods or Native dependencies (100% Swift Package Manager compatible).
 class StoryDocumentCard extends StatelessWidget {
   final String title;
   final String documentUrl;
@@ -23,8 +23,27 @@ class StoryDocumentCard extends StatelessWidget {
     required this.documentKey,
   });
 
+  bool get _isPdf {
+    final cleanUrl = documentUrl.split('?').first.toLowerCase();
+    return cleanUrl.endsWith('.pdf');
+  }
+
+  void _openDocument(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => DocumentViewerScreen(
+          title: title,
+          documentUrl: documentUrl,
+          documentKey: documentKey,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isPdf = _isPdf;
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(18.w),
@@ -48,7 +67,9 @@ class StoryDocumentCard extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  Icons.picture_as_pdf_rounded,
+                  isPdf
+                      ? Icons.picture_as_pdf_rounded
+                      : Icons.description_rounded,
                   color: ColorManager.gold,
                   size: 26.sp,
                 ),
@@ -81,17 +102,7 @@ class StoryDocumentCard extends StatelessWidget {
             width: double.infinity,
             height: 46.h,
             child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => DocumentViewerScreen(
-                      title: title,
-                      documentUrl: documentUrl,
-                      documentKey: documentKey,
-                    ),
-                  ),
-                );
-              },
+              onPressed: () => _openDocument(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: ColorManager.gold,
                 foregroundColor: ColorManager.primaryDark,

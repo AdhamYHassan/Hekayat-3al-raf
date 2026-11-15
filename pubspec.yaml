@@ -54,6 +54,7 @@ dependencies:
   path_provider: ^2.1.5
   video_player: ^2.14.1
   flutter_pdfview: ^1.4.3
+  docx_file_viewer: ^1.0.5
   share_plus: ^13.3.1
   record: ^7.1.2
   image_picker: ^1.2.4
@@ -61,6 +62,7 @@ dependencies:
   device_info_plus: ^13.3.0
   webview_flutter: ^4.10.15
   cached_network_image: ^4.0.3
+  in_app_update: ^5.0.0
 
 dev_dependencies:
   flutter_test:

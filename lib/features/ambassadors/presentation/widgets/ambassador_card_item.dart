@@ -42,7 +42,10 @@ class AmbassadorCardItem extends StatelessWidget {
                 AppCachedNetworkImage(
                   imageUrl: ambassador.imageUrl,
                   fit: BoxFit.cover,
-                  alignment: const Alignment(0.0, -0.56), // object-position: 50% 22%
+                  alignment: const Alignment(
+                    0.0,
+                    -0.56,
+                  ), // object-position: 50% 22%
                   memCacheWidth: 600,
                   memCacheHeight: 480,
                 ),
@@ -116,7 +119,9 @@ class AmbassadorCardItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'ambassadors.stories_count'.tr(args: ['${ambassador.storiesCount}']),
+                            'ambassadors.stories_count'.tr(
+                              args: ['${ambassador.storiesCount}'],
+                            ),
                             style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper400,
                               fontSize: 10.sp,
@@ -133,7 +138,9 @@ class AmbassadorCardItem extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'ambassadors.answered_count'.tr(args: ['${ambassador.answeredQuestionsCount}']),
+                            'ambassadors.answered_count'.tr(
+                              args: ['${ambassador.answeredQuestionsCount}'],
+                            ),
                             style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.paper400,
                               fontSize: 10.sp,
@@ -169,4 +176,3 @@ class AmbassadorCardItem extends StatelessWidget {
     );
   }
 }
-

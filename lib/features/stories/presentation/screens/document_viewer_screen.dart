@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:docx_file_viewer/docx_file_viewer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
@@ -8,14 +9,13 @@ import '../../../../core/services/document_download_service.dart';
 import '../../../../core/theming/colors_manager.dart';
 import '../../../../core/theming/styles.dart';
 
-/// Full-screen high-performance PDF Viewer for document-type stories.
+/// Full-screen high-performance Viewer for document-type stories (PDF & DOCX).
 ///
 /// Features:
-/// - Uses native platform PDFKit (iOS) & AndroidPdfViewer (Android) via [PDFView].
-/// - Zero external permission requirements (100% Apple & Google Store compliant).
-/// - Native Export/Share Sheet to save to Files/Drive or share externally.
+/// - Uses native platform PDFKit (iOS) & AndroidPdfViewer (Android) for PDF.
+/// - Fallback to [DocxView] for Word (.docx) documents with native Flutter widgets.
+/// - Zero CocoaPods or external permission requirements.
 /// - Disk cached for instant opening.
-/// - Live page counter and smooth pinch-to-zoom.
 class DocumentViewerScreen extends StatefulWidget {
   final String title;
   final String documentUrl;
@@ -35,9 +35,10 @@ class DocumentViewerScreen extends StatefulWidget {
 class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
   final DocumentDownloadService _downloadService = DocumentDownloadService();
 
-  File? _pdfFile;
+  File? _docFile;
   bool _isLoading = true;
   String? _errorMessage;
+  bool _isDocxMode = false;
 
   int _totalPages = 0;
   int _currentPage = 0;
@@ -53,6 +54,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
+      _isDocxMode = false;
     });
 
     try {
@@ -60,9 +62,14 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
         documentUrl: widget.documentUrl,
         fileKey: widget.documentKey,
       );
+
+      final isDocx = file.path.toLowerCase().endsWith('.docx') ||
+          file.path.toLowerCase().endsWith('.doc');
+
       if (mounted) {
         setState(() {
-          _pdfFile = file;
+          _docFile = file;
+          _isDocxMode = isDocx;
           _isLoading = false;
         });
       }
@@ -77,15 +84,22 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
   }
 
   Future<void> _shareDocument() async {
-    if (_pdfFile == null || !await _pdfFile!.exists()) return;
+    if (_docFile == null || !await _docFile!.exists()) return;
     if (!mounted) return;
 
     final box = context.findRenderObject() as RenderBox?;
     final origin = box != null ? box.localToGlobal(Offset.zero) & box.size : null;
 
+    final isPdf = !_isDocxMode;
     await SharePlus.instance.share(
       ShareParams(
-        files: [XFile(_pdfFile!.path, mimeType: 'application/pdf', name: '${widget.title}.pdf')],
+        files: [
+          XFile(
+            _docFile!.path,
+            mimeType: isPdf ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            name: isPdf ? '${widget.title}.pdf' : '${widget.title}.docx',
+          ),
+        ],
         subject: widget.title,
         sharePositionOrigin: origin,
       ),
@@ -110,7 +124,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
           ),
         ),
         actions: [
-          if (_isReady && _totalPages > 0)
+          if (!_isDocxMode && _isReady && _totalPages > 0)
             Padding(
               padding: EdgeInsetsDirectional.only(end: 8.w),
               child: Center(
@@ -134,7 +148,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
                 ),
               ),
             ),
-          if (_pdfFile != null)
+          if (_docFile != null)
             IconButton(
               icon: const Icon(Icons.share_outlined, color: ColorManager.gold),
               tooltip: 'document.share_document'.tr(),
@@ -167,7 +181,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
       );
     }
 
-    if (_errorMessage != null || _pdfFile == null) {
+    if (_errorMessage != null || _docFile == null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -202,9 +216,23 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
       );
     }
 
+    // DOCX Mode (Native Flutter widget rendering)
+    if (_isDocxMode) {
+      return Container(
+        color: Colors.white,
+        child: DocxView(
+          file: _docFile!,
+          config: const DocxViewConfig(
+            enableZoom: true,
+          ),
+        ),
+      );
+    }
+
+    // PDF Mode (Native platform PDFKit / AndroidPdfViewer)
     return RepaintBoundary(
       child: PDFView(
-        filePath: _pdfFile!.path,
+        filePath: _docFile!.path,
         enableSwipe: true,
         swipeHorizontal: false,
         autoSpacing: true,
@@ -225,8 +253,9 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
           });
         },
         onError: (error) {
+          // If PDF rendering fails, automatically retry with DOCX viewer
           setState(() {
-            _errorMessage = error.toString();
+            _isDocxMode = true;
           });
         },
       ),

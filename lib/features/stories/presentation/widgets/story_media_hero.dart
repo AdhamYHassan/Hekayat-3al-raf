@@ -15,7 +15,7 @@ class StoryMediaHero extends StatelessWidget {
   final String category;
   final String year;
   final StoryMediaType mediaType;
-  final VoidCallback onShareTap;
+  final VoidCallback? onShareTap;
 
   const StoryMediaHero({
     super.key,
@@ -25,7 +25,7 @@ class StoryMediaHero extends StatelessWidget {
     required this.category,
     required this.year,
     required this.mediaType,
-    required this.onShareTap,
+    this.onShareTap,
   });
 
   @override
@@ -54,24 +54,31 @@ class StoryMediaHero extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 12.h,
-            left: 12.w,
-            child: InkWell(
-              onTap: onShareTap,
-              borderRadius: BorderRadius.circular(20.r),
-              child: Container(
-                width: 36.w,
-                height: 36.h,
-                decoration: BoxDecoration(
-                  color: ColorManager.primaryDark.withValues(alpha: 0.6),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: ColorManager.gold.withValues(alpha: 0.3)),
+          if (onShareTap != null)
+            Positioned(
+              top: 12.h,
+              left: 12.w,
+              child: InkWell(
+                onTap: onShareTap,
+                borderRadius: BorderRadius.circular(20.r),
+                child: Container(
+                  width: 36.w,
+                  height: 36.h,
+                  decoration: BoxDecoration(
+                    color: ColorManager.primaryDark.withValues(alpha: 0.6),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: ColorManager.gold.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Icon(
+                    CupertinoIcons.share,
+                    size: 16.sp,
+                    color: ColorManager.gold,
+                  ),
                 ),
-                child: Icon(CupertinoIcons.share, size: 16.sp, color: ColorManager.gold),
               ),
             ),
-          ),
           Positioned(
             bottom: 16.h,
             left: 16.w,

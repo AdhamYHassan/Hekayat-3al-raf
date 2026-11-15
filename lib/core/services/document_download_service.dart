@@ -24,9 +24,20 @@ class DocumentDownloadService {
       await cacheDir.create(recursive: true);
     }
 
+    // Determine extension from URL or content-disposition
+    String extension = 'bin';
+    final uriPath = Uri.tryParse(documentUrl)?.path.toLowerCase() ?? '';
+    if (uriPath.endsWith('.docx')) {
+      extension = 'docx';
+    } else if (uriPath.endsWith('.pdf')) {
+      extension = 'pdf';
+    } else if (uriPath.endsWith('.doc')) {
+      extension = 'doc';
+    }
+
     // Sanitize filename
-    final safeFileName = '${fileKey.replaceAll(RegExp(r'[^a-zA-Z0-9_\-]'), '_')}.pdf';
-    final targetFile = File('${cacheDir.path}/$safeFileName');
+    final safeFileName = '${fileKey.replaceAll(RegExp(r'[^a-zA-Z0-9_\-]'), '_')}.$extension';
+    var targetFile = File('${cacheDir.path}/$safeFileName');
 
     // Return cached file if valid and not empty
     if (await targetFile.exists() && await targetFile.length() > 0) {
@@ -39,7 +50,7 @@ class DocumentDownloadService {
       await partialFile.delete();
     }
 
-    await _dio.download(
+    final response = await _dio.download(
       documentUrl,
       partialFile.path,
       onReceiveProgress: onProgress,
@@ -48,6 +59,29 @@ class DocumentDownloadService {
         followRedirects: true,
       ),
     );
+
+    // If extension wasn't in URL, detect from Content-Type or Content-Disposition
+    if (extension == 'bin') {
+      final contentType = response.headers.value('content-type')?.toLowerCase() ?? '';
+      final disposition = response.headers.value('content-disposition')?.toLowerCase() ?? '';
+      if (contentType.contains('pdf') || disposition.contains('.pdf')) {
+        extension = 'pdf';
+      } else if (contentType.contains('word') || contentType.contains('openxmlformats') || disposition.contains('.docx')) {
+        extension = 'docx';
+      } else if (disposition.contains('.doc')) {
+        extension = 'doc';
+      } else {
+        // Inspect magic bytes
+        final bytes = await partialFile.openRead(0, 4).first;
+        if (bytes.length >= 4 && bytes[0] == 0x25 && bytes[1] == 0x50 && bytes[2] == 0x44 && bytes[3] == 0x46) {
+          extension = 'pdf'; // %PDF
+        } else if (bytes.length >= 4 && bytes[0] == 0x50 && bytes[1] == 0x4B) {
+          extension = 'docx'; // PK (zip)
+        }
+      }
+      final newSafeName = '${fileKey.replaceAll(RegExp(r'[^a-zA-Z0-9_\-]'), '_')}.$extension';
+      targetFile = File('${cacheDir.path}/$newSafeName');
+    }
 
     // Atomically rename once download succeeds
     await partialFile.rename(targetFile.path);
