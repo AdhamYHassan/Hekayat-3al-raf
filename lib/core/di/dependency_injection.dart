@@ -73,6 +73,7 @@ import 'package:hekayat_3al_raf/features/home/data/repositories/home_repository_
 import 'package:hekayat_3al_raf/features/home/domain/repositories/i_home_repository.dart';
 import 'package:hekayat_3al_raf/features/home/domain/usecases/get_home_data_usecase.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
+import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -103,6 +104,11 @@ void setupDependencyInjection() {
 
   getIt.registerLazySingleton<HomeCubit>(
     () => HomeCubit(getIt<GetHomeDataUseCase>()),
+  );
+
+  // Main navigation cubit (singleton for shared tab transitions across screens)
+  getIt.registerLazySingleton<MainCubit>(
+    () => MainCubit(),
   );
 
   // ---------------------------------------------------------------------------

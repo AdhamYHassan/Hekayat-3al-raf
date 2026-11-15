@@ -8,9 +8,9 @@ class HomeCubit extends Cubit<HomeState> {
 
   HomeCubit(this._getHomeDataUseCase) : super(const HomeInitial());
 
-  Future<void> loadHomeData() async {
+  Future<void> loadHomeData({bool forceRefresh = false}) async {
     emit(const HomeLoading());
-    final result = await _getHomeDataUseCase();
+    final result = await _getHomeDataUseCase(forceRefresh: forceRefresh);
 
     switch (result) {
       case ApiSuccess(:final data):

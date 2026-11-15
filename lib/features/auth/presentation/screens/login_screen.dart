@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -78,37 +79,34 @@ class _LoginViewState extends State<_LoginView> {
       _passwordError = null;
     });
 
-    final lang = context.locale.languageCode;
+    final isArabic = context.locale.languageCode == 'ar';
     final text = _loginController.text.trim();
     final password = _passwordController.text.trim();
     bool isValid = true;
 
     if (text.isEmpty) {
-      _loginError = lang == 'ar'
-          ? 'يرجى إدخال رقم الموبايل أو البريد الإلكتروني'
-          : 'Please enter your mobile or email';
+      _loginError = 'auth.login_input_required'.tr();
       isValid = false;
     } else if (_isPhoneInput) {
       if (!_selectedCountry.isValid(text)) {
-        _loginError = lang == 'ar'
-            ? 'رقم هاتف غير صحيح لدولة ${_selectedCountry.nameAr} (مثال: ${_selectedCountry.exampleNumber})'
-            : 'Invalid phone number for ${_selectedCountry.nameEn} (e.g. ${_selectedCountry.exampleNumber})';
+        final countryName =
+            isArabic ? _selectedCountry.nameAr : _selectedCountry.nameEn;
+        _loginError = 'auth.invalid_phone_for_country'.tr(args: [
+          countryName,
+          _selectedCountry.exampleNumber,
+        ]);
         isValid = false;
       }
     } else {
       final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
       if (!emailRegex.hasMatch(text)) {
-        _loginError = lang == 'ar'
-            ? 'صيغة البريد الإلكتروني غير صحيحة'
-            : 'Invalid email address format';
+        _loginError = 'auth.invalid_email_format'.tr();
         isValid = false;
       }
     }
 
     if (password.isEmpty) {
-      _passwordError = lang == 'ar'
-          ? 'يرجى إدخال كلمة المرور'
-          : 'Please enter your password';
+      _passwordError = 'auth.password_required'.tr();
       isValid = false;
     }
 
@@ -216,7 +214,7 @@ class _LoginViewState extends State<_LoginView> {
 
                       // Welcome Title
                       Text(
-                        'أهلاً بيكم تاني',
+                        'auth.login_welcome_title'.tr(),
                         style: AppFonts.alexandria(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
@@ -229,7 +227,7 @@ class _LoginViewState extends State<_LoginView> {
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 290.w),
                         child: Text(
-                          'كل حكاية بتبدأ بحد بيفتح الباب. ادخل واكمل من حيث وقفت.',
+                          'auth.login_welcome_subtitle'.tr(),
                           textAlign: TextAlign.center,
                           style: AppFonts.ibmPlexSansArabic(
                             fontSize: 13.5.sp,
@@ -243,15 +241,15 @@ class _LoginViewState extends State<_LoginView> {
                       SizedBox(height: 32.h),
 
                       // Input 1: Phone / Email Login
-                      _buildFieldLabel(
-                        context.locale.languageCode == 'ar'
-                            ? 'رقم الموبايل أو البريد الإلكتروني'
-                            : 'Mobile Number or Email',
-                      ),
+                      _buildFieldLabel('auth.login_input_label'.tr()),
                       _buildLoginField(),
                       if (_loginError != null)
                         Padding(
-                          padding: EdgeInsets.only(top: 4.h, right: 6.w, left: 6.w),
+                          padding: EdgeInsets.only(
+                            top: 4.h,
+                            right: 6.w,
+                            left: 6.w,
+                          ),
                           child: Align(
                             alignment: AlignmentDirectional.centerStart,
                             child: Text(
@@ -271,7 +269,11 @@ class _LoginViewState extends State<_LoginView> {
                       _buildPasswordField(),
                       if (_passwordError != null)
                         Padding(
-                          padding: EdgeInsets.only(top: 4.h, right: 6.w, left: 6.w),
+                          padding: EdgeInsets.only(
+                            top: 4.h,
+                            right: 6.w,
+                            left: 6.w,
+                          ),
                           child: Align(
                             alignment: AlignmentDirectional.centerStart,
                             child: Text(
@@ -349,7 +351,7 @@ class _LoginViewState extends State<_LoginView> {
                                       )
                                     else ...[
                                       Text(
-                                        'تسجيل الدخول',
+                                        'auth.login'.tr(),
                                         style: AppFonts.alexandria(
                                           fontSize: 14.5.sp,
                                           fontWeight: FontWeight.bold,
@@ -358,7 +360,7 @@ class _LoginViewState extends State<_LoginView> {
                                       ),
                                       SizedBox(width: 8.w),
                                       Icon(
-                                        Icons.chevron_left_rounded,
+                                        context.forwardChevron,
                                         size: 18.sp,
                                         color: ColorManager.primaryDark,
                                       ),
@@ -387,7 +389,7 @@ class _LoginViewState extends State<_LoginView> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                               child: Text(
-                                'أو',
+                                'auth.login_or'.tr(),
                                 style: AppFonts.ibmPlexSansArabic(
                                   fontSize: 11.5.sp,
                                   color: ColorManager.paper400,
@@ -422,7 +424,7 @@ class _LoginViewState extends State<_LoginView> {
                           ),
                         ),
                         child: Text(
-                          'الدخول كزائر',
+                          'auth.guest_entry'.tr(),
                           style: AppFonts.ibmPlexSansArabic(
                             fontSize: 13.5.sp,
                             fontWeight: FontWeight.w500,
@@ -437,7 +439,7 @@ class _LoginViewState extends State<_LoginView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'ماعندكش حساب؟ ',
+                            'auth.dont_have_account_prompt'.tr(),
                             style: AppFonts.ibmPlexSansArabic(
                               fontSize: 13.sp,
                               color: ColorManager.paper300,
@@ -448,7 +450,7 @@ class _LoginViewState extends State<_LoginView> {
                               context.pushReplacement(Routes.register);
                             },
                             child: Text(
-                              'أنشئ حساب',
+                              'auth.create_account_action'.tr(),
                               style: AppFonts.alexandria(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
@@ -457,17 +459,6 @@ class _LoginViewState extends State<_LoginView> {
                             ),
                           ),
                         ],
-                      ),
-
-                      SizedBox(height: 36.h),
-
-                      // Footer Note
-                      Text(
-                        'حكايات على الرف · نسخة تجريبية للعرض',
-                        style: AppFonts.ibmPlexSansArabic(
-                          fontSize: 10.5.sp,
-                          color: ColorManager.paper400.withValues(alpha: 0.5),
-                        ),
                       ),
                       SizedBox(height: 24.h),
                     ],
@@ -603,7 +594,9 @@ class _LoginViewState extends State<_LoginView> {
           Expanded(
             child: TextField(
               controller: _loginController,
-              keyboardType: isPhone ? TextInputType.phone : TextInputType.emailAddress,
+              keyboardType: isPhone
+                  ? TextInputType.phone
+                  : TextInputType.emailAddress,
               inputFormatters: [
                 const ArabicToEnglishDigitsFormatter(),
                 if (isPhone)
@@ -622,7 +615,9 @@ class _LoginViewState extends State<_LoginView> {
                       _selectedCountry = detected;
                       _loginController.value = TextEditingValue(
                         text: normalized,
-                        selection: TextSelection.collapsed(offset: normalized.length),
+                        selection: TextSelection.collapsed(
+                          offset: normalized.length,
+                        ),
                       );
                       if (_loginError != null) _loginError = null;
                     });
@@ -641,7 +636,7 @@ class _LoginViewState extends State<_LoginView> {
               decoration: InputDecoration(
                 hintText: isPhone
                     ? _selectedCountry.exampleNumber
-                    : (lang == 'ar' ? '01012345678 أو name@example.com' : '01012345678 or name@example.com'),
+                    : 'auth.login_input_hint'.tr(),
                 hintTextDirection: TextDirection.ltr,
                 hintStyle: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.paper400.withValues(alpha: 0.5),

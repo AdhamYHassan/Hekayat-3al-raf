@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_back_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AppWebViewScreen extends StatefulWidget {
@@ -69,6 +70,21 @@ class _AppWebViewScreenState extends State<AppWebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
+    final titleWidget = Expanded(
+      child: Text(
+        widget.title,
+        style: AppFonts.alexandria(
+          fontSize: 15.sp,
+          fontWeight: FontWeight.bold,
+          color: ColorManager.paper100,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+    const backWidget = AppBackButton();
+
     return Scaffold(
       backgroundColor: ColorManager.primaryDark,
       appBar: AppBar(
@@ -79,46 +95,9 @@ class _AppWebViewScreenState extends State<AppWebViewScreen> {
         titleSpacing: 16.w,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                widget.title,
-                style: AppFonts.alexandria(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorManager.paper100,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              borderRadius: BorderRadius.circular(20.r),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'common.back'.tr(),
-                      style: AppFonts.ibmPlexSansArabic(
-                        fontSize: 13.5.sp,
-                        fontWeight: FontWeight.w500,
-                        color: ColorManager.goldLight,
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    Icon(
-                      Icons.chevron_left_rounded,
-                      color: ColorManager.goldLight,
-                      size: 20.sp,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          children: isArabic
+              ? [titleWidget, SizedBox(width: 8.w), backWidget]
+              : [backWidget, SizedBox(width: 8.w), titleWidget],
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(2.h),

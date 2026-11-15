@@ -1,14 +1,16 @@
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_back_button.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
-import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_cubit.dart';
+import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_state.dart';
 import 'package:hekayat_3al_raf/features/contact/presentation/bloc/contact_us_cubit.dart';
 import 'package:hekayat_3al_raf/features/contact/presentation/bloc/contact_us_state.dart';
 
@@ -40,11 +42,11 @@ class _ContactUsViewState extends State<_ContactUsView> {
   String _selectedSubject = '';
 
   final List<Map<String, String>> _subjects = const [
-    {'value': 'general', 'label': 'استفسار عام'},
-    {'value': 'submission', 'label': 'سؤال عن إرسال حكاية'},
-    {'value': 'ambassadors', 'label': 'السفراء'},
-    {'value': 'collaboration', 'label': 'التعاون'},
-    {'value': 'other', 'label': 'حاجة تانية'},
+    {'value': 'general', 'labelKey': 'contact.subjects.inquiry'},
+    {'value': 'suggestion', 'labelKey': 'contact.subjects.suggestion'},
+    {'value': 'collaboration', 'labelKey': 'contact.subjects.partnership'},
+    {'value': 'technical', 'labelKey': 'contact.subjects.technical'},
+    {'value': 'other', 'labelKey': 'contact.subjects.other'},
   ];
 
   @override
@@ -97,10 +99,10 @@ class _ContactUsViewState extends State<_ContactUsView> {
           surfaceTintColor: Colors.transparent,
           automaticallyImplyLeading: false,
           titleSpacing: 16.w,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppCachedNetworkImage(
+          title: Builder(
+            builder: (context) {
+              final isArabic = context.locale.languageCode == 'ar';
+              final logoWidget = AppCachedNetworkImage(
                 imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                 height: 32.h,
                 fit: BoxFit.contain,
@@ -113,34 +115,16 @@ class _ContactUsViewState extends State<_ContactUsView> {
                     color: ColorManager.gold,
                   ),
                 ),
-              ),
-              InkWell(
-                onTap: () => Navigator.of(context).pop(),
-                borderRadius: BorderRadius.circular(20.r),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'رجوع',
-                        style: AppFonts.ibmPlexSansArabic(
-                          fontSize: 13.5.sp,
-                          fontWeight: FontWeight.w500,
-                          color: ColorManager.goldLight,
-                        ),
-                      ),
-                      SizedBox(width: 4.w),
-                      Icon(
-                        CupertinoIcons.arrow_left,
-                        size: 14.sp,
-                        color: ColorManager.goldLight,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+              );
+              const backWidget = AppBackButton();
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: isArabic
+                    ? [logoWidget, backWidget]
+                    : [backWidget, logoWidget],
+              );
+            },
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(1.h),
@@ -161,7 +145,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
 
                 // 1. Title & Subtitle
                 Text(
-                  'تواصل معنا',
+                  'contact.title'.tr(),
                   style: AppFonts.alexandria(
                     fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
@@ -170,7 +154,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                 ),
                 SizedBox(height: 6.h),
                 Text(
-                  'سؤال، اقتراح، أو فكرة تعاون. اكتبلنا وإحنا هنقرا كل كلمة.',
+                  'contact.subtitle'.tr(),
                   style: AppFonts.ibmPlexSansArabic(
                     fontSize: 13.sp,
                     color: ColorManager.paper200.withValues(alpha: 0.60),
@@ -180,22 +164,13 @@ class _ContactUsViewState extends State<_ContactUsView> {
 
                 SizedBox(height: 20.h),
 
-                // 2. Quick Action Cards (احكي حكايتك / السفراء)
+                // 2. Quick Action Card (احكي حكايتك)
                 _buildQuickCard(
-                  title: 'عايز تحكي حكاية؟ مش محتاج تكلمنا الأول.',
-                  actionText: 'احكي حكايتك',
+                  title: 'contact.quick_submit_hint'.tr(),
+                  actionText: 'contact.quick_submit_action'.tr(),
                   onTap: () {
                     Navigator.of(context).pop();
-                    // Go to Submit Tab or Route
-                    context.push(Routes.submitStoryForm);
-                  },
-                ),
-                SizedBox(height: 8.h),
-                _buildQuickCard(
-                  title: 'عايز تعرف السفراء بيعملوا إيه؟',
-                  actionText: 'السفراء',
-                  onTap: () {
-                    Navigator.of(context).pop();
+                    getIt<MainCubit>().changeTab(MainTab.submit);
                   },
                 ),
 
@@ -203,15 +178,15 @@ class _ContactUsViewState extends State<_ContactUsView> {
 
                 // 3. Contact Form
                 // Full Name
-                _buildFieldLabel('الاسم بالكامل'),
+                _buildFieldLabel('contact.full_name'.tr()),
                 _buildTextField(
                   controller: _nameController,
-                  hintText: 'الاسم بالكامل',
+                  hintText: 'contact.full_name'.tr(),
                 ),
                 SizedBox(height: 14.h),
 
                 // Email
-                _buildFieldLabel('البريد الإلكتروني'),
+                _buildFieldLabel('contact.email'.tr()),
                 _buildTextField(
                   controller: _emailController,
                   hintText: 'email@example.com',
@@ -221,7 +196,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                 SizedBox(height: 14.h),
 
                 // Phone
-                _buildFieldLabel('رقم الموبايل (اختياري)'),
+                _buildFieldLabel('contact.phone'.tr()),
                 _buildTextField(
                   controller: _phoneController,
                   hintText: '+20...',
@@ -231,15 +206,15 @@ class _ContactUsViewState extends State<_ContactUsView> {
                 SizedBox(height: 14.h),
 
                 // Subject Dropdown
-                _buildFieldLabel('الموضوع'),
+                _buildFieldLabel('contact.subject'.tr()),
                 _buildSubjectDropdown(),
                 SizedBox(height: 14.h),
 
                 // Message Textarea
-                _buildFieldLabel('رسالتك'),
+                _buildFieldLabel('contact.message'.tr()),
                 _buildTextField(
                   controller: _messageController,
-                  hintText: 'رسالتك',
+                  hintText: 'contact.message'.tr(),
                   maxLines: 5,
                 ),
                 SizedBox(height: 24.h),
@@ -281,7 +256,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
                                 )
                               else ...[
                                 Text(
-                                  'ابعت الرسالة',
+                                  'contact.send_button'.tr(),
                                   style: AppFonts.alexandria(
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
@@ -379,7 +354,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
         child: DropdownButton<String>(
           value: _selectedSubject.isEmpty ? null : _selectedSubject,
           hint: Text(
-            'اختار موضوع',
+            'contact.choose_subject'.tr(),
             style: AppFonts.ibmPlexSansArabic(
               color: ColorManager.paper400.withValues(alpha: 0.6),
               fontSize: 13.5.sp,
@@ -395,7 +370,7 @@ class _ContactUsViewState extends State<_ContactUsView> {
             return DropdownMenuItem<String>(
               value: item['value'],
               child: Text(
-                item['label']!,
+                item['labelKey']!.tr(),
                 style: AppFonts.ibmPlexSansArabic(
                   color: ColorManager.paper100,
                   fontSize: 13.5.sp,

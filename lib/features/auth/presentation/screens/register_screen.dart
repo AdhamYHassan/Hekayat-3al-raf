@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/gestures.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_phone_input_field.dart';
@@ -117,49 +118,52 @@ class _RegisterViewState extends State<_RegisterView> {
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
-    final lang = context.locale.languageCode;
+    final isArabic = context.locale.languageCode == 'ar';
     if (name.isEmpty) {
-      _nameError = lang == 'ar' ? 'يرجى إدخال الاسم بالكامل' : 'Please enter your full name';
+      _nameError = 'auth.name_required'.tr();
       isValid = false;
     }
 
     if (phone.isEmpty) {
-      _phoneError = lang == 'ar' ? 'يرجى إدخال رقم الموبايل' : 'Please enter your mobile number';
+      _phoneError = 'auth.phone_required'.tr();
       isValid = false;
     } else if (!_selectedCountry.isValid(phone)) {
-      _phoneError = lang == 'ar'
-          ? 'رقم هاتف غير صحيح لدولة ${_selectedCountry.nameAr} (مثال: ${_selectedCountry.exampleNumber})'
-          : 'Invalid phone number for ${_selectedCountry.nameEn} (e.g. ${_selectedCountry.exampleNumber})';
+      final countryName =
+          isArabic ? _selectedCountry.nameAr : _selectedCountry.nameEn;
+      _phoneError = 'auth.invalid_phone_for_country'.tr(args: [
+        countryName,
+        _selectedCountry.exampleNumber,
+      ]);
       isValid = false;
     }
 
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (email.isEmpty) {
-      _emailError = 'يرجى إدخال البريد الإلكتروني';
+      _emailError = 'auth.email_required'.tr();
       isValid = false;
     } else if (!emailRegex.hasMatch(email)) {
-      _emailError = 'صيغة البريد الإلكتروني غير صحيحة';
+      _emailError = 'auth.invalid_email_format'.tr();
       isValid = false;
     }
 
     if (password.isEmpty) {
-      _passwordError = 'يرجى إدخال كلمة المرور';
+      _passwordError = 'auth.password_required'.tr();
       isValid = false;
     } else if (password.length < 6) {
-      _passwordError = 'كلمة المرور يجب ألا تقل عن 6 أحرف';
+      _passwordError = 'auth.password_length_error'.tr();
       isValid = false;
     }
 
     if (confirmPassword.isEmpty) {
-      _confirmPasswordError = 'يرجى تأكيد كلمة المرور';
+      _confirmPasswordError = 'auth.confirm_password_required'.tr();
       isValid = false;
     } else if (confirmPassword != password) {
-      _confirmPasswordError = 'كلمتا المرور غير متطابقتين';
+      _confirmPasswordError = 'auth.password_mismatch'.tr();
       isValid = false;
     }
 
     if (!_agreedToTerms) {
-      _termsError = 'يجب الموافقة على الشروط والأحكام وسياسة الخصوصية';
+      _termsError = 'auth.terms_required'.tr();
       isValid = false;
     }
 
@@ -186,16 +190,10 @@ class _RegisterViewState extends State<_RegisterView> {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterSuccess) {
-          AppSnackBar.showSuccess(
-            context,
-            message: state.response.message,
-          );
+          AppSnackBar.showSuccess(context, message: state.response.message);
           context.go(Routes.home);
         } else if (state is RegisterFailure) {
-          AppSnackBar.showError(
-            context,
-            message: state.errorMessage,
-          );
+          AppSnackBar.showError(context, message: state.errorMessage);
         }
       },
       child: Scaffold(
@@ -205,7 +203,8 @@ class _RegisterViewState extends State<_RegisterView> {
             // 1. Cinematic Background Image
             Positioned.fill(
               child: AppCachedNetworkImage(
-                imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-collage.webp',
+                imageUrl:
+                    'https://hekayat-ala-el-raff-m9tr.bolt.host/home/hero-collage.webp',
                 fit: BoxFit.cover,
                 alignment: const Alignment(0, -0.5),
                 memCacheWidth: 750,
@@ -241,7 +240,8 @@ class _RegisterViewState extends State<_RegisterView> {
 
                       // Logo
                       AppCachedNetworkImage(
-                        imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                        imageUrl:
+                            'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                         height: 48.h,
                         fit: BoxFit.contain,
                         memCacheHeight: 120,
@@ -267,7 +267,7 @@ class _RegisterViewState extends State<_RegisterView> {
                           ),
                           SizedBox(width: 8.w),
                           Text(
-                            'حساب جديد',
+                            'auth.register_badge'.tr(),
                             style: AppFonts.ibmPlexSansArabic(
                               color: ColorManager.gold,
                               fontSize: 11.5.sp,
@@ -280,7 +280,7 @@ class _RegisterViewState extends State<_RegisterView> {
 
                       // Welcome Title
                       Text(
-                        'احكي حكايتك من اليوم',
+                        'auth.register_title'.tr(),
                         style: AppFonts.alexandria(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
@@ -293,7 +293,7 @@ class _RegisterViewState extends State<_RegisterView> {
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 290.w),
                         child: Text(
-                          'أنشئ حسابك وابدأ تشارك حكاياتك مع الناس اللي عايزة تسمع.',
+                          'auth.register_subtitle'.tr(),
                           textAlign: TextAlign.center,
                           style: AppFonts.ibmPlexSansArabic(
                             fontSize: 13.sp,
@@ -307,10 +307,10 @@ class _RegisterViewState extends State<_RegisterView> {
                       SizedBox(height: 24.h),
 
                       // 1. Full Name
-                      _buildFieldLabel('الاسم بالكامل'),
+                      _buildFieldLabel('auth.name_label'.tr()),
                       _buildCustomTextField(
                         controller: _nameController,
-                        hintText: 'اكتب اسمك',
+                        hintText: 'auth.name_hint'.tr(),
                         icon: CupertinoIcons.person,
                         errorMessage: _nameError,
                         onChanged: (_) {
@@ -322,7 +322,7 @@ class _RegisterViewState extends State<_RegisterView> {
                       SizedBox(height: 14.h),
 
                       // 2. Phone
-                      _buildFieldLabel('رقم الموبايل'),
+                      _buildFieldLabel('auth.phone_number'.tr()),
                       AppPhoneInputField(
                         controller: _phoneController,
                         selectedCountry: _selectedCountry,
@@ -342,7 +342,7 @@ class _RegisterViewState extends State<_RegisterView> {
                       SizedBox(height: 14.h),
 
                       // 3. Email
-                      _buildFieldLabel('البريد الإلكتروني'),
+                      _buildFieldLabel('auth.email'.tr()),
                       _buildCustomTextField(
                         controller: _emailController,
                         hintText: 'name@example.com',
@@ -359,7 +359,7 @@ class _RegisterViewState extends State<_RegisterView> {
                       SizedBox(height: 14.h),
 
                       // 4. Password
-                      _buildFieldLabel('كلمة المرور'),
+                      _buildFieldLabel('auth.password'.tr()),
                       _buildCustomTextField(
                         controller: _passwordController,
                         hintText: '••••••••',
@@ -390,7 +390,7 @@ class _RegisterViewState extends State<_RegisterView> {
                       SizedBox(height: 14.h),
 
                       // 5. Confirm Password
-                      _buildFieldLabel('تأكيد كلمة المرور'),
+                      _buildFieldLabel('auth.confirm_password'.tr()),
                       _buildCustomTextField(
                         controller: _confirmPasswordController,
                         hintText: '••••••••',
@@ -486,7 +486,7 @@ class _RegisterViewState extends State<_RegisterView> {
                                   Expanded(
                                     child: Text.rich(
                                       TextSpan(
-                                        text: 'أوافق على ',
+                                        text: 'auth.agree_to_prefix'.tr(),
                                         style: AppFonts.ibmPlexSansArabic(
                                           fontSize: 11.5.sp,
                                           color: ColorManager.paper200
@@ -494,27 +494,33 @@ class _RegisterViewState extends State<_RegisterView> {
                                         ),
                                         children: [
                                           TextSpan(
-                                            text: 'الشروط والأحكام',
+                                            text: 'settings.terms_conditions'
+                                                .tr(),
                                             recognizer: _termsRecognizer,
-                                            style:
-                                                AppFonts.ibmPlexSansArabic(
-                                                  color: ColorManager.goldLight,
-                                                  fontWeight: FontWeight.bold,
-                                                  decoration: TextDecoration.underline,
-                                                  decorationColor: ColorManager.goldLight,
-                                                ),
+                                            style: AppFonts.ibmPlexSansArabic(
+                                              color: ColorManager.goldLight,
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor:
+                                                  ColorManager.goldLight,
+                                            ),
                                           ),
-                                          const TextSpan(text: ' و'),
                                           TextSpan(
-                                            text: 'سياسة الخصوصية',
+                                            text: 'auth.and_conjunction'.tr(),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                'settings.privacy_policy'.tr(),
                                             recognizer: _privacyRecognizer,
-                                            style:
-                                                AppFonts.ibmPlexSansArabic(
-                                                  color: ColorManager.goldLight,
-                                                  fontWeight: FontWeight.bold,
-                                                  decoration: TextDecoration.underline,
-                                                  decorationColor: ColorManager.goldLight,
-                                                ),
+                                            style: AppFonts.ibmPlexSansArabic(
+                                              color: ColorManager.goldLight,
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor:
+                                                  ColorManager.goldLight,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -577,7 +583,7 @@ class _RegisterViewState extends State<_RegisterView> {
                                       )
                                     else ...[
                                       Text(
-                                        'إنشاء الحساب',
+                                        'auth.register'.tr(),
                                         style: AppFonts.alexandria(
                                           fontSize: 14.5.sp,
                                           fontWeight: FontWeight.bold,
@@ -586,7 +592,7 @@ class _RegisterViewState extends State<_RegisterView> {
                                       ),
                                       SizedBox(width: 8.w),
                                       Icon(
-                                        Icons.chevron_left_rounded,
+                                        context.forwardChevron,
                                         size: 18.sp,
                                         color: ColorManager.primaryDark,
                                       ),
@@ -605,7 +611,7 @@ class _RegisterViewState extends State<_RegisterView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'عندك حساب بالفعل؟ ',
+                            'auth.already_have_account_prompt'.tr(),
                             style: AppFonts.ibmPlexSansArabic(
                               fontSize: 13.sp,
                               color: ColorManager.paper300,
@@ -616,7 +622,7 @@ class _RegisterViewState extends State<_RegisterView> {
                               context.pushReplacement(Routes.login);
                             },
                             child: Text(
-                              'سجل دخولك',
+                              'auth.login_action'.tr(),
                               style: AppFonts.alexandria(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
@@ -629,14 +635,6 @@ class _RegisterViewState extends State<_RegisterView> {
 
                       SizedBox(height: 32.h),
 
-                      // Footer Note
-                      Text(
-                        'حكايات على الرف · نسخة تجريبية للعرض',
-                        style: AppFonts.ibmPlexSansArabic(
-                          fontSize: 10.5.sp,
-                          color: ColorManager.paper400.withValues(alpha: 0.5),
-                        ),
-                      ),
                       SizedBox(height: 24.h),
                     ],
                   ),

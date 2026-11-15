@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/repositories/i_ambassador_repository.dart';
@@ -38,6 +40,17 @@ class AmbassadorDetailsCubit extends Cubit<AmbassadorDetailsState> {
     required String body,
   }) async {
     if (state.details == null) return;
+
+    // Check token locally first to save unnecessary API round-trips
+    final token = await SecureStorageHelper.getAccessToken();
+    if (token == null || token.trim().isEmpty) {
+      emit(state.copyWith(
+        isSubmittingQuestion: false,
+        errorMessage: 'auth.login_required',
+      ));
+      return;
+    }
+
     emit(state.copyWith(isSubmittingQuestion: true));
 
     final result = await _ambassadorRepository.submitQuestion(
@@ -52,30 +65,29 @@ class AmbassadorDetailsCubit extends Cubit<AmbassadorDetailsState> {
         final updatedEntity = AmbassadorDetailsEntity(
           id: state.details!.id,
           name: state.details!.name,
-          role: state.details!.role,
-          city: state.details!.city,
-          joinYear: state.details!.joinYear,
+          shortDescription: state.details!.shortDescription,
+          description: state.details!.description,
           coverImageUrl: state.details!.coverImageUrl,
-          quote: state.details!.quote,
-          tags: state.details!.tags,
-          storiesCount: state.details!.storiesCount,
-          answeredQuestionsCount: state.details!.answeredQuestionsCount,
-          bioParagraphs: state.details!.bioParagraphs,
-          pullQuote: state.details!.pullQuote,
+          followersCount: state.details!.followersCount,
+          answeredCount: state.details!.answeredCount,
+          isFollowing: state.details!.isFollowing,
+          canManage: state.details!.canManage,
+          webUrl: state.details!.webUrl,
           gallery: state.details!.gallery,
-          selectedStories: state.details!.selectedStories,
           questions: updatedList,
         );
 
         emit(state.copyWith(
           isSubmittingQuestion: false,
           details: updatedEntity,
-          questionSubmitSuccess: 'تم إرسال سؤالك بنجاح!',
+          questionSubmitSuccess: 'ambassadors.question_submit_success'.tr(),
+          errorMessage: null,
         ));
       case ApiFailure<AmbassadorQaItem>(:final failure):
         emit(state.copyWith(
           isSubmittingQuestion: false,
           errorMessage: failure.message,
+          questionSubmitSuccess: null,
         ));
     }
   }

@@ -35,8 +35,9 @@ class DocumentDownloadService {
       extension = 'doc';
     }
 
-    // Sanitize filename
-    final safeFileName = '${fileKey.replaceAll(RegExp(r'[^a-zA-Z0-9_\-]'), '_')}.$extension';
+    // Sanitize filename: use clean readable title or fallback to key
+    final cleanName = fileKey.replaceAll(RegExp(r'[^a-zA-Z0-9_\-\u0600-\u06FF]'), '_');
+    final safeFileName = '$cleanName.$extension';
     var targetFile = File('${cacheDir.path}/$safeFileName');
 
     // Return cached file if valid and not empty
@@ -79,7 +80,7 @@ class DocumentDownloadService {
           extension = 'docx'; // PK (zip)
         }
       }
-      final newSafeName = '${fileKey.replaceAll(RegExp(r'[^a-zA-Z0-9_\-]'), '_')}.$extension';
+      final newSafeName = '$cleanName.$extension';
       targetFile = File('${cacheDir.path}/$newSafeName');
     }
 

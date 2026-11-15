@@ -58,7 +58,33 @@
     "password_mismatch": "كلمة المرور وتأكيدها غير متطابقين",
     "code_length_error": "يجب إدخال الرمز كاملاً (6 أرقام)",
     "password_length_error": "يجب أن تكون كلمة المرور 6 أحرف أو أرقام على الأقل",
-    "reset_success": "تم تغيير كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول."
+    "reset_success": "تم تغيير كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول.",
+    "login_welcome_title": "أهلاً بيكم تاني",
+    "login_welcome_subtitle": "كل حكاية بتبدأ بحد بيفتح الباب. ادخل واكمل من حيث وقفت.",
+    "login_input_label": "رقم الموبايل أو البريد الإلكتروني",
+    "login_input_hint": "01012345678 أو name@example.com",
+    "login_or": "أو",
+    "guest_entry": "الدخول كزائر",
+    "dont_have_account_prompt": "ماعندكش حساب؟ ",
+    "create_account_action": "أنشئ حساب",
+    "login_input_required": "يرجى إدخال رقم الموبايل أو البريد الإلكتروني",
+    "invalid_phone_for_country": "رقم هاتف غير صحيح لدولة {} (مثال: {})",
+    "invalid_email_format": "صيغة البريد الإلكتروني غير صحيحة",
+    "password_required": "يرجى إدخال كلمة المرور",
+    "register_badge": "حساب جديد",
+    "register_title": "احكي حكايتك من اليوم",
+    "register_subtitle": "أنشئ حسابك وابدأ تشارك حكاياتك مع الناس اللي عايزة تسمع.",
+    "name_label": "الاسم بالكامل",
+    "name_hint": "اكتب اسمك",
+    "name_required": "يرجى إدخال الاسم بالكامل",
+    "phone_required": "يرجى إدخال رقم الموبايل",
+    "email_required": "يرجى إدخال البريد الإلكتروني",
+    "confirm_password_required": "يرجى تأكيد كلمة المرور",
+    "terms_required": "يجب الموافقة على الشروط والأحكام وسياسة الخصوصية",
+    "agree_to_prefix": "أوافق على ",
+    "and_conjunction": " و ",
+    "already_have_account_prompt": "عندك حساب بالفعل؟ ",
+    "login_action": "سجل دخولك"
   },
   "stories": {
     "title": "الحكايات",
@@ -233,7 +259,11 @@
     "empty_qa": "لا توجد أسئلة بعد.",
     "selected_stories": "حكايات مختارة",
     "view_profile": "عرض الملف",
-    "role_default": "سفير المنصة"
+    "role_default": "سفير المنصة",
+    "followers_count": "{} متابع",
+    "about_ambassador": "عن السفير",
+    "gallery_title": "ألبوم الصور والأرشيف",
+    "question_submit_success": "تم إرسال سؤالك بنجاح!"
   },
   "submit": {
     "title": "احكي حكايتك",
@@ -341,6 +371,28 @@
       "guest_phone_hint": "رقم الموبايل (مثال: 01012345678)",
       "submitting": "جاري الإرسال...",
       "confirm_and_submit": "تأكيد وإرسال الحكاية"
+    }
+  },
+  "contact": {
+    "title": "تواصل معنا",
+    "subtitle": "سؤال، اقتراح، أو فكرة تعاون. اكتبلنا وإحنا هنقرا كل كلمة.",
+    "quick_submit_hint": "عايز تحكي حكاية؟ مش محتاج تكلمنا الأول.",
+    "quick_submit_action": "احكي حكايتك",
+    "full_name": "الاسم بالكامل",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الموبايل (اختياري)",
+    "subject": "الموضوع",
+    "choose_subject": "اختار موضوع",
+    "message": "رسالتك",
+    "send_button": "ابعت الرسالة",
+    "sending": "جاري الإرسال...",
+    "success_title": "تم الإرسال",
+    "subjects": {
+      "suggestion": "اقتراح للمنصة",
+      "inquiry": "استفسار عام",
+      "partnership": "شراكة / تعاون",
+      "technical": "مشكلة تقنية",
+      "other": "أخرى"
     }
   }
 }

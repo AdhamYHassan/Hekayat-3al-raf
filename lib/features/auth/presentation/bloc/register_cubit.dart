@@ -56,7 +56,11 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
 
     if (!agreedToTerms) {
-      emit(const RegisterFailure('يجب الموافقة على الشروط والأحكام وسياسة الخصوصية'));
+      emit(
+        const RegisterFailure(
+          'يجب الموافقة على الشروط والأحكام وسياسة الخصوصية',
+        ),
+      );
       return;
     }
 
@@ -80,4 +84,3 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
   }
 }
-

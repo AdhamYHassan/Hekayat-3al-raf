@@ -74,7 +74,8 @@ class AppRouter {
         path: Routes.storyDetails,
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          final storyId = extra?['id'] as String? ?? 'c77848a2-d890-4e60-b654-d603dcae67f6';
+          final storyId =
+              extra?['id'] as String? ?? 'c77848a2-d890-4e60-b654-d603dcae67f6';
           return _buildPageWithTransition(
             context: context,
             state: state,
@@ -91,11 +92,12 @@ class AppRouter {
         path: Routes.ambassadorDetails,
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          final ambassadorId = extra?['id'] as String? ?? '1';
+          final ambassadorSlug =
+              (extra?['slug'] ?? extra?['id']) as String? ?? '';
           return _buildPageWithTransition(
             context: context,
             state: state,
-            child: AmbassadorDetailsScreen(ambassadorId: ambassadorId),
+            child: AmbassadorDetailsScreen(ambassadorSlug: ambassadorSlug),
           );
         },
       ),
@@ -103,7 +105,8 @@ class AppRouter {
         path: Routes.submitStoryForm,
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          final format = extra?['format'] as StorySubmissionFormat? ??
+          final format =
+              extra?['format'] as StorySubmissionFormat? ??
               StorySubmissionFormat.written;
           final cubit = extra?['cubit'] as SubmitStoryCubit?;
 
@@ -135,14 +138,12 @@ class AppRouter {
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
           final title = extra?['title'] as String? ?? 'حكايات على الرف';
-          final url = extra?['url'] as String? ?? 'https://hekayat3alraf.com/ar/';
+          final url =
+              extra?['url'] as String? ?? 'https://hekayat3alraf.com/ar/';
           return _buildPageWithTransition(
             context: context,
             state: state,
-            child: AppWebViewScreen(
-              title: title,
-              initialUrl: url,
-            ),
+            child: AppWebViewScreen(title: title, initialUrl: url),
           );
         },
       ),

@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_list_item_entity.dart';
 
@@ -42,15 +43,12 @@ class AmbassadorCardItem extends StatelessWidget {
                 AppCachedNetworkImage(
                   imageUrl: ambassador.imageUrl,
                   fit: BoxFit.cover,
-                  alignment: const Alignment(
-                    0.0,
-                    -0.56,
-                  ), // object-position: 50% 22%
+                  alignment: const Alignment(0.0, -0.56),
                   memCacheWidth: 600,
                   memCacheHeight: 480,
                 ),
 
-                // Dark gradient overlay strictly matching prototype DOM
+                // Dark gradient overlay
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -71,7 +69,7 @@ class AmbassadorCardItem extends StatelessWidget {
                   start: 12.w,
                   top: 12.h,
                   child: Icon(
-                    Icons.chevron_left_rounded,
+                    context.forwardChevron,
                     color: ColorManager.gold.withValues(alpha: 0.6),
                     size: 20.sp,
                   ),
@@ -94,77 +92,57 @@ class AmbassadorCardItem extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           height: 1.2,
                         ),
-                      ),
-                      SizedBox(height: 2.h),
-                      Text(
-                        ambassador.role,
-                        style: AppFonts.ibmPlexSansArabic(
-                          color: ColorManager.goldLight,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        ambassador.quote,
-                        style: AppFonts.ibmPlexSansArabic(
-                          color: ColorManager.paper200.withValues(alpha: 0.7),
-                          fontSize: 12.sp,
-                          height: 1.4,
-                        ),
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 6.h),
-                      Row(
-                        children: [
-                          Text(
-                            'ambassadors.stories_count'.tr(
-                              args: ['${ambassador.storiesCount}'],
-                            ),
-                            style: AppFonts.ibmPlexSansArabic(
-                              color: ColorManager.paper400,
-                              fontSize: 10.sp,
-                            ),
+                      if (ambassador.shortDescription.isNotEmpty) ...[
+                        SizedBox(height: 2.h),
+                        Text(
+                          ambassador.shortDescription,
+                          style: AppFonts.ibmPlexSansArabic(
+                            color: ColorManager.goldLight,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w),
-                            child: Text(
-                              '·',
-                              style: TextStyle(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                      if (ambassador.description.isNotEmpty) ...[
+                        SizedBox(height: 4.h),
+                        Text(
+                          ambassador.description,
+                          style: AppFonts.ibmPlexSansArabic(
+                            color: ColorManager.paper200.withValues(alpha: 0.7),
+                            fontSize: 12.sp,
+                            height: 1.4,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                      if (ambassador.followersCount > 0) ...[
+                        SizedBox(height: 6.h),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.people_outline_rounded,
+                              size: 13.sp,
+                              color: ColorManager.paper400,
+                            ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              'ambassadors.followers_count'.tr(
+                                args: ['${ambassador.followersCount}'],
+                              ),
+                              style: AppFonts.ibmPlexSansArabic(
                                 color: ColorManager.paper400,
                                 fontSize: 10.sp,
                               ),
                             ),
-                          ),
-                          Text(
-                            'ambassadors.answered_count'.tr(
-                              args: ['${ambassador.answeredQuestionsCount}'],
-                            ),
-                            style: AppFonts.ibmPlexSansArabic(
-                              color: ColorManager.paper400,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w),
-                            child: Text(
-                              '·',
-                              style: TextStyle(
-                                color: ColorManager.paper400,
-                                fontSize: 10.sp,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            ambassador.city,
-                            style: AppFonts.ibmPlexSansArabic(
-                              color: ColorManager.paper400,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                 ),

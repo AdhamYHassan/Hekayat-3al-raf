@@ -27,7 +27,10 @@ class AmbassadorsScreen extends StatelessWidget {
 class _AmbassadorsView extends StatelessWidget {
   const _AmbassadorsView();
 
-  bool _onScrollNotification(ScrollNotification notification, BuildContext context) {
+  bool _onScrollNotification(
+    ScrollNotification notification,
+    BuildContext context,
+  ) {
     if (notification is ScrollUpdateNotification) {
       final metrics = notification.metrics;
       if (metrics.pixels >= metrics.maxScrollExtent * 0.85) {
@@ -50,7 +53,8 @@ class _AmbassadorsView extends StatelessWidget {
               return const AmbassadorsListShimmerLoading();
             }
 
-            if (state.status == AmbassadorsListStatus.failure && state.ambassadors.isEmpty) {
+            if (state.status == AmbassadorsListStatus.failure &&
+                state.ambassadors.isEmpty) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -64,11 +68,17 @@ class _AmbassadorsView extends StatelessWidget {
                     ),
                     SizedBox(height: 12.h),
                     ElevatedButton(
-                      onPressed: () => context.read<AmbassadorsListCubit>().loadAmbassadors(),
-                      style: ElevatedButton.styleFrom(backgroundColor: ColorManager.gold),
+                      onPressed: () => context
+                          .read<AmbassadorsListCubit>()
+                          .loadAmbassadors(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorManager.gold,
+                      ),
                       child: Text(
                         'common.retry'.tr(),
-                        style: AppFonts.alexandria(color: ColorManager.primaryDark),
+                        style: AppFonts.alexandria(
+                          color: ColorManager.primaryDark,
+                        ),
                       ),
                     ),
                   ],
@@ -77,7 +87,8 @@ class _AmbassadorsView extends StatelessWidget {
             }
 
             return NotificationListener<ScrollNotification>(
-              onNotification: (notification) => _onScrollNotification(notification, context),
+              onNotification: (notification) =>
+                  _onScrollNotification(notification, context),
               child: CustomScrollView(
                 slivers: [
                   // Header (Title & Subtitle strictly matching prototype DOM)
@@ -99,7 +110,9 @@ class _AmbassadorsView extends StatelessWidget {
                           Text(
                             'ambassadors.subtitle'.tr(),
                             style: AppFonts.ibmPlexSansArabic(
-                              color: ColorManager.paper200.withValues(alpha: 0.65),
+                              color: ColorManager.paper200.withValues(
+                                alpha: 0.65,
+                              ),
                               fontSize: 13.sp,
                               height: 1.5,
                             ),
@@ -114,7 +127,8 @@ class _AmbassadorsView extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 16.h),
                     sliver: SliverList.separated(
                       itemCount: state.ambassadors.length,
-                      separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 16.h),
                       itemBuilder: (context, index) {
                         final item = state.ambassadors[index];
                         return AmbassadorCardItem(
@@ -144,9 +158,7 @@ class _AmbassadorsView extends StatelessWidget {
                       ),
                     ),
 
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: 100.h),
-                  ),
+                  SliverToBoxAdapter(child: SizedBox(height: 100.h)),
                 ],
               ),
             );

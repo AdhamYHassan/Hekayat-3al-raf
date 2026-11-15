@@ -16,6 +16,7 @@ import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_share_ct
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_top_stories_list.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_state.dart';
+import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
 
 /// Pure Presentation Screen.
 /// Free of any DI / Service Locator dependencies, making it 100% testable.
@@ -107,6 +108,12 @@ class HomeFeedScreen extends StatelessWidget {
                 // ),
                 SizedBox(height: 32.h),
                 HomeShareCtaCard(
+                  onRecordVoiceTap: () {
+                    context.push(
+                      Routes.submitStoryForm,
+                      extra: {'format': StorySubmissionFormat.audio},
+                    );
+                  },
                   onSubmitTap: () =>
                       context.read<MainCubit>().changeTab(MainTab.submit),
                 ),

@@ -2,13 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
 class HomeShareCtaCard extends StatelessWidget {
   final VoidCallback onSubmitTap;
+  final VoidCallback? onRecordVoiceTap;
 
-  const HomeShareCtaCard({super.key, required this.onSubmitTap});
+  const HomeShareCtaCard({
+    super.key,
+    required this.onSubmitTap,
+    this.onRecordVoiceTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +79,7 @@ class HomeShareCtaCard extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 InkWell(
-                  onTap: onSubmitTap,
+                  onTap: onRecordVoiceTap ?? onSubmitTap,
                   borderRadius: BorderRadius.circular(24.r),
                   child: Container(
                     padding: EdgeInsets.symmetric(
@@ -97,7 +103,7 @@ class HomeShareCtaCard extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Icon(
-                          CupertinoIcons.arrow_left,
+                          context.forwardArrow,
                           size: 14.sp,
                           color: ColorManager.primaryDark,
                         ),
@@ -198,7 +204,7 @@ class HomeShareCtaCard extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Icon(
-                          CupertinoIcons.arrow_left,
+                          context.forwardArrow,
                           size: 16.sp,
                           color: ColorManager.primaryDark,
                         ),

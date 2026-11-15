@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -322,7 +323,7 @@ class _SubmitStoryStep2FormState extends State<SubmitStoryStep2Form> {
                     padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
                   ),
                   icon: Icon(
-                    Icons.chevron_right_rounded,
+                    context.backChevron,
                     color: ColorManager.paper100,
                     size: 18.sp,
                   ),
@@ -372,7 +373,7 @@ class _SubmitStoryStep2FormState extends State<SubmitStoryStep2Form> {
                             ),
                             SizedBox(width: 6.w),
                             Icon(
-                              Icons.chevron_left_rounded,
+                              context.forwardChevron,
                               color: ColorManager.primaryDark,
                               size: 18.sp,
                             ),
@@ -728,7 +729,7 @@ class _CustomCoverPlaceholderBox extends StatelessWidget {
                   )
                 else
                   Icon(
-                    Icons.chevron_left_rounded,
+                    context.forwardChevron,
                     color: ColorManager.gold.withValues(alpha: 0.6),
                     size: 20.sp,
                   ),

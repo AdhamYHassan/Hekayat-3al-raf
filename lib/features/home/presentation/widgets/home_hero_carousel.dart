@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
@@ -192,7 +192,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                                       ),
                                       SizedBox(width: 6.w),
                                       Icon(
-                                        CupertinoIcons.arrow_left,
+                                        context.forwardArrow,
                                         size: 14.sp,
                                         color: ColorManager.primaryDark,
                                       ),

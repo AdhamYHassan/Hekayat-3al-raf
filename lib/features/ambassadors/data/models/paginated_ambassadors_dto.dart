@@ -5,6 +5,7 @@ import '../../domain/entities/ambassador_list_item_entity.dart';
 class AmbassadorListItemDto extends Equatable {
   final String slug;
   final String name;
+  final String shortDescription;
   final String description;
   final String mainImage;
   final int followersCount;
@@ -12,6 +13,7 @@ class AmbassadorListItemDto extends Equatable {
   const AmbassadorListItemDto({
     required this.slug,
     required this.name,
+    required this.shortDescription,
     required this.description,
     required this.mainImage,
     required this.followersCount,
@@ -21,6 +23,7 @@ class AmbassadorListItemDto extends Equatable {
     return AmbassadorListItemDto(
       slug: json['slug'] as String? ?? '',
       name: json['name'] as String? ?? '',
+      shortDescription: json['short_description'] as String? ?? '',
       description: json['description'] as String? ?? '',
       mainImage: json['main_image'] as String? ?? '',
       followersCount: json['followers_count'] as int? ?? 0,
@@ -28,31 +31,25 @@ class AmbassadorListItemDto extends Equatable {
   }
 
   AmbassadorListItemEntity toDomain() {
-    // Parse role from first line of description if available
-    final cleanDescription = description.replaceAll('\r\n', '\n');
-    final lines = cleanDescription
-        .split('\n')
-        .map((l) => l.trim())
-        .where((l) => l.isNotEmpty)
-        .toList();
-
-    final role = lines.isNotEmpty ? lines.first : '';
-    final quote = lines.length > 1 ? lines[1] : description;
-
     return AmbassadorListItemEntity(
       id: slug,
       name: name,
-      role: role,
-      quote: quote,
-      storiesCount: 0,
-      answeredQuestionsCount: 0,
-      city: 'القاهرة، مصر',
+      shortDescription: shortDescription,
+      description: description,
       imageUrl: mainImage,
+      followersCount: followersCount,
     );
   }
 
   @override
-  List<Object?> get props => [slug, name, description, mainImage, followersCount];
+  List<Object?> get props => [
+        slug,
+        name,
+        shortDescription,
+        description,
+        mainImage,
+        followersCount,
+      ];
 }
 
 /// DTO representing the paginated response for `/ambassadors/`
@@ -86,4 +83,3 @@ class PaginatedAmbassadorsDto extends Equatable {
   @override
   List<Object?> get props => [count, next, previous, results];
 }
-

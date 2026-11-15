@@ -11,8 +11,8 @@ class GetHomeDataUseCase {
 
   const GetHomeDataUseCase(this._repository);
 
-  Future<ApiResult<HomeDataEntity>> call() async {
-    return await _repository.getHomeData();
+  Future<ApiResult<HomeDataEntity>> call({bool forceRefresh = false}) async {
+    return await _repository.getHomeData(forceRefresh: forceRefresh);
   }
 }
 

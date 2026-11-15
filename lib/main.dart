@@ -26,28 +26,24 @@ void main() async {
   // 3. Local Storage setup
   await SharedPrefsHelper.init();
 
-  // 4. Force Global Portrait Orientation by default & White Status Bar icons
+  // 4. Determine initial locale (Defaults to 'ar' for first install, or user's saved choice)
+  final savedLocaleCode = SharedPrefsHelper.getLocaleCode();
+
+  // 5. Force Global Portrait Orientation by default & White Status Bar icons
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-  // 4. Dependency Injection (Service Locator)
+  // 6. Dependency Injection (Service Locator)
   setupDependencyInjection();
-
-  // 3. Firebase (Commented until needed)
-  /*
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  */
 
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('ar'), Locale('en')],
       path: 'assets/translations',
-      startLocale: const Locale('ar'),
+      startLocale: Locale(savedLocaleCode),
       fallbackLocale: const Locale('ar'),
       saveLocale: true,
       useOnlyLangCode: true,

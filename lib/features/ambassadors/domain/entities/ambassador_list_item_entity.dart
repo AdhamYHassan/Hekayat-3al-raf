@@ -1,37 +1,31 @@
 import 'package:equatable/equatable.dart';
 
-/// Entity representing an ambassador in the ambassadors list directory
+/// Entity representing an ambassador in the ambassadors list directory.
+/// Contains only real fields delivered by the live API.
 class AmbassadorListItemEntity extends Equatable {
   final String id;
   final String name;
-  final String role;
-  final String quote;
-  final int storiesCount;
-  final int answeredQuestionsCount;
-  final String city;
+  final String shortDescription;
+  final String description;
   final String imageUrl;
+  final int followersCount;
 
   const AmbassadorListItemEntity({
     required this.id,
     required this.name,
-    required this.role,
-    required this.quote,
-    required this.storiesCount,
-    required this.answeredQuestionsCount,
-    required this.city,
+    required this.shortDescription,
+    required this.description,
     required this.imageUrl,
+    required this.followersCount,
   });
 
   @override
   List<Object?> get props => [
         id,
         name,
-        role,
-        quote,
-        storiesCount,
-        answeredQuestionsCount,
-        city,
+        shortDescription,
+        description,
         imageUrl,
+        followersCount,
       ];
 }
-

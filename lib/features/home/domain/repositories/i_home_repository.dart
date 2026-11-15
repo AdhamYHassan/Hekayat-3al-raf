@@ -14,6 +14,6 @@ abstract class IHomeRepository {
   /// the concrete implementation (HomeRepositoryImpl) will orchestrate them
   /// concurrently using `Future.wait([...])` to maintain 0ms UI delay and
   /// keep the Domain and Presentation layers 100% untouched.
-  Future<ApiResult<HomeDataEntity>> getHomeData();
+  Future<ApiResult<HomeDataEntity>> getHomeData({bool forceRefresh = false});
 }
 

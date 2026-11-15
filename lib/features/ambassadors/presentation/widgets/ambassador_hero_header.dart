@@ -1,20 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 
 class AmbassadorHeroHeader extends StatelessWidget {
   final String name;
-  final String role;
-  final String cityAndJoin;
+  final String shortDescription;
   final String coverImageUrl;
 
   const AmbassadorHeroHeader({
     super.key,
     required this.name,
-    required this.role,
-    required this.cityAndJoin,
+    required this.shortDescription,
     required this.coverImageUrl,
   });
 
@@ -35,7 +34,7 @@ class AmbassadorHeroHeader extends StatelessWidget {
             memCacheHeight: 640,
           ),
 
-          // Gradient overlay strictly matching prototype DOM (only fade to dark at the bottom)
+          // Gradient overlay strictly matching prototype DOM
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -52,45 +51,46 @@ class AmbassadorHeroHeader extends StatelessWidget {
             ),
           ),
 
-          // Name, Role & Location Info
+          // Name & Role Info
           Positioned(
             bottom: 16.h,
             left: 16.w,
             right: 16.w,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  name,
-                  textAlign: TextAlign.right,
-                  style: AppFonts.alexandria(
-                    color: ColorManager.paper100,
-                    fontSize: 22.sp,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  role,
-                  textAlign: TextAlign.right,
-                  style: AppFonts.ibmPlexSansArabic(
-                    color: ColorManager.goldLight,
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  cityAndJoin,
-                  textAlign: TextAlign.right,
-                  style: AppFonts.ibmPlexSansArabic(
-                    color: ColorManager.paper400,
-                    fontSize: 11.sp,
-                  ),
-                ),
-              ],
+            child: Builder(
+              builder: (context) {
+                final isArabic = context.locale.languageCode == 'ar';
+                final crossAxisAlign = isArabic ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+                final textAlign = isArabic ? TextAlign.right : TextAlign.left;
+
+                return Column(
+                  crossAxisAlignment: crossAxisAlign,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      name,
+                      textAlign: textAlign,
+                      style: AppFonts.alexandria(
+                        color: ColorManager.paper100,
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                    ),
+                    if (shortDescription.isNotEmpty) ...[
+                      SizedBox(height: 4.h),
+                      Text(
+                        shortDescription,
+                        textAlign: textAlign,
+                        style: AppFonts.ibmPlexSansArabic(
+                          color: ColorManager.goldLight,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -98,4 +98,3 @@ class AmbassadorHeroHeader extends StatelessWidget {
     );
   }
 }
-

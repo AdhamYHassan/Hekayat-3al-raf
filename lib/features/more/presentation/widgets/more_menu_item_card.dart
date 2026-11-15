@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 
@@ -84,7 +85,7 @@ class MoreMenuItemCard extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.chevron_left_rounded,
+                context.forwardChevron,
                 color: ColorManager.gold.withValues(alpha: 0.45),
                 size: 20.sp,
               ),

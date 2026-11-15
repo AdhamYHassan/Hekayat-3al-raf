@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'package:hekayat_3al_raf/core/network/failure.dart';
 import 'package:hekayat_3al_raf/core/network/network_exceptions.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/data/datasources/i_ambassador_remote_data_source.dart';
@@ -47,7 +46,7 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
       );
       return ApiSuccess(paginated);
     } catch (e) {
-      return ApiFailure(ServerFailure('فشل في جلب قائمة السفراء: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }
 
@@ -81,18 +80,15 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
       final completeEntity = AmbassadorDetailsEntity(
         id: details.id,
         name: details.name,
-        role: details.role,
-        city: details.city,
-        joinYear: details.joinYear,
+        shortDescription: details.shortDescription,
+        description: details.description,
         coverImageUrl: details.coverImageUrl,
-        quote: details.quote,
-        tags: details.tags,
-        storiesCount: details.storiesCount,
-        answeredQuestionsCount: details.answeredQuestionsCount,
-        bioParagraphs: details.bioParagraphs,
-        pullQuote: details.pullQuote,
+        followersCount: details.followersCount,
+        answeredCount: details.answeredCount,
+        isFollowing: details.isFollowing,
+        canManage: details.canManage,
+        webUrl: details.webUrl,
         gallery: details.gallery,
-        selectedStories: details.selectedStories,
         questions: questions,
       );
 
@@ -109,7 +105,7 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
 
       return ApiSuccess(completeEntity);
     } catch (e) {
-      return ApiFailure(ServerFailure('فشل في جلب بيانات السفير: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }
 
@@ -131,18 +127,15 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
         final updatedEntity = AmbassadorDetailsEntity(
           id: cached.id,
           name: cached.name,
-          role: cached.role,
-          city: cached.city,
-          joinYear: cached.joinYear,
+          shortDescription: cached.shortDescription,
+          description: cached.description,
           coverImageUrl: cached.coverImageUrl,
-          quote: cached.quote,
-          tags: cached.tags,
-          storiesCount: cached.storiesCount,
-          answeredQuestionsCount: cached.answeredQuestionsCount,
-          bioParagraphs: cached.bioParagraphs,
-          pullQuote: cached.pullQuote,
+          followersCount: cached.followersCount,
+          answeredCount: cached.answeredCount,
+          isFollowing: cached.isFollowing,
+          canManage: cached.canManage,
+          webUrl: cached.webUrl,
           gallery: cached.gallery,
-          selectedStories: cached.selectedStories,
           questions: updatedQuestions,
         );
         _cache[ambassadorSlug] = _CachedAmbassadorDetails(
@@ -165,7 +158,7 @@ class AmbassadorRepositoryImpl implements IAmbassadorRepository {
           await _remoteDataSource.getAmbassadorQuestions(ambassadorSlug);
       return ApiSuccess(questions);
     } catch (e) {
-      return ApiFailure(ServerFailure('فشل في جلب أسئلة السفير: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }
 }

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_back_button.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/my_story_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
@@ -128,32 +129,7 @@ class MyStoriesScreen extends StatelessWidget {
               ),
             ),
           ),
-          InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            borderRadius: BorderRadius.circular(20.r),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'common.back'.tr(),
-                    style: AppFonts.ibmPlexSansArabic(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                      color: ColorManager.goldLight,
-                    ),
-                  ),
-                  SizedBox(width: 4.w),
-                  Icon(
-                    Icons.chevron_left_rounded,
-                    color: ColorManager.goldLight,
-                    size: 20.sp,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          const AppBackButton(),
         ],
       ),
     );

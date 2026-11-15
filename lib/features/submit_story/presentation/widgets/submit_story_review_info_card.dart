@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
@@ -54,7 +55,7 @@ class SubmitStoryReviewInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 2.h),
                     child: Icon(
-                      Icons.chevron_left_rounded,
+                      context.forwardChevron,
                       color: ColorManager.gold,
                       size: 16.sp,
                     ),

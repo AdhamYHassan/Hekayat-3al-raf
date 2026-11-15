@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
@@ -192,7 +193,7 @@ class _SubmitStoryView extends StatelessWidget {
                                   ),
                                   SizedBox(width: 6.w),
                                   Icon(
-                                    Icons.chevron_left_rounded,
+                                    context.forwardChevron,
                                     color: ColorManager.primaryDark,
                                     size: 18.sp,
                                   ),

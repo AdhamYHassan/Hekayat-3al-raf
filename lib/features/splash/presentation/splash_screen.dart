@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -59,10 +58,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _navigateToNext() async {
     if (!mounted) return;
-
-    if (context.locale.languageCode != 'ar') {
-      await context.setLocale(const Locale('ar'));
-    }
 
     // 2.2 seconds display time for smooth splash intro
     await Future.delayed(const Duration(milliseconds: 2200));

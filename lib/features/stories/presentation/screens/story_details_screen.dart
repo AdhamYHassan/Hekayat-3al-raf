@@ -55,12 +55,13 @@ class _StoryDetailsView extends StatelessWidget {
             error.contains('بيانات الدخول') ||
             error.contains('لم يتم تزويد') ||
             error.contains('Given token not valid') ||
-            error.toLowerCase().contains('unauthorized');
+            error.toLowerCase().contains('unauthorized') ||
+            error.toLowerCase().contains('authentication credentials');
 
         if (is401) {
           AppSnackBar.showAuthRequired(
             context,
-            message: error,
+            message: 'auth.login_required'.tr(),
             onLoginTap: () => context.push(Routes.login),
           );
         } else {
@@ -209,7 +210,9 @@ class _StoryDetailsView extends StatelessWidget {
                           child: StoryDocumentCard(
                             title: story.title,
                             documentUrl: media.document!,
-                            documentKey: story.id,
+                            documentKey: story.title.trim().isNotEmpty
+                                ? '${story.title.trim()}_${story.id.substring(0, 8)}'
+                                : story.id,
                           ),
                         ),
                         SizedBox(height: 16.h),

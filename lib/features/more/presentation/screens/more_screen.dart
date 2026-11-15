@@ -16,6 +16,7 @@ import 'package:hekayat_3al_raf/features/more/presentation/widgets/delete_accoun
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/more_language_selector.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/more_menu_item_card.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/delete_account_usecase.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -40,7 +41,8 @@ class MoreScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     AppCachedNetworkImage(
-                      imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                      imageUrl:
+                          'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
                       height: 48.h,
                       fit: BoxFit.contain,
                       memCacheHeight: 120,
@@ -166,7 +168,8 @@ class MoreScreen extends StatelessWidget {
               FutureBuilder<String?>(
                 future: SecureStorageHelper.getToken(),
                 builder: (context, snapshot) {
-                  final hasToken = snapshot.data != null && snapshot.data!.trim().isNotEmpty;
+                  final hasToken =
+                      snapshot.data != null && snapshot.data!.trim().isNotEmpty;
                   if (!hasToken) return const SizedBox.shrink();
 
                   return Padding(
@@ -180,7 +183,8 @@ class MoreScreen extends StatelessWidget {
                           context: context,
                           builder: (dialogContext) => DeleteAccountDialog(
                             onConfirmDelete: (password) async {
-                              final deleteUseCase = getIt<DeleteAccountUseCase>();
+                              final deleteUseCase =
+                                  getIt<DeleteAccountUseCase>();
                               final result = await deleteUseCase(password);
                               if (!context.mounted) return false;
 
@@ -188,7 +192,8 @@ class MoreScreen extends StatelessWidget {
                                 case ApiSuccess():
                                   AppSnackBar.showSuccess(
                                     context,
-                                    message: 'settings.delete_account_success'.tr(),
+                                    message: 'settings.delete_account_success'
+                                        .tr(),
                                   );
                                   context.go(Routes.home);
                                   return true;
@@ -219,19 +224,10 @@ class MoreScreen extends StatelessWidget {
                   await SharedPrefsHelper.setLocaleCode(newLang);
                   if (context.mounted) {
                     await context.setLocale(Locale(newLang));
+                    // Force refresh Home feed with the new language headers
+                    getIt<HomeCubit>().loadHomeData(forceRefresh: true);
                   }
                 },
-              ),
-
-              SizedBox(height: 32.h),
-
-              // 4. Footer Note
-              Text(
-                'settings.footer_version'.tr(),
-                style: AppFonts.ibmPlexSansArabic(
-                  fontSize: 10.5.sp,
-                  color: ColorManager.paper400.withValues(alpha: 0.6),
-                ),
               ),
 
               // Spacing for Floating Bottom Nav Bar

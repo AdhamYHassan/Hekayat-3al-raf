@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_details_entity.dart';
 import 'package:hekayat_3al_raf/features/stories/domain/entities/story_vote_result_entity.dart';
@@ -40,6 +41,15 @@ class StoryDetailsCubit extends Cubit<StoryDetailsState> {
   Future<void> voteStory(String voteValue) async {
     final currentStory = state.story;
     if (currentStory == null || !currentStory.votingOpen) return;
+
+    // Check token locally first to save unnecessary API round-trips
+    final token = await SecureStorageHelper.getAccessToken();
+    if (token == null || token.trim().isEmpty) {
+      emit(state.copyWith(
+        voteErrorMessage: 'auth.login_required',
+      ));
+      return;
+    }
 
     final previousStory = currentStory;
     final currentVote = currentStory.myVote;

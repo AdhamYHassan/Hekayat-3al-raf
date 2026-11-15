@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/domain/entities/ambassador_details_entity.dart';
 
@@ -26,7 +27,7 @@ class AmbassadorGalleryCarousel extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  'ألبوم الصور والأرشيف',
+                  'ambassadors.gallery_title'.tr(),
                   style: AppFonts.alexandria(
                     color: ColorManager.paper100,
                     fontSize: 16.sp,
@@ -47,7 +48,7 @@ class AmbassadorGalleryCarousel extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
           SizedBox(
-            height: 190.h,
+            height: 240.h,
             child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               scrollDirection: Axis.horizontal,
@@ -55,20 +56,22 @@ class AmbassadorGalleryCarousel extends StatelessWidget {
               separatorBuilder: (context, index) => SizedBox(width: 12.w),
               itemBuilder: (context, index) {
                 final item = items[index];
+                final hasCaption = item.caption.trim().isNotEmpty;
+
                 return SizedBox(
-                  width: 220.w,
+                  width: 170.w,
                   child: Container(
                     decoration: BoxDecoration(
                       color: ColorManager.primaryLight.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(10.r),
                       border: Border.all(
-                        color: ColorManager.gold.withValues(alpha: 0.1),
+                        color: ColorManager.gold.withValues(alpha: 0.15),
                         width: 1,
                       ),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(
                           child: Stack(
@@ -77,15 +80,19 @@ class AmbassadorGalleryCarousel extends StatelessWidget {
                               AppCachedNetworkImage(
                                 imageUrl: item.imageUrl,
                                 fit: BoxFit.cover,
-                                memCacheWidth: 440,
+                                alignment: Alignment.topCenter,
+                                memCacheWidth: 400,
+                                memCacheHeight: 560,
                               ),
-                              if (item.year != null)
+                              if (item.year != null && item.year!.isNotEmpty)
                                 Positioned(
                                   top: 8.h,
                                   right: 8.w,
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 8.w, vertical: 2.h),
+                                      horizontal: 8.w,
+                                      vertical: 2.h,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: ColorManager.primaryDark
                                           .withValues(alpha: 0.8),
@@ -104,19 +111,20 @@ class AmbassadorGalleryCarousel extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(8.w),
-                          child: Text(
-                            item.caption,
-                            style: AppFonts.ibmPlexSansArabic(
-                              color: ColorManager.paper200,
-                              fontSize: 11.sp,
-                              height: 1.3,
+                        if (hasCaption)
+                          Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Text(
+                              item.caption,
+                              style: AppFonts.ibmPlexSansArabic(
+                                color: ColorManager.paper200,
+                                fontSize: 11.sp,
+                                height: 1.3,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -129,4 +137,3 @@ class AmbassadorGalleryCarousel extends StatelessWidget {
     );
   }
 }
-

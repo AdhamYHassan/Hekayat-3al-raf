@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
@@ -316,7 +317,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                       ),
                     ),
                     icon: Icon(
-                      Icons.chevron_right_rounded,
+                      context.backChevron,
                       color: ColorManager.paper100,
                       size: 18.sp,
                     ),

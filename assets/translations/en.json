@@ -58,7 +58,33 @@
     "password_mismatch": "Passwords do not match",
     "code_length_error": "Please enter the complete 6-digit code",
     "password_length_error": "Password must be at least 6 characters",
-    "reset_success": "Password changed successfully! You can now log in."
+    "reset_success": "Password changed successfully! You can now log in.",
+    "login_welcome_title": "Welcome Back",
+    "login_welcome_subtitle": "Every story begins with opening the door. Sign in and pick up where you left off.",
+    "login_input_label": "Mobile Number or Email",
+    "login_input_hint": "01012345678 or name@example.com",
+    "login_or": "OR",
+    "guest_entry": "Continue as Guest",
+    "dont_have_account_prompt": "Don't have an account? ",
+    "create_account_action": "Create Account",
+    "login_input_required": "Please enter your mobile number or email",
+    "invalid_phone_for_country": "Invalid phone number for {} (e.g. {})",
+    "invalid_email_format": "Invalid email address format",
+    "password_required": "Please enter your password",
+    "register_badge": "New Account",
+    "register_title": "Tell Your Story Today",
+    "register_subtitle": "Create your account and start sharing your stories with those who want to hear.",
+    "name_label": "Full Name",
+    "name_hint": "Enter your name",
+    "name_required": "Please enter your full name",
+    "phone_required": "Please enter your mobile number",
+    "email_required": "Please enter your email",
+    "confirm_password_required": "Please confirm your password",
+    "terms_required": "You must agree to the Terms & Conditions and Privacy Policy",
+    "agree_to_prefix": "I agree to the ",
+    "and_conjunction": " and ",
+    "already_have_account_prompt": "Already have an account? ",
+    "login_action": "Log In"
   },
   "stories": {
     "title": "Stories",
@@ -96,6 +122,7 @@
     "title": "Home",
     "welcome": "Welcome",
     "more": "More",
+    "all": "View all",
     "featured_kicker": "Story of the Month",
     "featured_title": "Featured Narrative",
     "top_stories_kicker": "Authentic Stories",
@@ -229,7 +256,11 @@
     "empty_qa": "No questions yet.",
     "selected_stories": "Selected Stories",
     "view_profile": "View Profile",
-    "role_default": "Platform Ambassador"
+    "role_default": "Platform Ambassador",
+    "followers_count": "{} Followers",
+    "about_ambassador": "About the Ambassador",
+    "gallery_title": "Photo Album & Archive",
+    "question_submit_success": "Your question was submitted successfully!"
   },
   "submit": {
     "title": "Tell Your Story",
@@ -337,6 +368,28 @@
       "guest_phone_hint": "Mobile Number (e.g. 01012345678)",
       "submitting": "Submitting...",
       "confirm_and_submit": "Confirm & Submit Story"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "A question, suggestion, or partnership idea. Write to us and we'll read every word.",
+    "quick_submit_hint": "Want to tell a story? No need to contact us first.",
+    "quick_submit_action": "Tell Your Story",
+    "full_name": "Full Name",
+    "email": "Email",
+    "phone": "Mobile Number (Optional)",
+    "subject": "Subject",
+    "choose_subject": "Choose a subject",
+    "message": "Your Message",
+    "send_button": "Send Message",
+    "sending": "Sending...",
+    "success_title": "Message Sent",
+    "subjects": {
+      "suggestion": "Suggestion for the platform",
+      "inquiry": "General Inquiry",
+      "partnership": "Partnership / Collaboration",
+      "technical": "Technical Issue",
+      "other": "Other"
     }
   }
 }

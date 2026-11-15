@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_back_button.dart';
 import 'package:hekayat_3al_raf/features/submit_story/domain/entities/submit_story_entities.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_cubit.dart';
 import 'package:hekayat_3al_raf/features/submit_story/presentation/bloc/submit_story_state.dart';
@@ -35,6 +35,17 @@ class SubmitStoryFormSubscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
+    final titleWidget = Text(
+      _getFormatTitle(format),
+      style: AppFonts.alexandria(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.bold,
+        color: ColorManager.paper100,
+      ),
+    );
+    const backWidget = AppBackButton();
+
     return Scaffold(
       backgroundColor: ColorManager.primaryDark,
       appBar: AppBar(
@@ -45,42 +56,9 @@ class SubmitStoryFormSubscreen extends StatelessWidget {
         titleSpacing: 16.w,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              _getFormatTitle(format),
-              style: AppFonts.alexandria(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: ColorManager.paper100,
-              ),
-            ),
-            InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              borderRadius: BorderRadius.circular(20.r),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'submit.back'.tr(),
-                      style: AppFonts.ibmPlexSansArabic(
-                        fontSize: 13.5.sp,
-                        fontWeight: FontWeight.w500,
-                        color: ColorManager.goldLight,
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    Icon(
-                      CupertinoIcons.arrow_left,
-                      size: 14.sp,
-                      color: ColorManager.goldLight,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          children: isArabic
+              ? [titleWidget, backWidget]
+              : [backWidget, titleWidget],
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.h),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/helpers/in_app_update_helper.dart';
 import 'package:hekayat_3al_raf/features/ambassadors/presentation/screens/ambassadors_screen.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/screens/home_feed_screen.dart';
@@ -32,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<MainCubit>(create: (_) => MainCubit()),
+        BlocProvider<MainCubit>.value(value: getIt<MainCubit>()),
         BlocProvider<NavBarScrollCubit>(create: (_) => NavBarScrollCubit()),
       ],
       child: const _MainScreenContent(),

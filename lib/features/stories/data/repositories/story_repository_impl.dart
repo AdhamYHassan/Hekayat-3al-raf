@@ -1,4 +1,4 @@
-import 'package:hekayat_3al_raf/core/network/failure.dart';
+import 'package:hekayat_3al_raf/core/network/network_exceptions.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/features/stories/data/datasources/i_story_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/stories/data/models/paginated_stories_dto.dart';
@@ -40,7 +40,7 @@ class StoryRepositoryImpl implements IStoryRepository {
       if (_storyCache.containsKey(storyId)) {
         return ApiSuccess(_storyCache[storyId]!.$1);
       }
-      return ApiFailure(ServerFailure('فشل في جلب تفاصيل الحكاية: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }
 
@@ -69,7 +69,7 @@ class StoryRepositoryImpl implements IStoryRepository {
 
       return ApiSuccess(voteResult);
     } catch (e) {
-      return ApiFailure(ServerFailure('فشل في تسجيل التفاعل: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }
 
@@ -93,7 +93,7 @@ class StoryRepositoryImpl implements IStoryRepository {
       );
       return ApiSuccess(paginated);
     } catch (e) {
-      return ApiFailure(ServerFailure('فشل في جلب الحكايات: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }
 
@@ -103,7 +103,7 @@ class StoryRepositoryImpl implements IStoryRepository {
       final types = await _remoteDataSource.getStoryTypes();
       return ApiSuccess(types);
     } catch (e) {
-      return ApiFailure(ServerFailure('فشل في جلب أقسام الحكايات: $e'));
+      return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }
 }

@@ -17,6 +17,7 @@ class SubmitStoryStepper extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: _StepItem(
@@ -60,38 +61,41 @@ class _StepItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: 24.w,
-          height: 24.w,
+          width: 26.w,
+          height: 26.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isActive ? ColorManager.gold : ColorManager.primaryLight.withValues(alpha: 0.4),
+            color: isActive
+                ? ColorManager.gold
+                : ColorManager.primaryLight.withValues(alpha: 0.4),
           ),
           child: Center(
             child: Text(
               stepNumber.toString(),
               style: AppFonts.ibmPlexSansArabic(
-                color: isActive ? ColorManager.primaryDark : ColorManager.paper400,
-                fontSize: 11.sp,
+                color:
+                    isActive ? ColorManager.primaryDark : ColorManager.paper400,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
-        SizedBox(width: 5.w),
-        Flexible(
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppFonts.ibmPlexSansArabic(
-              color: isActive ? ColorManager.gold : ColorManager.paper400,
-              fontSize: 11.sp,
-              fontWeight: FontWeight.w500,
-            ),
+        SizedBox(height: 6.h),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          style: AppFonts.ibmPlexSansArabic(
+            color: isActive ? ColorManager.gold : ColorManager.paper400,
+            fontSize: 11.sp,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+            height: 1.25,
           ),
         ),
       ],
@@ -107,10 +111,12 @@ class _StepDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 14.w,
-      height: 1.h,
-      margin: EdgeInsets.symmetric(horizontal: 4.w),
-      color: isActive ? ColorManager.gold : ColorManager.gold.withValues(alpha: 0.2),
+      width: 20.w,
+      height: 1.5.h,
+      margin: EdgeInsets.only(top: 13.w, left: 4.w, right: 4.w),
+      color: isActive
+          ? ColorManager.gold
+          : ColorManager.gold.withValues(alpha: 0.2),
     );
   }
 }

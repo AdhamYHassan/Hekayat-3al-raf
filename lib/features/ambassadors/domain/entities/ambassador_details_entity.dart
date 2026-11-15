@@ -18,26 +18,6 @@ class AmbassadorGalleryItem extends Equatable {
   List<Object?> get props => [id, imageUrl, caption, year];
 }
 
-/// Entity representing selected stories curated by this ambassador
-class AmbassadorStoryItem extends Equatable {
-  final String id;
-  final String title;
-  final String category;
-  final String viewsCount;
-  final double rating;
-
-  const AmbassadorStoryItem({
-    required this.id,
-    required this.title,
-    required this.category,
-    required this.viewsCount,
-    required this.rating,
-  });
-
-  @override
-  List<Object?> get props => [id, title, category, viewsCount, rating];
-}
-
 /// Entity representing questions asked to the ambassador and their responses
 class AmbassadorQaItem extends Equatable {
   final String id;
@@ -70,39 +50,34 @@ class AmbassadorQaItem extends Equatable {
       ];
 }
 
-/// Root Aggregate Entity representing the complete cultural ambassador profile
+/// Root Aggregate Entity representing the complete cultural ambassador profile.
+/// Strictly maps live backend fields without mock attributes.
 class AmbassadorDetailsEntity extends Equatable {
   final String id;
   final String name;
-  final String role;
-  final String city;
-  final String joinYear;
+  final String shortDescription;
+  final String description;
   final String coverImageUrl;
-  final String quote;
-  final List<String> tags;
-  final int storiesCount;
-  final int answeredQuestionsCount;
-  final List<String> bioParagraphs;
-  final String pullQuote;
+  final int followersCount;
+  final int answeredCount;
+  final bool isFollowing;
+  final bool canManage;
+  final String webUrl;
   final List<AmbassadorGalleryItem> gallery;
-  final List<AmbassadorStoryItem> selectedStories;
   final List<AmbassadorQaItem> questions;
 
   const AmbassadorDetailsEntity({
     required this.id,
     required this.name,
-    required this.role,
-    required this.city,
-    required this.joinYear,
+    required this.shortDescription,
+    required this.description,
     required this.coverImageUrl,
-    required this.quote,
-    required this.tags,
-    required this.storiesCount,
-    required this.answeredQuestionsCount,
-    required this.bioParagraphs,
-    required this.pullQuote,
+    required this.followersCount,
+    required this.answeredCount,
+    required this.isFollowing,
+    required this.canManage,
+    required this.webUrl,
     required this.gallery,
-    required this.selectedStories,
     required this.questions,
   });
 
@@ -110,19 +85,15 @@ class AmbassadorDetailsEntity extends Equatable {
   List<Object?> get props => [
         id,
         name,
-        role,
-        city,
-        joinYear,
+        shortDescription,
+        description,
         coverImageUrl,
-        quote,
-        tags,
-        storiesCount,
-        answeredQuestionsCount,
-        bioParagraphs,
-        pullQuote,
+        followersCount,
+        answeredCount,
+        isFollowing,
+        canManage,
+        webUrl,
         gallery,
-        selectedStories,
         questions,
       ];
 }
-

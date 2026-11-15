@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
+import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/features/auth/presentation/bloc/reset_password_cubit.dart';
@@ -459,7 +460,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                   ),
                   SizedBox(width: 8.w),
                   Icon(
-                    Icons.chevron_left_rounded,
+                    context.forwardChevron,
                     color: ColorManager.primaryDark,
                     size: 20.sp,
                   ),
