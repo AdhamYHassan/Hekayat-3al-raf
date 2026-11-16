@@ -29,6 +29,7 @@ class SubmitStoryState extends Equatable {
   final String guestName;
   final String guestPhone;
   final String guestPhoneRegion;
+  final bool acceptTerms;
 
   // Autosave & Recovery State
   final bool isAutosaving;
@@ -58,6 +59,7 @@ class SubmitStoryState extends Equatable {
     this.guestName = '',
     this.guestPhone = '',
     this.guestPhoneRegion = 'EG',
+    this.acceptTerms = false,
     this.isAutosaving = false,
     this.isDraftSaved = false,
     this.recoverableDraft,
@@ -93,6 +95,7 @@ class SubmitStoryState extends Equatable {
     String? guestName,
     String? guestPhone,
     String? guestPhoneRegion,
+    bool? acceptTerms,
     bool? isAutosaving,
     bool? isDraftSaved,
     StoryDraftEntity? recoverableDraft,
@@ -126,6 +129,7 @@ class SubmitStoryState extends Equatable {
       guestName: guestName ?? this.guestName,
       guestPhone: guestPhone ?? this.guestPhone,
       guestPhoneRegion: guestPhoneRegion ?? this.guestPhoneRegion,
+      acceptTerms: acceptTerms ?? this.acceptTerms,
       isAutosaving: isAutosaving ?? this.isAutosaving,
       isDraftSaved: isDraftSaved ?? this.isDraftSaved,
       recoverableDraft: clearRecoverableDraft
@@ -158,6 +162,7 @@ class SubmitStoryState extends Equatable {
         guestName,
         guestPhone,
         guestPhoneRegion,
+        acceptTerms,
         isAutosaving,
         isDraftSaved,
         recoverableDraft,

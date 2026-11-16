@@ -16,6 +16,7 @@ class SubmitStoryParams extends Equatable {
   final String? guestName;
   final String? guestPhone;
   final String? guestPhoneRegion;
+  final bool acceptTerms;
 
   const SubmitStoryParams({
     required this.submissionType,
@@ -31,6 +32,7 @@ class SubmitStoryParams extends Equatable {
     this.guestName,
     this.guestPhone,
     this.guestPhoneRegion = 'EG',
+    this.acceptTerms = true,
   });
 
   @override
@@ -48,6 +50,7 @@ class SubmitStoryParams extends Equatable {
         guestName,
         guestPhone,
         guestPhoneRegion,
+        acceptTerms,
       ];
 }
 

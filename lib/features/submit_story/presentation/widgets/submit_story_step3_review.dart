@@ -1,11 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/helpers/direction_extension.dart';
+import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
+import 'package:hekayat_3al_raf/core/models/country_phone_info.dart';
+import 'package:hekayat_3al_raf/core/widgets/app_phone_input_field.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -25,9 +30,13 @@ class SubmitStoryStep3Review extends StatefulWidget {
 class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
   late final TextEditingController _guestNameController;
   late final TextEditingController _guestPhoneController;
+  late final TapGestureRecognizer _termsRecognizer;
+  late CountryPhoneInfo _selectedCountry;
   bool _isLoggedIn = true;
+  bool _agreedToTerms = false;
   String? _guestNameError;
   String? _guestPhoneError;
+  String? _termsError;
 
   @override
   void initState() {
@@ -35,7 +44,27 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
     final cubit = context.read<SubmitStoryCubit>();
     _guestNameController = TextEditingController(text: cubit.state.guestName);
     _guestPhoneController = TextEditingController(text: cubit.state.guestPhone);
+
+    _termsRecognizer = TapGestureRecognizer()..onTap = _navigateToTerms;
+
+    final regionCode = cubit.state.guestPhoneRegion;
+    _selectedCountry = CountryPhoneInfo.supportedCountries.firstWhere(
+      (c) => c.code.toUpperCase() == regionCode.toUpperCase(),
+      orElse: () => CountryPhoneInfo.supportedCountries.first,
+    );
+
     _checkAuthStatus();
+  }
+
+  void _navigateToTerms() {
+    final lang = context.locale.languageCode == 'en' ? 'en' : 'ar';
+    context.push(
+      Routes.webView,
+      extra: {
+        'title': 'settings.terms_conditions'.tr(),
+        'url': 'https://hekayat3alraf.com/$lang/terms/',
+      },
+    );
   }
 
   Future<void> _checkAuthStatus() async {
@@ -47,26 +76,40 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
     }
   }
 
-  bool _validateGuestFields() {
-    if (_isLoggedIn) return true;
-
+  bool _validateForm() {
     bool isValid = true;
-    if (_guestNameController.text.trim().isEmpty) {
-      _guestNameError = 'validation.guest_name_required'.tr();
-      isValid = false;
-    } else {
-      _guestNameError = null;
+
+    if (!_isLoggedIn) {
+      if (_guestNameController.text.trim().isEmpty) {
+        _guestNameError = 'validation.guest_name_required'.tr();
+        isValid = false;
+      } else {
+        _guestNameError = null;
+      }
+
+      final phone = _guestPhoneController.text.trim();
+      final isArabic = context.locale.languageCode == 'ar';
+      if (phone.isEmpty) {
+        _guestPhoneError = 'validation.guest_phone_required'.tr();
+        isValid = false;
+      } else if (!_selectedCountry.isValid(phone)) {
+        final countryName =
+            isArabic ? _selectedCountry.nameAr : _selectedCountry.nameEn;
+        _guestPhoneError = 'auth.invalid_phone_for_country'.tr(args: [
+          countryName,
+          _selectedCountry.exampleNumber,
+        ]);
+        isValid = false;
+      } else {
+        _guestPhoneError = null;
+      }
     }
 
-    final phone = _guestPhoneController.text.trim();
-    if (phone.isEmpty) {
-      _guestPhoneError = 'validation.guest_phone_required'.tr();
-      isValid = false;
-    } else if (phone.length < 9) {
-      _guestPhoneError = 'validation.invalid_phone'.tr();
+    if (!_agreedToTerms) {
+      _termsError = 'submit.step3.terms_required'.tr();
       isValid = false;
     } else {
-      _guestPhoneError = null;
+      _termsError = null;
     }
 
     setState(() {});
@@ -75,6 +118,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
 
   @override
   void dispose() {
+    _termsRecognizer.dispose();
     _guestNameController.dispose();
     _guestPhoneController.dispose();
     super.dispose();
@@ -85,6 +129,10 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
     final cubit = context.read<SubmitStoryCubit>();
 
     return BlocConsumer<SubmitStoryCubit, SubmitStoryState>(
+      listenWhen: (previous, current) =>
+          previous.isSubmittedSuccessfully != current.isSubmittedSuccessfully ||
+          (current.errorMessage != null &&
+              previous.errorMessage != current.errorMessage),
       listener: (context, state) {
         if (state.isSubmittedSuccessfully) {
           showDialog<void>(
@@ -279,14 +327,25 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                         },
                       ),
                       SizedBox(height: 10.h),
-                      _buildGuestTextField(
+                      AppPhoneInputField(
                         controller: _guestPhoneController,
-                        hint: 'submit.step3.guest_phone_hint'.tr(),
-                        icon: CupertinoIcons.phone,
-                        keyboardType: TextInputType.phone,
+                        selectedCountry: _selectedCountry,
                         errorMessage: _guestPhoneError,
+                        onCountryChanged: (country) {
+                          setState(() {
+                            _selectedCountry = country;
+                            _guestPhoneError = null;
+                          });
+                          cubit.updateGuestInfo(
+                            phone: _guestPhoneController.text,
+                            region: country.code,
+                          );
+                        },
                         onChanged: (val) {
-                          cubit.updateGuestInfo(phone: val);
+                          cubit.updateGuestInfo(
+                            phone: val,
+                            region: _selectedCountry.code,
+                          );
                           if (_guestPhoneError != null) {
                             setState(() => _guestPhoneError = null);
                           }
@@ -297,7 +356,95 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                 ),
               ],
 
-              SizedBox(height: 24.h),
+              SizedBox(height: 18.h),
+
+              // Accept Terms and Conditions Checkbox
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 14.w,
+                  vertical: 12.h,
+                ),
+                decoration: BoxDecoration(
+                  color: ColorManager.primaryLight.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(
+                    color: _termsError != null
+                        ? ColorManager.error
+                        : ColorManager.gold.withValues(alpha: 0.12),
+                    width: _termsError != null ? 1.4 : 1.0,
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 2.h),
+                      child: SizedBox(
+                        width: 20.r,
+                        height: 20.r,
+                        child: Checkbox(
+                          value: _agreedToTerms,
+                          activeColor: ColorManager.gold,
+                          checkColor: ColorManager.primaryDark,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                          onChanged: (val) {
+                            final checked = val ?? false;
+                            setState(() {
+                              _agreedToTerms = checked;
+                              if (_agreedToTerms) {
+                                _termsError = null;
+                              }
+                            });
+                            cubit.updateAcceptTerms(checked);
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          text: 'submit.step3.agree_to_terms_prefix'.tr(),
+                          style: AppFonts.ibmPlexSansArabic(
+                            fontSize: 12.sp,
+                            color: ColorManager.paper200.withValues(alpha: 0.8),
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'settings.terms_conditions'.tr(),
+                              recognizer: _termsRecognizer,
+                              style: AppFonts.ibmPlexSansArabic(
+                                color: ColorManager.goldLight,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                decorationColor: ColorManager.goldLight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_termsError != null)
+                Padding(
+                  padding: EdgeInsets.only(top: 6.h, right: 6.w, left: 6.w),
+                  child: Text(
+                    _termsError!,
+                    style: AppFonts.ibmPlexSansArabic(
+                      color: ColorManager.error,
+                      fontSize: 11.5.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+
+              SizedBox(height: 20.h),
 
               // Actions: Previous + Submit
               Row(
@@ -336,7 +483,7 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
                       onPressed: state.isSubmitting
                           ? null
                           : () {
-                              if (!_validateGuestFields()) {
+                              if (!_validateForm()) {
                                 return;
                               }
                               cubit.submitStory();

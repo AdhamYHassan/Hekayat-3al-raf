@@ -13,6 +13,7 @@ class SubmitStoryRequestModel {
       'narrator_name': params.narratorName,
       'summary': params.summary,
       'show_author': params.showAuthor,
+      'accept_terms': params.acceptTerms,
     };
 
     // Body content for text stories

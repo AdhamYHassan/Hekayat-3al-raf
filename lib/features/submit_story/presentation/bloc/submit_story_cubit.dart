@@ -112,7 +112,7 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
   }
 
   void setStep(int step) {
-    emit(state.copyWith(currentStep: step));
+    emit(state.copyWith(currentStep: step, clearError: true));
   }
 
   void updateTitle(String title) {
@@ -174,6 +174,10 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
     ));
   }
 
+  void updateAcceptTerms(bool accepted) {
+    emit(state.copyWith(acceptTerms: accepted));
+  }
+
   Future<bool> submitStory() async {
     final token = await SecureStorageHelper.getToken();
     final isGuest = token == null || token.isEmpty;
@@ -201,6 +205,7 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
       guestName: isGuest ? state.guestName.trim() : null,
       guestPhone: isGuest ? state.guestPhone.trim() : null,
       guestPhoneRegion: isGuest ? state.guestPhoneRegion : null,
+      acceptTerms: state.acceptTerms,
     );
 
     emit(state.copyWith(isSubmitting: true, clearError: true));

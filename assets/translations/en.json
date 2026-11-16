@@ -367,7 +367,9 @@
       "guest_name_hint": "Full Name",
       "guest_phone_hint": "Mobile Number (e.g. 01012345678)",
       "submitting": "Submitting...",
-      "confirm_and_submit": "Confirm & Submit Story"
+      "confirm_and_submit": "Confirm & Submit Story",
+      "agree_to_terms_prefix": "I agree to the ",
+      "terms_required": "You must agree to the Terms & Conditions to submit your story"
     }
   },
   "contact": {

@@ -370,7 +370,9 @@
       "guest_name_hint": "اسمك الكامل",
       "guest_phone_hint": "رقم الموبايل (مثال: 01012345678)",
       "submitting": "جاري الإرسال...",
-      "confirm_and_submit": "تأكيد وإرسال الحكاية"
+      "confirm_and_submit": "تأكيد وإرسال الحكاية",
+      "agree_to_terms_prefix": "أوافق على ",
+      "terms_required": "يجب الموافقة على الشروط والأحكام لإرسال الحكاية"
     }
   },
   "contact": {
