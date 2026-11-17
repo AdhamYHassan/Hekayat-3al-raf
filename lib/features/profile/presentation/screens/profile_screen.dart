@@ -441,12 +441,6 @@ class _ProfileContent extends StatelessWidget {
                   value: user.email.isNotEmpty ? user.email : '—',
                   isLtr: true,
                 ),
-                SizedBox(height: 8.h),
-                _buildContactCard(
-                  icon: CupertinoIcons.location_solid,
-                  label: 'profile.city'.tr(),
-                  value: 'profile.default_city'.tr(),
-                ),
               ],
             ),
           ),
@@ -819,10 +813,7 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
                     height: 76.r,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: ColorManager.gold,
-                        width: 1.5,
-                      ),
+                      border: Border.all(color: ColorManager.gold, width: 1.5),
                     ),
                     child: ClipOval(
                       child: _selectedAvatar != null
@@ -831,21 +822,21 @@ class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
                               fit: BoxFit.cover,
                             )
                           : widget.user.avatar != null &&
-                                  widget.user.avatar!.isNotEmpty
-                              ? AppCachedNetworkImage(
-                                  imageUrl: widget.user.avatar!,
-                                  width: 76.r,
-                                  height: 76.r,
-                                  fit: BoxFit.cover,
-                                )
-                              : Container(
-                                  color: ColorManager.primaryLight,
-                                  child: Icon(
-                                    CupertinoIcons.person_fill,
-                                    size: 40.sp,
-                                    color: ColorManager.gold,
-                                  ),
-                                ),
+                                widget.user.avatar!.isNotEmpty
+                          ? AppCachedNetworkImage(
+                              imageUrl: widget.user.avatar!,
+                              width: 76.r,
+                              height: 76.r,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              color: ColorManager.primaryLight,
+                              child: Icon(
+                                CupertinoIcons.person_fill,
+                                size: 40.sp,
+                                color: ColorManager.gold,
+                              ),
+                            ),
                     ),
                   ),
                   Container(

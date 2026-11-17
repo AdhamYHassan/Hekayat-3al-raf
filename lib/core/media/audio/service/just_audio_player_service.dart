@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/media/audio/model/audio_playback_state.dart';
 import 'package:hekayat_3al_raf/core/media/audio/model/audio_track.dart';
 import 'package:hekayat_3al_raf/core/media/audio/service/i_audio_player_service.dart';
@@ -60,6 +61,8 @@ class JustAudioPlayerService implements IAudioPlayerService {
   // Cached metadata for seamless virtual resurrection
   AudioTrack? _lastTrack;
   Duration _lastPosition = Duration.zero;
+  // Tracks whether audio was genuinely playing before an incoming call interrupted it
+  bool _playInterrupted = false;
 
   JustAudioPlayerService() {
     _initAudioSession();
@@ -87,16 +90,24 @@ class JustAudioPlayerService implements IAudioPlayerService {
       _sessionSubscriptions.add(
         session.interruptionEventStream.listen((event) {
           if (event.begin) {
+            // Record whether playback was actually active right before the call
+            _playInterrupted = _player?.playing ?? false;
             debugPrint(
-              '[AudioSession] Interruption began (e.g. Incoming call). Pausing.',
+              '[AudioSession] Interruption began (e.g. Incoming call). Was playing: $_playInterrupted',
             );
-            pause();
+            if (_playInterrupted) {
+              pause();
+            }
           } else {
             debugPrint(
-              '[AudioSession] Interruption ended. Resuming playback if appropriate.',
+              '[AudioSession] Interruption ended. Should resume: $_playInterrupted',
             );
-            if (event.type == AudioInterruptionType.pause) {
+            // Only resume if the user was actively listening before the interruption started
+            if (_playInterrupted && event.type == AudioInterruptionType.pause) {
+              _playInterrupted = false;
               resume();
+            } else {
+              _playInterrupted = false;
             }
           }
         }),
@@ -266,29 +277,59 @@ class JustAudioPlayerService implements IAudioPlayerService {
             : track.url;
         debugPrint('[AudioPlayer] Playing local file: $filePath');
         audioSource = AudioSource.file(filePath, tag: mediaItem);
-      } else {
-        // Resolve local cache destination for remote URLs
-        final cacheFile = await _resolveCacheFile(track.id);
-        debugPrint('[AudioPlayer] Cache destination: ${cacheFile.path}');
+        final duration = await player.setAudioSource(audioSource);
+        debugPrint('[AudioPlayer] Duration resolved: $duration');
+        await player.play();
+        return;
+      }
 
-        final isCached =
-            await cacheFile.exists() && await cacheFile.length() > 0;
+      // Check if previously cached on disk
+      final cacheFile = await _resolveCacheFile(track.id);
+      debugPrint('[AudioPlayer] Cache destination: ${cacheFile.path}');
 
-        if (isCached) {
+      final isCached =
+          await cacheFile.exists() && await cacheFile.length() > 50 * 1024;
+
+      if (isCached) {
+        try {
           debugPrint(
             '[AudioPlayer] Cache HIT: Playing directly from local storage (Zero Network).',
           );
           audioSource = AudioSource.file(cacheFile.path, tag: mediaItem);
-        } else {
+          final duration = await player.setAudioSource(audioSource);
+          debugPrint('[AudioPlayer] Duration resolved: $duration');
+          await player.play();
+          return;
+        } catch (e) {
+          // If cached file is corrupted (e.g., from an aborted download or prior version),
+          // purge it immediately and seamlessly fallback to online streaming
           debugPrint(
-            '[AudioPlayer] Cache MISS: Streaming over standard network URI (Lockscreen compatible).',
+            '[AudioPlayer] Corrupted cache detected on playback, purging: $e',
           );
-          audioSource = AudioSource.uri(Uri.parse(track.url), tag: mediaItem);
-
-          // Background caching: stream-save concurrently without proxy overhead
-          unawaited(_cacheTrackInBackground(track.url, cacheFile));
+          if (await cacheFile.exists()) {
+            await cacheFile.delete();
+          }
         }
       }
+
+      // Stream over network with optional auth headers (fully supports guests when token is null)
+      debugPrint(
+        '[AudioPlayer] Cache MISS/Fallback: Streaming over network with headers.',
+      );
+      final token = await SecureStorageHelper.getToken();
+      final headers = <String, String>{
+        if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+        'Accept': '*/*',
+      };
+
+      audioSource = AudioSource.uri(
+        Uri.parse(track.url),
+        headers: headers,
+        tag: mediaItem,
+      );
+
+      // Start background download to cache clean copy for next time & offline seek
+      unawaited(_cacheTrackInBackground(track.url, cacheFile, token));
 
       final duration = await player.setAudioSource(audioSource);
       debugPrint('[AudioPlayer] Duration resolved: $duration');
@@ -367,23 +408,54 @@ class JustAudioPlayerService implements IAudioPlayerService {
     _scheduleIdleRelease();
   }
 
-  /// Silently caches the audio file in the background without localhost proxying
-  Future<void> _cacheTrackInBackground(String url, File cacheFile) async {
+  /// Silently caches the audio file in the background, validating content type and size
+  Future<void> _cacheTrackInBackground(
+    String url,
+    File cacheFile,
+    String? token,
+  ) async {
     try {
       final partFile = File('${cacheFile.path}.part');
       if (await partFile.exists()) {
         await partFile.delete();
       }
 
-      final request = await HttpClient().getUrl(Uri.parse(url));
+      final client = HttpClient();
+      final request = await client.getUrl(Uri.parse(url));
+
+      if (token != null && token.isNotEmpty) {
+        request.headers.set('Authorization', 'Bearer $token');
+      }
+      request.headers.set('Accept', '*/*');
+
       final response = await request.close();
 
-      if (response.statusCode == 200) {
+      // Guard against caching HTML error pages or non-audio responses
+      final mime = response.headers.contentType?.mimeType.toLowerCase() ?? '';
+      final isDisallowedMime = mime.contains('text') || mime.contains('html');
+
+      if (response.statusCode == 200 && !isDisallowedMime) {
         final sink = partFile.openWrite();
         await response.pipe(sink);
-        await partFile.rename(cacheFile.path);
+
+        // Verify the file is non-empty and large enough to be a genuine audio track
+        final fileSize = await partFile.length();
+        if (fileSize > 50 * 1024) {
+          await partFile.rename(cacheFile.path);
+          debugPrint(
+            '[AudioPlayer] Verified audio cache complete (${(fileSize / 1024).round()} KB): ${cacheFile.path}',
+          );
+        } else {
+          debugPrint(
+            '[AudioPlayer] Rejecting tiny audio cache payload ($fileSize bytes) to prevent corrupt playback.',
+          );
+          if (await partFile.exists()) {
+            await partFile.delete();
+          }
+        }
+      } else {
         debugPrint(
-          '[AudioPlayer] Background cache complete: ${cacheFile.path}',
+          '[AudioPlayer] Background cache skipped (Status: ${response.statusCode}, Mime: $mime)',
         );
       }
     } catch (e) {
