@@ -241,7 +241,11 @@ class JustAudioPlayerService implements IAudioPlayerService {
       final player = _ensurePlayer();
 
       debugPrint('[AudioPlayer] Loading Track with Caching: ${track.title}');
-      _emitState(_currentState.copyWith(status: AudioStatus.loading));
+      // Propagate active track ID alongside the loading status
+      _emitState(_currentState.copyWith(
+        status: AudioStatus.loading,
+        currentTrackId: track.id,
+      ));
 
       final mediaItem = MediaItem(
         id: track.id,

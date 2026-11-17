@@ -25,6 +25,11 @@ class AudioPlayerCubit extends Cubit<AudioPlaybackState> {
         state.status == AudioStatus.initial ||
         state.status == AudioStatus.completed) {
       _currentTrackId = track.id;
+      // Immediately announce the new track ID and reset positions so other cards reset to idle
+      emit(state.copyWith(
+        currentTrackId: track.id,
+        position: Duration.zero,
+      ));
       await _audioService.playTrack(track);
     } else if (state.status == AudioStatus.playing) {
       await _audioService.pause();

@@ -94,7 +94,7 @@ class StoryPlayerCard extends StatelessWidget {
                       SizedBox(height: 4.h),
 
                       // Isolated Progress Bar & Duration Counter
-                      const _AudioSliderSection(),
+                      _AudioSliderSection(audioUrl: audioUrl),
                     ],
                   ),
                 ),
@@ -103,14 +103,14 @@ class StoryPlayerCard extends StatelessWidget {
             SizedBox(height: 6.h),
 
             // 3. Status Footer text with its own granular selector
-            const _AudioStatusFooter(),
+            _AudioStatusFooter(audioUrl: audioUrl),
           ],
         ),
       );
   }
 }
 
-/// Granular Play/Pause Button widget: Rebuilds ONLY when [AudioStatus] changes.
+/// Granular Play/Pause Button widget: Rebuilds ONLY when playback status or active track changes.
 class _PlayPauseButton extends StatelessWidget {
   final String title;
   final String audioUrl;
@@ -128,11 +128,15 @@ class _PlayPauseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AudioPlayerCubit, AudioPlaybackState, AudioStatus>(
-      selector: (state) => state.status,
-      builder: (context, status) {
-        final isPlaying = status == AudioStatus.playing;
-        final isLoading = status == AudioStatus.loading;
+    return BlocBuilder<AudioPlayerCubit, AudioPlaybackState>(
+      buildWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.currentTrackId != current.currentTrackId,
+      builder: (context, state) {
+        // Confirm this specific card owns the active track before displaying playing/loading states
+        final isCurrentTrack = state.currentTrackId == audioUrl;
+        final isPlaying = isCurrentTrack && state.status == AudioStatus.playing;
+        final isLoading = isCurrentTrack && state.status == AudioStatus.loading;
 
         return InkWell(
           onTap: () {
@@ -184,7 +188,9 @@ class _PlayPauseButton extends StatelessWidget {
 
 /// Isolated Slider & Duration widget: Handles touch drag smoothly without parent re-renders.
 class _AudioSliderSection extends StatefulWidget {
-  const _AudioSliderSection();
+  final String audioUrl;
+
+  const _AudioSliderSection({required this.audioUrl});
 
   @override
   State<_AudioSliderSection> createState() => _AudioSliderSectionState();
@@ -205,25 +211,31 @@ class _AudioSliderSectionState extends State<_AudioSliderSection> {
   Widget build(BuildContext context) {
     return BlocBuilder<AudioPlayerCubit, AudioPlaybackState>(
       buildWhen: (previous, current) {
-        // Rebuild only if position, duration, or buffered position changed
-        return previous.position != current.position ||
+        // Rebuild when active track switches or during playback progression
+        return previous.currentTrackId != current.currentTrackId ||
+            previous.position != current.position ||
             previous.duration != current.duration ||
             previous.bufferedPosition != current.bufferedPosition;
       },
       builder: (context, state) {
-        final totalDurationMs = state.duration.inMilliseconds.toDouble();
+        // If another track is currently playing, this card should render in pristine idle state
+        final isCurrentTrack = state.currentTrackId == widget.audioUrl;
+        final effectivePosition = isCurrentTrack ? state.position : Duration.zero;
+        final effectiveDuration = isCurrentTrack ? state.duration : Duration.zero;
+
+        final totalDurationMs = effectiveDuration.inMilliseconds.toDouble();
         final maxSliderValue = totalDurationMs > 0 ? totalDurationMs : 1.0;
 
         final currentSliderValue = _isDragging
             ? _dragPositionMs.clamp(0.0, maxSliderValue)
-            : state.position.inMilliseconds.toDouble().clamp(
+            : effectivePosition.inMilliseconds.toDouble().clamp(
                 0.0,
                 maxSliderValue,
               );
 
         final displayDuration = _isDragging
             ? Duration(milliseconds: _dragPositionMs.toInt())
-            : state.position;
+            : effectivePosition;
 
         return Column(
           children: [
@@ -257,9 +269,11 @@ class _AudioSliderSectionState extends State<_AudioSliderSection> {
                   setState(() {
                     _isDragging = false;
                   });
-                  context.read<AudioPlayerCubit>().seek(
-                    Duration(milliseconds: value.toInt()),
-                  );
+                  if (isCurrentTrack) {
+                    context.read<AudioPlayerCubit>().seek(
+                      Duration(milliseconds: value.toInt()),
+                    );
+                  }
                 },
               ),
             ),
@@ -274,7 +288,7 @@ class _AudioSliderSectionState extends State<_AudioSliderSection> {
                   ),
                 ),
                 Text(
-                  _formatDuration(state.duration),
+                  _formatDuration(effectiveDuration),
                   style: AppFonts.ibmPlexSansArabic(
                     fontSize: 10.sp,
                     color: ColorManager.paper400,
@@ -291,18 +305,22 @@ class _AudioSliderSectionState extends State<_AudioSliderSection> {
 
 /// Status label footer: Rebuilds only when [AudioStatus] transitions or displays error message.
 class _AudioStatusFooter extends StatelessWidget {
-  const _AudioStatusFooter();
+  final String audioUrl;
+
+  const _AudioStatusFooter({required this.audioUrl});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioPlayerCubit, AudioPlaybackState>(
       buildWhen: (previous, current) =>
+          previous.currentTrackId != current.currentTrackId ||
           previous.status != current.status ||
           previous.errorMessage != current.errorMessage,
       builder: (context, state) {
-        final isPlaying = state.status == AudioStatus.playing;
-        final isLoading = state.status == AudioStatus.loading;
-        final isError = state.status == AudioStatus.error;
+        final isCurrentTrack = state.currentTrackId == audioUrl;
+        final isPlaying = isCurrentTrack && state.status == AudioStatus.playing;
+        final isLoading = isCurrentTrack && state.status == AudioStatus.loading;
+        final isError = isCurrentTrack && state.status == AudioStatus.error;
 
         String message;
         Color color;

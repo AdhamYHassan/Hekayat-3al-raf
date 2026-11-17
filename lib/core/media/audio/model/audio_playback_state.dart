@@ -4,6 +4,8 @@ enum AudioStatus { initial, loading, playing, paused, completed, error }
 
 class AudioPlaybackState extends Equatable {
   final AudioStatus status;
+  // Identifies which track is actively playing or paused so other cards don't mimic it
+  final String? currentTrackId;
   final Duration position;
   final Duration duration;
   final Duration bufferedPosition;
@@ -11,6 +13,7 @@ class AudioPlaybackState extends Equatable {
 
   const AudioPlaybackState({
     this.status = AudioStatus.initial,
+    this.currentTrackId,
     this.position = Duration.zero,
     this.duration = Duration.zero,
     this.bufferedPosition = Duration.zero,
@@ -25,6 +28,8 @@ class AudioPlaybackState extends Equatable {
 
   AudioPlaybackState copyWith({
     AudioStatus? status,
+    String? currentTrackId,
+    bool clearCurrentTrackId = false,
     Duration? position,
     Duration? duration,
     Duration? bufferedPosition,
@@ -32,6 +37,9 @@ class AudioPlaybackState extends Equatable {
   }) {
     return AudioPlaybackState(
       status: status ?? this.status,
+      currentTrackId: clearCurrentTrackId
+          ? null
+          : (currentTrackId ?? this.currentTrackId),
       position: position ?? this.position,
       duration: duration ?? this.duration,
       bufferedPosition: bufferedPosition ?? this.bufferedPosition,
@@ -42,6 +50,7 @@ class AudioPlaybackState extends Equatable {
   @override
   List<Object?> get props => [
     status,
+    currentTrackId,
     position,
     duration,
     bufferedPosition,
