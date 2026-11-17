@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/update_profile_params.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/update_profile_usecase.dart';
@@ -14,6 +15,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     this._updateProfileUseCase,
   ) : super(const ProfileInitial());
 
+  void setInitialUser(ProfileUserEntity user) {
+    emit(ProfileLoaded(user: user));
+  }
+
   Future<void> loadProfile() async {
     emit(const ProfileLoading());
     final result = await _getProfileUseCase();
@@ -26,22 +31,26 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateProfile({
-    required String name,
-    required String phone,
-    required String bio,
-    String? avatar,
+    String? name,
+    String? email,
+    String? phone,
+    String? phoneRegion,
+    String? bio,
     String? avatarFilePath,
   }) async {
     final currentState = state;
-    if (currentState is! ProfileLoaded) return;
+    final currentUser = currentState is ProfileLoaded ? currentState.user : null;
 
-    emit(currentState.copyWith(isUpdating: true));
+    if (currentState is ProfileLoaded) {
+      emit(currentState.copyWith(isUpdating: true, updateSuccessMessage: null, updateErrorMessage: null));
+    }
 
     final params = UpdateProfileParams(
       name: name,
+      email: email,
       phone: phone,
+      phoneRegion: phoneRegion,
       bio: bio,
-      avatar: avatar,
       avatarFilePath: avatarFilePath,
     );
 
@@ -54,10 +63,15 @@ class ProfileCubit extends Cubit<ProfileState> {
           updateSuccessMessage: 'تم تحديث الملف الشخصي بنجاح',
         ));
       case ApiFailure(:final failure):
-        emit(currentState.copyWith(
-          isUpdating: false,
-          updateErrorMessage: failure.message,
-        ));
+        if (currentUser != null) {
+          emit(ProfileLoaded(
+            user: currentUser,
+            isUpdating: false,
+            updateErrorMessage: failure.message,
+          ));
+        } else {
+          emit(ProfileError(failure.message));
+        }
     }
   }
 }

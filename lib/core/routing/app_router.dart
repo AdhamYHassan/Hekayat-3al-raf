@@ -12,7 +12,9 @@ import 'package:hekayat_3al_raf/features/auth/presentation/screens/forgot_passwo
 import 'package:hekayat_3al_raf/features/contact/presentation/screens/contact_us_screen.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
+import 'package:hekayat_3al_raf/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/screens/my_stories_screen.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/screens/profile_screen.dart';
@@ -157,6 +159,20 @@ class AppRouter {
             child: const ProfileScreen(),
           ),
         ),
+      ),
+      GoRoute(
+        path: Routes.editProfile,
+        pageBuilder: (context, state) {
+          final user = state.extra as ProfileUserEntity;
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: BlocProvider<ProfileCubit>(
+              create: (context) => getIt<ProfileCubit>()..setInitialUser(user),
+              child: EditProfileScreen(user: user),
+            ),
+          );
+        },
       ),
       GoRoute(
         path: Routes.myStories,

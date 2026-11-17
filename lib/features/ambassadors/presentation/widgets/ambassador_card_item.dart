@@ -24,62 +24,83 @@ class AmbassadorCardItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(16.r),
           child: Container(
-            height: 192.h,
             decoration: BoxDecoration(
-              color: ColorManager.primaryLight,
-              borderRadius: BorderRadius.circular(12.r),
+              color: ColorManager.primaryLight.withValues(alpha: 0.25),
+              borderRadius: BorderRadius.circular(16.r),
               border: Border.all(
-                color: ColorManager.gold.withValues(alpha: 0.12),
+                color: ColorManager.gold.withValues(alpha: 0.15),
                 width: 1,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.35),
+                  blurRadius: 12,
+                  offset: const Offset(0, 5),
+                ),
+              ],
             ),
             clipBehavior: Clip.antiAlias,
             child: Stack(
-              fit: StackFit.expand,
               children: [
-                // Background Cover Image with matched decoding dimensions
+                // 1. Natural Height Image (Displays 100% of the image without forcing or stretching)
                 AppCachedNetworkImage(
                   imageUrl: ambassador.imageUrl,
-                  fit: BoxFit.cover,
-                  alignment: const Alignment(0.0, -0.56),
-                  memCacheWidth: 600,
-                  memCacheHeight: 480,
+                  fit: BoxFit.fitWidth,
+                  width: double.infinity,
+                  memCacheWidth: 800,
                 ),
 
-                // Dark gradient overlay
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        ColorManager.primaryDark.withValues(alpha: 0.4),
-                        ColorManager.primaryDark.withValues(alpha: 0.95),
-                      ],
-                      stops: const [0.0, 0.45, 1.0],
+                // 2. Dark vignette overlay at the bottom for typography legibility
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: 120.h,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          ColorManager.primaryDark.withValues(alpha: 0.65),
+                          ColorManager.primaryDark.withValues(alpha: 0.95),
+                        ],
+                        stops: const [0.0, 0.5, 1.0],
+                      ),
                     ),
                   ),
                 ),
 
-                // Chevron icon indicating navigation
+                // 3. Chevron navigation pill
                 PositionedDirectional(
-                  start: 12.w,
-                  top: 12.h,
-                  child: Icon(
-                    context.forwardChevron,
-                    color: ColorManager.gold.withValues(alpha: 0.6),
-                    size: 20.sp,
+                  start: 14.w,
+                  top: 14.h,
+                  child: Container(
+                    padding: EdgeInsets.all(6.r),
+                    decoration: BoxDecoration(
+                      color: ColorManager.primaryDark.withValues(alpha: 0.55),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: ColorManager.gold.withValues(alpha: 0.3),
+                        width: 0.8,
+                      ),
+                    ),
+                    child: Icon(
+                      context.forwardChevron,
+                      color: ColorManager.goldLight,
+                      size: 16.sp,
+                    ),
                   ),
                 ),
 
-                // Content Info at the bottom
+                // 4. Content Info positioned gracefully over the bottom gradient
                 Positioned(
-                  bottom: 12.h,
-                  left: 14.w,
-                  right: 14.w,
+                  bottom: 14.h,
+                  left: 16.w,
+                  right: 16.w,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -88,7 +109,7 @@ class AmbassadorCardItem extends StatelessWidget {
                         ambassador.name,
                         style: AppFonts.alexandria(
                           color: ColorManager.paper100,
-                          fontSize: 17.sp,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           height: 1.2,
                         ),
@@ -96,28 +117,15 @@ class AmbassadorCardItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (ambassador.shortDescription.isNotEmpty) ...[
-                        SizedBox(height: 2.h),
+                        SizedBox(height: 3.h),
                         Text(
                           ambassador.shortDescription,
                           style: AppFonts.ibmPlexSansArabic(
                             color: ColorManager.goldLight,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 12.5.sp,
+                            fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                      if (ambassador.description.isNotEmpty) ...[
-                        SizedBox(height: 4.h),
-                        Text(
-                          ambassador.description,
-                          style: AppFonts.ibmPlexSansArabic(
-                            color: ColorManager.paper200.withValues(alpha: 0.7),
-                            fontSize: 12.sp,
-                            height: 1.4,
-                          ),
-                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
@@ -137,7 +145,7 @@ class AmbassadorCardItem extends StatelessWidget {
                               ),
                               style: AppFonts.ibmPlexSansArabic(
                                 color: ColorManager.paper400,
-                                fontSize: 10.sp,
+                                fontSize: 10.5.sp,
                               ),
                             ),
                           ],

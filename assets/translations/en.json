@@ -23,7 +23,18 @@
     "loading": "Loading...",
     "no_data": "No data available",
     "see_all": "See All",
-    "close": "Close"
+    "close": "Close",
+    "unknown_error": "An unexpected error occurred. Please try again.",
+    "something_went_wrong": "Something went wrong. Please try again later.",
+    "connection_timeout": "Connection timeout with the server.",
+    "send_timeout": "Send timeout in sending data.",
+    "receive_timeout": "Receive timeout from server.",
+    "no_internet_connection": "No internet connection.",
+    "server_error": "Server error. Please try again later.",
+    "bad_response_format": "Invalid response format.",
+    "request_cancelled": "Request was cancelled.",
+    "save_changes": "Save Changes",
+    "saving": "Saving..."
   },
   "auth": {
     "login": "Login",
@@ -84,7 +95,10 @@
     "agree_to_prefix": "I agree to the ",
     "and_conjunction": " and ",
     "already_have_account_prompt": "Already have an account? ",
-    "login_action": "Log In"
+    "login_action": "Log In",
+    "change_avatar": "Change Profile Picture",
+    "full_name_hint": "Enter your full name",
+    "email_hint": "name@example.com"
   },
   "stories": {
     "title": "Stories",
@@ -184,6 +198,7 @@
     "name_label": "Full Name",
     "phone_label": "Phone Number",
     "bio_label": "Personal Bio",
+    "bio_hint": "Write a short bio about yourself and your interests...",
     "menu": "Menu",
     "edit_profile": "Edit Profile",
     "edit_profile_sub": "Photo, name, and email",
@@ -240,6 +255,9 @@
     "page_count": "Page {current} of {total}",
     "open_fullscreen": "View Fullscreen",
     "story_document": "Story Document",
+    "word_document": "Word Document",
+    "open_in_external_app": "Open & Read Document",
+    "open_in_external_app_hint": "For the most authentic formatting and layout, open this document directly in your device's Office or Document reader.",
     "share_document": "Share Document",
     "save_to_device": "Save to Device"
   },

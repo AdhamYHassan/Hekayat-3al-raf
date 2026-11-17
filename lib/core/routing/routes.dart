@@ -7,6 +7,7 @@ class Routes {
   static const String contactUs = '/contact-us';
   static const String webView = '/web-view';
   static const String profile = '/profile';
+  static const String editProfile = '/edit-profile';
   static const String myStories = '/my-stories';
   static const String login = '/login';
   static const String register = '/register';

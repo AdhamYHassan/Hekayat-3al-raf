@@ -42,14 +42,15 @@ class AmbassadorDetailsScreen extends StatelessWidget {
             // Handle Error Messages
             if (state.errorMessage != null) {
               final error = state.errorMessage!;
-              final is401 = error.contains('401') ||
+              final isAuthRequired = error == 'auth.login_required' ||
+                  error.contains('401') ||
                   error.contains('بيانات الدخول') ||
                   error.contains('لم يتم تزويد') ||
                   error.contains('Given token not valid') ||
                   error.toLowerCase().contains('unauthorized') ||
                   error.toLowerCase().contains('authentication credentials');
 
-              if (is401) {
+              if (isAuthRequired) {
                 AppSnackBar.showAuthRequired(
                   context,
                   message: 'auth.login_required'.tr(),
@@ -57,7 +58,7 @@ class AmbassadorDetailsScreen extends StatelessWidget {
                 );
               } else if (state.details != null) {
                 // Inline action error (e.g. question submit failed)
-                AppSnackBar.showError(context, message: error);
+                AppSnackBar.showError(context, message: error.tr());
               }
             }
           },

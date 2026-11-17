@@ -9,40 +9,51 @@ class AmbassadorsListCubit extends Cubit<AmbassadorsListState> {
   static const int _pageSize = 10;
 
   AmbassadorsListCubit(this._getAmbassadorsListUseCase)
-      : super(const AmbassadorsListState());
+    : super(const AmbassadorsListState());
 
   /// Loads the initial first page (resetting offset to 0)
   Future<void> loadAmbassadors() async {
-    emit(state.copyWith(
-      status: AmbassadorsListStatus.loading,
-      offset: 0,
-      ambassadors: [],
-      hasMore: true,
-      errorMessage: null,
-    ));
+    emit(
+      state.copyWith(
+        status: AmbassadorsListStatus.loading,
+        offset: 0,
+        ambassadors: [],
+        hasMore: true,
+        errorMessage: null,
+      ),
+    );
 
-    final result = await _getAmbassadorsListUseCase(limit: _pageSize, offset: 0);
+    final result = await _getAmbassadorsListUseCase(
+      limit: _pageSize,
+      offset: 0,
+    );
 
     switch (result) {
       case ApiSuccess<PaginatedAmbassadorsEntity>(:final data):
-        emit(state.copyWith(
-          status: AmbassadorsListStatus.success,
-          ambassadors: data.ambassadors,
-          hasMore: data.hasMore,
-          totalCount: data.count,
-          offset: data.ambassadors.length,
-        ));
+        emit(
+          state.copyWith(
+            status: AmbassadorsListStatus.success,
+            ambassadors: data.ambassadors,
+            hasMore: data.hasMore,
+            totalCount: data.count,
+            offset: data.ambassadors.length,
+          ),
+        );
       case ApiFailure<PaginatedAmbassadorsEntity>(:final failure):
-        emit(state.copyWith(
-          status: AmbassadorsListStatus.failure,
-          errorMessage: failure.message,
-        ));
+        emit(
+          state.copyWith(
+            status: AmbassadorsListStatus.failure,
+            errorMessage: failure.message,
+          ),
+        );
     }
   }
 
   /// Fetches subsequent pages without resetting existing list
   Future<void> loadMoreAmbassadors() async {
-    if (state.isLoadingMore || !state.hasMore || state.status == AmbassadorsListStatus.loading) {
+    if (state.isLoadingMore ||
+        !state.hasMore ||
+        state.status == AmbassadorsListStatus.loading) {
       return;
     }
 
@@ -56,19 +67,20 @@ class AmbassadorsListCubit extends Cubit<AmbassadorsListState> {
     switch (result) {
       case ApiSuccess<PaginatedAmbassadorsEntity>(:final data):
         final combined = [...state.ambassadors, ...data.ambassadors];
-        emit(state.copyWith(
-          status: AmbassadorsListStatus.success,
-          ambassadors: combined,
-          hasMore: data.hasMore,
-          totalCount: data.count,
-          offset: state.offset + data.ambassadors.length,
-          isLoadingMore: false,
-        ));
+        emit(
+          state.copyWith(
+            status: AmbassadorsListStatus.success,
+            ambassadors: combined,
+            hasMore: data.hasMore,
+            totalCount: data.count,
+            offset: state.offset + data.ambassadors.length,
+            isLoadingMore: false,
+          ),
+        );
       case ApiFailure<PaginatedAmbassadorsEntity>(:final failure):
-        emit(state.copyWith(
-          isLoadingMore: false,
-          errorMessage: failure.message,
-        ));
+        emit(
+          state.copyWith(isLoadingMore: false, errorMessage: failure.message),
+        );
     }
   }
 }

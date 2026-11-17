@@ -23,7 +23,18 @@
     "loading": "جاري التحميل...",
     "no_data": "لا توجد بيانات",
     "see_all": "عرض الكل",
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "unknown_error": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
+    "something_went_wrong": "حدث خطأ ما. يرجى المحاولة لاحقاً.",
+    "connection_timeout": "انتهت مهلة الاتصال بالخادم.",
+    "send_timeout": "انتهت مهلة إرسال البيانات.",
+    "receive_timeout": "انتهت مهلة استلام البيانات من الخادم.",
+    "no_internet_connection": "لا يوجد اتصال بالإنترنت.",
+    "server_error": "حدث خطأ في الخادم. يرجى المحاولة لاحقاً.",
+    "bad_response_format": "تنسيق الاستجابة غير صالح.",
+    "request_cancelled": "تم إلغاء الطلب.",
+    "save_changes": "حفظ التغييرات",
+    "saving": "جاري الحفظ..."
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -84,7 +95,10 @@
     "agree_to_prefix": "أوافق على ",
     "and_conjunction": " و ",
     "already_have_account_prompt": "عندك حساب بالفعل؟ ",
-    "login_action": "سجل دخولك"
+    "login_action": "سجل دخولك",
+    "change_avatar": "تغيير الصورة الشخصية",
+    "full_name_hint": "اكتب اسمك الكامل",
+    "email_hint": "name@example.com"
   },
   "stories": {
     "title": "الحكايات",
@@ -187,6 +201,7 @@
     "name_label": "الاسم الكامل",
     "phone_label": "رقم الهاتف",
     "bio_label": "النبذة الشخصية (Bio)",
+    "bio_hint": "اكتب نبذة مختصرة عنك وعن اهتماماتك...",
     "menu": "القائمة",
     "edit_profile": "تعديل الملف الشخصي",
     "edit_profile_sub": "الصورة، الاسم، والبريد",
@@ -243,6 +258,9 @@
     "page_count": "صفحة {current} من {total}",
     "open_fullscreen": "عرض بملء الشاشة",
     "story_document": "مستند الحكاية",
+    "word_document": "مستند Word",
+    "open_in_external_app": "فتح وقراءة المستند",
+    "open_in_external_app_hint": "للحصول على أفضل تجربة قراءة وتنسيق أصلي للمستند، يمكنك فتحه عبر تطبيقات الأوفيس المثبتة على جهازك.",
     "share_document": "مشاركة المستند",
     "save_to_device": "حفظ في الجهاز"
   },

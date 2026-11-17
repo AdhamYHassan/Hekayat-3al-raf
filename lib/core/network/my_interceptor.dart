@@ -38,21 +38,27 @@ class MyInterceptor extends Interceptor {
     options.baseUrl = ApiEndpoints.getBaseUrl(currentLang);
     options.headers['Accept-Language'] = currentLang;
 
-    // 1. Device ID header injection
-    try {
-      final String? deviceId = await DeviceHelper.getDeviceId();
-      if (deviceId != null && deviceId.isNotEmpty) {
-        options.headers['X-Device-Id'] = deviceId;
-      }
-    } catch (_) {}
-
-    // 2. Authorization header injection
+    // 1. Authorization header injection
     final bool isExcluded = _excludedPaths.any((p) => options.path.contains(p));
+    String? token;
     if (!isExcluded) {
-      final String? token = await SecureStorageHelper.getAccessToken();
+      token = await SecureStorageHelper.getAccessToken();
       if (token != null && token.trim().isNotEmpty) {
         options.headers['Authorization'] = 'Bearer ${token.trim()}';
       }
+    }
+
+    // 2. Device ID header injection (only sent for guest/unauthenticated sessions)
+    final bool hasValidToken = token != null && token.trim().isNotEmpty;
+    if (!hasValidToken) {
+      try {
+        final String? deviceId = await DeviceHelper.getDeviceId();
+        if (deviceId != null && deviceId.isNotEmpty) {
+          options.headers['X-Device-Id'] = deviceId;
+        }
+      } catch (_) {}
+    } else {
+      options.headers.remove('X-Device-Id');
     }
 
     // 3. Digit normalization

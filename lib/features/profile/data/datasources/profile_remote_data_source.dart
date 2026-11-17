@@ -27,16 +27,21 @@ class ProfileRemoteDataSource implements IProfileRemoteDataSource {
 
     if (params.avatarFilePath != null && params.avatarFilePath!.isNotEmpty) {
       final fileName = params.avatarFilePath!.split('/').last;
-      final formData = FormData.fromMap({
-        'name': params.name,
-        'phone': params.phone,
-        'phone_region': params.phoneRegion,
-        'bio': params.bio,
+      final map = <String, dynamic>{
         'avatar': await MultipartFile.fromFile(
           params.avatarFilePath!,
           filename: fileName,
         ),
-      });
+      };
+      if (params.name != null) map['name'] = params.name;
+      if (params.phone != null) {
+        map['phone'] = params.phone;
+        if (params.phoneRegion != null)
+          map['phone_region'] = params.phoneRegion;
+      }
+      if (params.bio != null) map['bio'] = params.bio;
+
+      final formData = FormData.fromMap(map);
       requestData = formData;
     } else {
       requestData = params.toJson();
@@ -74,4 +79,3 @@ class ProfileRemoteDataSource implements IProfileRemoteDataSource {
     );
   }
 }
-

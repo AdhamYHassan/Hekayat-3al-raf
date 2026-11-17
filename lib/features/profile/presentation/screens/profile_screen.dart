@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,8 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:hekayat_3al_raf/core/helpers/arabic_to_english_digits_formatter.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
@@ -180,25 +177,6 @@ class _ProfileContent extends StatelessWidget {
     }
   }
 
-  void _showEditProfileSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: ColorManager.primaryDark,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-        side: BorderSide(
-          color: ColorManager.gold.withValues(alpha: 0.2),
-          width: 1,
-        ),
-      ),
-      builder: (sheetContext) => BlocProvider.value(
-        value: context.read<ProfileCubit>(),
-        child: _EditProfileModalSheet(user: user),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final displayName = user.displayName.isNotEmpty
@@ -306,7 +284,12 @@ class _ProfileContent extends StatelessWidget {
                     // Avatar with Edit Badge
                     Center(
                       child: GestureDetector(
-                        onTap: () => _showEditProfileSheet(context),
+                        onTap: () async {
+                          await context.push(Routes.editProfile, extra: user);
+                          if (context.mounted) {
+                            context.read<ProfileCubit>().loadProfile();
+                          }
+                        },
                         child: Stack(
                           children: [
                             Container(
@@ -459,7 +442,12 @@ class _ProfileContent extends StatelessWidget {
                   icon: CupertinoIcons.pencil,
                   title: 'profile.edit_profile'.tr(),
                   subtitle: 'profile.edit_profile_sub'.tr(),
-                  onTap: () => _showEditProfileSheet(context),
+                  onTap: () async {
+                    await context.push(Routes.editProfile, extra: user);
+                    if (context.mounted) {
+                      context.read<ProfileCubit>().loadProfile();
+                    }
+                  },
                 ),
                 SizedBox(height: 8.h),
                 _buildMenuItemCard(
@@ -690,299 +678,3 @@ class _ProfileContent extends StatelessWidget {
   }
 }
 
-class _EditProfileModalSheet extends StatefulWidget {
-  final ProfileUserEntity user;
-
-  const _EditProfileModalSheet({required this.user});
-
-  @override
-  State<_EditProfileModalSheet> createState() => _EditProfileModalSheetState();
-}
-
-class _EditProfileModalSheetState extends State<_EditProfileModalSheet> {
-  late final TextEditingController _nameController;
-  late final TextEditingController _phoneController;
-  late final TextEditingController _bioController;
-  XFile? _selectedAvatar;
-  final ImagePicker _picker = ImagePicker();
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(
-      text: widget.user.displayName.isNotEmpty
-          ? widget.user.displayName
-          : widget.user.name,
-    );
-    _phoneController = TextEditingController(text: widget.user.phone);
-    _bioController = TextEditingController(text: widget.user.bio);
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _phoneController.dispose();
-    _bioController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickAvatar() async {
-    try {
-      final picked = await _picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1024,
-        maxHeight: 1024,
-        imageQuality: 85,
-      );
-      if (picked != null && mounted) {
-        setState(() {
-          _selectedAvatar = picked;
-        });
-      }
-    } catch (_) {}
-  }
-
-  void _onSave() {
-    final name = _nameController.text.trim();
-    final phone = _phoneController.text.trim();
-    final bio = _bioController.text.trim();
-
-    if (name.isEmpty) {
-      AppSnackBar.showError(
-        context,
-        message: 'validation.author_required'.tr(),
-      );
-      return;
-    }
-
-    Navigator.of(context).pop();
-    context.read<ProfileCubit>().updateProfile(
-      name: name,
-      phone: phone,
-      bio: bio,
-      avatar: widget.user.avatar,
-      avatarFilePath: _selectedAvatar?.path,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 20.w,
-        right: 20.w,
-        top: 20.h,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24.h,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'profile.edit_profile'.tr(),
-                style: AppFonts.alexandria(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorManager.paper100,
-                ),
-              ),
-              IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: Icon(
-                  CupertinoIcons.xmark_circle_fill,
-                  color: ColorManager.paper400,
-                  size: 24.sp,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12.h),
-
-          // Avatar picker preview
-          Center(
-            child: GestureDetector(
-              onTap: _pickAvatar,
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  Container(
-                    width: 76.r,
-                    height: 76.r,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: ColorManager.gold, width: 1.5),
-                    ),
-                    child: ClipOval(
-                      child: _selectedAvatar != null
-                          ? Image.file(
-                              File(_selectedAvatar!.path),
-                              fit: BoxFit.cover,
-                            )
-                          : widget.user.avatar != null &&
-                                widget.user.avatar!.isNotEmpty
-                          ? AppCachedNetworkImage(
-                              imageUrl: widget.user.avatar!,
-                              width: 76.r,
-                              height: 76.r,
-                              fit: BoxFit.cover,
-                            )
-                          : Container(
-                              color: ColorManager.primaryLight,
-                              child: Icon(
-                                CupertinoIcons.person_fill,
-                                size: 40.sp,
-                                color: ColorManager.gold,
-                              ),
-                            ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(5.r),
-                    decoration: BoxDecoration(
-                      color: ColorManager.gold,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: ColorManager.primaryDark,
-                        width: 2,
-                      ),
-                    ),
-                    child: Icon(
-                      CupertinoIcons.camera_fill,
-                      size: 14.sp,
-                      color: ColorManager.primaryDark,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 16.h),
-
-          // Name field
-          Text(
-            'profile.name_label'.tr(),
-            style: AppFonts.ibmPlexSansArabic(
-              fontSize: 12.sp,
-              color: ColorManager.paper300,
-            ),
-          ),
-          SizedBox(height: 6.h),
-          _buildTextField(
-            controller: _nameController,
-            hint: 'أدخل اسمك الكامل',
-          ),
-          SizedBox(height: 12.h),
-
-          // Phone field
-          Text(
-            'profile.phone_label'.tr(),
-            style: AppFonts.ibmPlexSansArabic(
-              fontSize: 12.sp,
-              color: ColorManager.paper300,
-            ),
-          ),
-          SizedBox(height: 6.h),
-          _buildTextField(
-            controller: _phoneController,
-            hint: '+201000000000',
-            keyboardType: TextInputType.phone,
-            isLtr: true,
-          ),
-          SizedBox(height: 12.h),
-
-          // Bio field
-          Text(
-            'profile.bio_label'.tr(),
-            style: AppFonts.ibmPlexSansArabic(
-              fontSize: 12.sp,
-              color: ColorManager.paper300,
-            ),
-          ),
-          SizedBox(height: 6.h),
-          _buildTextField(
-            controller: _bioController,
-            hint: 'اكتب نبذة مختصرة عنك...',
-            maxLines: 3,
-          ),
-          SizedBox(height: 20.h),
-
-          // Submit button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _onSave,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ColorManager.gold,
-                padding: EdgeInsets.symmetric(vertical: 12.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24.r),
-                ),
-              ),
-              child: Text(
-                'profile.save_changes'.tr(),
-                style: AppFonts.alexandria(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorManager.primaryDark,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    TextInputType keyboardType = TextInputType.text,
-    int maxLines = 1,
-    bool isLtr = false,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      inputFormatters: [
-        if (keyboardType == TextInputType.phone ||
-            keyboardType == TextInputType.number)
-          const ArabicToEnglishDigitsFormatter(),
-      ],
-      maxLines: maxLines,
-      style: AppFonts.ibmPlexSansArabic(
-        fontSize: 13.5.sp,
-        color: ColorManager.paper100,
-      ),
-      textDirection: isLtr ? ui.TextDirection.ltr : null,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: AppFonts.ibmPlexSansArabic(
-          fontSize: 13.sp,
-          color: ColorManager.paper400.withValues(alpha: 0.5),
-        ),
-        filled: true,
-        fillColor: ColorManager.primaryLight.withValues(alpha: 0.4),
-        contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(
-            color: ColorManager.gold.withValues(alpha: 0.15),
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(
-            color: ColorManager.gold.withValues(alpha: 0.15),
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: ColorManager.gold),
-        ),
-      ),
-    );
-  }
-}
