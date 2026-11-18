@@ -32,6 +32,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _emailController;
+  late final TextEditingController _currentPasswordController;
   late final TextEditingController _phoneController;
   late final TextEditingController _bioController;
 
@@ -39,6 +40,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final ImagePicker _picker = ImagePicker();
 
   String? _nameError;
+  String? _emailError;
+  String? _currentPasswordError;
+  bool _isPasswordObscured = true;
 
   @override
   void initState() {
@@ -49,6 +53,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           : widget.user.name,
     );
     _emailController = TextEditingController(text: widget.user.email);
+    _currentPasswordController = TextEditingController();
     _phoneController = TextEditingController(text: widget.user.phone);
     _bioController = TextEditingController(text: widget.user.bio);
   }
@@ -57,6 +62,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _currentPasswordController.dispose();
     _phoneController.dispose();
     _bioController.dispose();
     super.dispose();
@@ -83,12 +89,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _validateForm() {
     bool isValid = true;
     final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final isEmailChanged = email != widget.user.email;
+    final isPhoneChanged = _phoneController.text.trim() != widget.user.phone;
+    final currentPassword = _currentPasswordController.text;
 
     if (name.isEmpty) {
       setState(() => _nameError = 'auth.name_required'.tr());
       isValid = false;
     } else {
       setState(() => _nameError = null);
+    }
+
+    if (email.isEmpty) {
+      setState(() => _emailError = 'auth.email_required'.tr());
+      isValid = false;
+    } else {
+      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+      if (!emailRegex.hasMatch(email)) {
+        setState(() => _emailError = 'auth.invalid_email_format'.tr());
+        isValid = false;
+      } else {
+        setState(() => _emailError = null);
+      }
+    }
+
+    if ((isEmailChanged || isPhoneChanged) && currentPassword.isEmpty) {
+      setState(() => _currentPasswordError = 'auth.current_password_required'.tr());
+      isValid = false;
+    } else {
+      setState(() => _currentPasswordError = null);
     }
 
     return isValid;
@@ -101,19 +131,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ? widget.user.displayName
         : widget.user.name;
     final currentName = _nameController.text.trim();
+    final currentEmail = _emailController.text.trim();
+    final currentPassword = _currentPasswordController.text;
     final currentPhone = _phoneController.text.trim();
     final currentBio = _bioController.text.trim();
 
     // Only send fields that actually changed (Partial Update / PATCH semantic)
     final String? nameToSend = currentName != initialName ? currentName : null;
+    final String? emailToSend = currentEmail != widget.user.email ? currentEmail : null;
     final String? phoneToSend = currentPhone != widget.user.phone
         ? currentPhone
+        : null;
+    final bool isSensitiveDataChanged = emailToSend != null || phoneToSend != null;
+    final String? currentPasswordToSend = isSensitiveDataChanged && currentPassword.isNotEmpty
+        ? currentPassword
         : null;
     final String? bioToSend = currentBio != widget.user.bio ? currentBio : null;
     final String? avatarPathToSend = _selectedAvatar?.path;
 
     // If nothing changed at all, just close screen
     if (nameToSend == null &&
+        emailToSend == null &&
         phoneToSend == null &&
         bioToSend == null &&
         avatarPathToSend == null) {
@@ -123,6 +161,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     context.read<ProfileCubit>().updateProfile(
       name: nameToSend,
+      email: emailToSend,
+      currentPassword: currentPasswordToSend,
       phone: phoneToSend,
       phoneRegion: phoneToSend != null ? 'EG' : null,
       bio: bioToSend,
@@ -298,14 +338,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   SizedBox(height: 18.h),
 
-                  // 3. Email (Read-Only as mandated by backend security policy)
-                  _buildFieldLabel('auth.email'.tr()),
+                  // 3. Email (Editable)
+                  _buildFieldLabel('auth.email'.tr(), isRequired: true),
                   _buildTextField(
                     controller: _emailController,
                     hint: 'auth.email_hint'.tr(),
                     icon: CupertinoIcons.mail,
                     keyboardType: TextInputType.emailAddress,
-                    enabled: false,
+                    errorMessage: _emailError,
+                    enabled: !isUpdating,
+                    onChanged: (val) {
+                      if (_emailError != null) {
+                        setState(() => _emailError = null);
+                      }
+                      // Rebuild to toggle password field visibility if email matches original or not
+                      setState(() {});
+                    },
                   ),
                   SizedBox(height: 18.h),
 
@@ -317,8 +365,49 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     icon: CupertinoIcons.phone,
                     keyboardType: TextInputType.phone,
                     enabled: !isUpdating,
+                    onChanged: (val) {
+                      // Rebuild to toggle password field visibility if phone is changed
+                      setState(() {});
+                    },
                   ),
                   SizedBox(height: 18.h),
+
+                  // 4.1 Current Password (Revealed when email OR phone is modified)
+                  if (_emailController.text.trim() != widget.user.email ||
+                      _phoneController.text.trim() != widget.user.phone) ...[
+                    _buildFieldLabel(
+                      'auth.current_password'.tr(),
+                      isRequired: true,
+                    ),
+                    _buildTextField(
+                      controller: _currentPasswordController,
+                      hint: 'auth.current_password_hint'.tr(),
+                      icon: CupertinoIcons.lock,
+                      obscureText: _isPasswordObscured,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordObscured
+                              ? CupertinoIcons.eye_slash
+                              : CupertinoIcons.eye,
+                          color: ColorManager.paper400,
+                          size: 18.sp,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordObscured = !_isPasswordObscured;
+                          });
+                        },
+                      ),
+                      errorMessage: _currentPasswordError,
+                      enabled: !isUpdating,
+                      onChanged: (val) {
+                        if (_currentPasswordError != null && val.isNotEmpty) {
+                          setState(() => _currentPasswordError = null);
+                        }
+                      },
+                    ),
+                    SizedBox(height: 18.h),
+                  ],
 
                   // 5. Bio
                   _buildFieldLabel('profile.bio_label'.tr()),
@@ -414,6 +503,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     required IconData icon,
     int maxLines = 1,
     TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+    Widget? suffixIcon,
     String? errorMessage,
     bool enabled = true,
     ValueChanged<String>? onChanged,
@@ -427,6 +518,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           controller: controller,
           maxLines: maxLines,
           enabled: enabled,
+          obscureText: obscureText,
           keyboardType: keyboardType,
           inputFormatters: [
             if (keyboardType == TextInputType.phone ||
@@ -449,6 +541,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     size: 18.sp,
                   )
                 : null,
+            suffixIcon: suffixIcon,
             hintText: hint,
             hintStyle: AppFonts.ibmPlexSansArabic(
               fontSize: 12.5.sp,

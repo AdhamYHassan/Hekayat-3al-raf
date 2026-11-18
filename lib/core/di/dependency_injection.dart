@@ -2,10 +2,12 @@ import 'package:hekayat_3al_raf/features/profile/data/datasources/i_profile_remo
 import 'package:hekayat_3al_raf/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/repositories/i_profile_repository.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_my_messages_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_my_stories_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/delete_account_usecase.dart';
+import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_messages_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_cubit.dart';
 import 'package:dio/dio.dart';
@@ -305,6 +307,9 @@ void setupDependencyInjection() {
   getIt.registerLazySingleton<GetMyStoriesUseCase>(
     () => GetMyStoriesUseCase(getIt<IProfileRepository>()),
   );
+  getIt.registerLazySingleton<GetMyMessagesUseCase>(
+    () => GetMyMessagesUseCase(getIt<IProfileRepository>()),
+  );
   getIt.registerLazySingleton<DeleteAccountUseCase>(
     () => DeleteAccountUseCase(getIt<IProfileRepository>()),
   );
@@ -316,6 +321,9 @@ void setupDependencyInjection() {
   );
   getIt.registerFactory<MyStoriesCubit>(
     () => MyStoriesCubit(getIt<GetMyStoriesUseCase>()),
+  );
+  getIt.registerFactory<MyMessagesCubit>(
+    () => MyMessagesCubit(getIt<GetMyMessagesUseCase>()),
   );
 
   // ---------------------------------------------------------------------------

@@ -5,6 +5,7 @@ import 'package:hekayat_3al_raf/features/profile/data/datasources/i_profile_remo
 import 'package:hekayat_3al_raf/features/profile/domain/entities/my_story_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/update_profile_params.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/entities/user_message_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/repositories/i_profile_repository.dart';
 
 class ProfileRepositoryImpl implements IProfileRepository {
@@ -41,6 +42,16 @@ class ProfileRepositoryImpl implements IProfileRepository {
     try {
       final stories = await _remoteDataSource.getMyStories();
       return ApiSuccess(stories);
+    } catch (error) {
+      return ApiFailure(NetworkExceptions.getFailure(error));
+    }
+  }
+
+  @override
+  Future<ApiResult<List<UserMessageEntity>>> getMyMessages() async {
+    try {
+      final messages = await _remoteDataSource.getMyMessages();
+      return ApiSuccess(messages);
     } catch (error) {
       return ApiFailure(NetworkExceptions.getFailure(error));
     }

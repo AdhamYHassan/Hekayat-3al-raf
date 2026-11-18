@@ -97,6 +97,9 @@
     "already_have_account_prompt": "Already have an account? ",
     "login_action": "Log In",
     "change_avatar": "Change Profile Picture",
+    "current_password": "Current Password",
+    "current_password_hint": "Enter your current password to confirm changes",
+    "current_password_required": "Please enter your current password to confirm changes",
     "full_name_hint": "Enter your full name",
     "email_hint": "name@example.com"
   },
@@ -204,8 +207,8 @@
     "edit_profile_sub": "Photo, name, and email",
     "my_stories": "My Stories",
     "my_stories_sub": "Stories you submitted",
-    "my_questions": "My Questions",
-    "my_questions_sub": "Your questions to ambassadors",
+    "my_messages": "My Messages",
+    "my_messages_sub": "Inquiries, messages, and replies",
     "settings": "Settings",
     "settings_sub": "Language and preferences",
     "logout": "Log Out",
@@ -222,6 +225,21 @@
       "tell_new_story": "Tell a New Story",
       "empty_title": "No stories yet",
       "empty_subtitle": "Every experience deserves to be heard. Tell your story and share your memories."
+    },
+    "my_messages_screen": {
+      "back_to_profile": "Back to Profile",
+      "kicker": "My Messages",
+      "title": "Messages & Inquiries",
+      "stat_all": "All",
+      "stat_replied": "Replied",
+      "stat_pending": "Pending",
+      "send_message": "Send New Message",
+      "empty_title": "No messages yet",
+      "empty_subtitle": "When you submit an inquiry or message, it will appear here along with replies once received.",
+      "admin_reply": "Administration Reply:",
+      "no_reply_yet": "Awaiting review and reply from the team.",
+      "sent_at": "Sent at: {}",
+      "replied_at": "Replied at: {}"
     }
   },
   "validation": {

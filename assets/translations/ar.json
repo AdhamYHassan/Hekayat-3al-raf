@@ -97,6 +97,9 @@
     "already_have_account_prompt": "عندك حساب بالفعل؟ ",
     "login_action": "سجل دخولك",
     "change_avatar": "تغيير الصورة الشخصية",
+    "current_password": "كلمة المرور الحالية",
+    "current_password_hint": "أدخل كلمة المرور الحالية لتأكيد التغيير",
+    "current_password_required": "يرجى إدخال كلمة المرور الحالية لتأكيد التعديل",
     "full_name_hint": "اكتب اسمك الكامل",
     "email_hint": "name@example.com"
   },
@@ -207,8 +210,8 @@
     "edit_profile_sub": "الصورة، الاسم، والبريد",
     "my_stories": "حكاياتي",
     "my_stories_sub": "الحكايات اللي بعتها",
-    "my_questions": "أسئلتي",
-    "my_questions_sub": "أسئلتك للسفراء",
+    "my_messages": "رسايلي",
+    "my_messages_sub": "الرسائل والاستفسارات والردود",
     "settings": "الإعدادات",
     "settings_sub": "اللغة والتفضيلات",
     "logout": "تسجيل الخروج",
@@ -225,6 +228,21 @@
       "tell_new_story": "احكي حكاية جديدة",
       "empty_title": "لسه مفيش حكايات",
       "empty_subtitle": "كل تجربة تستحق أن تُسمع. احكي حكايتك وشاركنا ذكرياتك."
+    },
+    "my_messages_screen": {
+      "back_to_profile": "رجوع للملف الشخصي",
+      "kicker": "رسايلي",
+      "title": "الرسائل والاستفسارات",
+      "stat_all": "الكل",
+      "stat_replied": "تم الرد",
+      "stat_pending": "قيد الانتظار",
+      "send_message": "إرسال رسالة جديدة",
+      "empty_title": "لا توجد رسائل بعد",
+      "empty_subtitle": "عند إرسال أي استفسار أو رسالة للمنصة، ستظهر هنا مع الردود فور وصولها.",
+      "admin_reply": "رد الإدارة:",
+      "no_reply_yet": "في انتظار المراجعة والرد من الفريق.",
+      "sent_at": "تاريخ الإرسال: {}",
+      "replied_at": "تاريخ الرد: {}"
     }
   },
   "validation": {

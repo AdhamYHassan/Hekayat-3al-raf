@@ -9,6 +9,7 @@ class Routes {
   static const String profile = '/profile';
   static const String editProfile = '/edit-profile';
   static const String myStories = '/my-stories';
+  static const String myMessages = '/my-messages';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';

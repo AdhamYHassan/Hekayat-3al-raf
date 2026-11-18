@@ -463,13 +463,10 @@ class _ProfileContent extends StatelessWidget {
                 SizedBox(height: 8.h),
                 _buildMenuItemCard(
                   icon: CupertinoIcons.chat_bubble_2_fill,
-                  title: 'profile.my_questions'.tr(),
-                  subtitle: 'profile.my_questions_sub'.tr(),
+                  title: 'profile.my_messages'.tr(),
+                  subtitle: 'profile.my_messages_sub'.tr(),
                   onTap: () {
-                    AppSnackBar.showInfo(
-                      context,
-                      message: 'profile.coming_soon'.tr(),
-                    );
+                    context.push(Routes.myMessages);
                   },
                 ),
                 // SizedBox(height: 8.h),

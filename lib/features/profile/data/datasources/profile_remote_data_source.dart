@@ -4,6 +4,7 @@ import 'package:hekayat_3al_raf/core/network/inetwork_helper.dart';
 import 'package:hekayat_3al_raf/features/profile/data/datasources/i_profile_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/profile/data/models/my_story_model.dart';
 import 'package:hekayat_3al_raf/features/profile/data/models/profile_user_model.dart';
+import 'package:hekayat_3al_raf/features/profile/data/models/user_message_model.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/update_profile_params.dart';
 
 class ProfileRemoteDataSource implements IProfileRemoteDataSource {
@@ -33,13 +34,24 @@ class ProfileRemoteDataSource implements IProfileRemoteDataSource {
           filename: fileName,
         ),
       };
-      if (params.name != null) map['name'] = params.name;
+      if (params.name != null) {
+        map['name'] = params.name;
+      }
       if (params.phone != null) {
         map['phone'] = params.phone;
-        if (params.phoneRegion != null)
+        if (params.phoneRegion != null) {
           map['phone_region'] = params.phoneRegion;
+        }
       }
-      if (params.bio != null) map['bio'] = params.bio;
+      if (params.bio != null) {
+        map['bio'] = params.bio;
+      }
+      if (params.email != null) {
+        map['email'] = params.email;
+      }
+      if (params.currentPassword != null && params.currentPassword!.isNotEmpty) {
+        map['current_password'] = params.currentPassword;
+      }
 
       final formData = FormData.fromMap(map);
       requestData = formData;
@@ -68,6 +80,19 @@ class ProfileRemoteDataSource implements IProfileRemoteDataSource {
     final results = data['results'] as List<dynamic>? ?? [];
     return results
         .map((item) => MyStoryModel.fromJson(item as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<List<UserMessageModel>> getMyMessages() async {
+    final response = await _networkHelper.get(ApiEndpoints.myMessages);
+    final json = response.data as Map<String, dynamic>;
+    final data = json['data'] is Map<String, dynamic>
+        ? json['data'] as Map<String, dynamic>
+        : json;
+    final results = data['results'] as List<dynamic>? ?? [];
+    return results
+        .map((item) => UserMessageModel.fromJson(item as Map<String, dynamic>))
         .toList();
   }
 

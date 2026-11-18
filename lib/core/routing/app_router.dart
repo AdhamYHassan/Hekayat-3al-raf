@@ -13,8 +13,10 @@ import 'package:hekayat_3al_raf/features/contact/presentation/screens/contact_us
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
+import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_messages_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:hekayat_3al_raf/features/profile/presentation/screens/my_messages_screen.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/screens/my_stories_screen.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/screens/profile_screen.dart';
@@ -182,6 +184,17 @@ class AppRouter {
           child: BlocProvider<MyStoriesCubit>(
             create: (context) => getIt<MyStoriesCubit>()..loadMyStories(),
             child: const MyStoriesScreen(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.myMessages,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: BlocProvider<MyMessagesCubit>(
+            create: (context) => getIt<MyMessagesCubit>()..loadMyMessages(),
+            child: const MyMessagesScreen(),
           ),
         ),
       ),

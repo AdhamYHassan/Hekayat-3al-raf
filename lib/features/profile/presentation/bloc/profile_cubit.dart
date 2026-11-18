@@ -33,6 +33,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfile({
     String? name,
     String? email,
+    String? currentPassword,
     String? phone,
     String? phoneRegion,
     String? bio,
@@ -48,6 +49,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     final params = UpdateProfileParams(
       name: name,
       email: email,
+      currentPassword: currentPassword,
       phone: phone,
       phoneRegion: phoneRegion,
       bio: bio,

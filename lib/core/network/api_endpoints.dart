@@ -22,6 +22,7 @@ class ApiEndpoints {
   static const String storyTypes = 'stories/types/';
   static const String submitStory = 'stories/submit/';
   static const String myStories = 'stories/my/';
+  static const String myMessages = 'auth/me/messages/';
   static String stories({
     int limit = 10,
     int offset = 0,
