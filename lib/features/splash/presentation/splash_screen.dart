@@ -1,11 +1,15 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
+import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_state.dart';
+import 'package:hekayat_3al_raf/features/splash/domain/usecases/get_app_config_usecase.dart';
+import 'package:hekayat_3al_raf/features/splash/presentation/widgets/forced_update_dialog.dart';
 
 /// High-Performance Splash Screen with hardware-isolated pulsating progress bar.
 ///
@@ -51,16 +55,47 @@ class _SplashScreenState extends State<SplashScreen>
         }
       });
 
-      // 2. Perform locale check and proceed to home
-      _navigateToNext();
+      // 2. Check startup config (force update) and proceed
+      _initAppAndNavigate();
     });
   }
 
-  Future<void> _navigateToNext() async {
+  Future<void> _initAppAndNavigate() async {
+    final startTime = DateTime.now();
+
+    // Fetch start-up config to check for force update (iOS only, Android uses in_app_update)
+    bool isUpdateRequired = false;
+    String? updateUrl;
+
+    if (Platform.isIOS) {
+      try {
+        final configResult = await getIt<GetAppConfigUseCase>()();
+        if (configResult case ApiSuccess(:final data)) {
+          if (data.updateRequired) {
+            isUpdateRequired = true;
+            updateUrl = data.iosUrl;
+          }
+        }
+      } catch (_) {
+        // Fallback: continue normally if network fails on config
+      }
+    }
+
     if (!mounted) return;
 
-    // 2.2 seconds display time for smooth splash intro
-    await Future.delayed(const Duration(milliseconds: 2200));
+    if (isUpdateRequired) {
+      // Show un-dismissible forced update dialog and halt navigation on iOS
+      await ForcedUpdateDialog.show(context, updateUrl: updateUrl);
+      return;
+    }
+
+    // Ensure smooth splash intro of at least 2.2 seconds
+    final elapsed = DateTime.now().difference(startTime).inMilliseconds;
+    const minSplashDuration = 2200;
+    if (elapsed < minSplashDuration) {
+      await Future.delayed(Duration(milliseconds: minSplashDuration - elapsed));
+    }
+
     if (mounted) {
       context.go(Routes.home);
     }

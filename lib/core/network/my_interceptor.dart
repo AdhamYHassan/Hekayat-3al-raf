@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:hekayat_3al_raf/core/helpers/device_helper.dart';
 import 'package:hekayat_3al_raf/core/helpers/digit_converter.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
@@ -11,6 +12,8 @@ import 'package:hekayat_3al_raf/core/network/dio_factory.dart';
 import 'package:hekayat_3al_raf/core/network/token_refresh_manager.dart';
 
 class MyInterceptor extends Interceptor {
+  static String? _cachedAppVersion;
+
   static const List<String> _excludedPaths = [
     'auth/login',
     'auth/register',
@@ -37,6 +40,19 @@ class MyInterceptor extends Interceptor {
     final currentLang = SharedPrefsHelper.getLocaleCode();
     options.baseUrl = ApiEndpoints.getBaseUrl(currentLang);
     options.headers['Accept-Language'] = currentLang;
+
+    // Inject App Version header strictly for config endpoint
+    if (options.path.contains(ApiEndpoints.config)) {
+      if (_cachedAppVersion == null) {
+        try {
+          final packageInfo = await PackageInfo.fromPlatform();
+          _cachedAppVersion = packageInfo.version;
+        } catch (_) {
+          _cachedAppVersion = '1.0.4';
+        }
+      }
+      options.headers['X-App-Version'] = _cachedAppVersion;
+    }
 
     // 1. Authorization header injection
     final bool isExcluded = _excludedPaths.any((p) => options.path.contains(p));
@@ -66,8 +82,9 @@ class MyInterceptor extends Interceptor {
       options.data = DigitConverter.convertPayloadDigits(options.data);
     }
     if (options.queryParameters.isNotEmpty) {
-      final converted =
-          DigitConverter.convertPayloadDigits(options.queryParameters);
+      final converted = DigitConverter.convertPayloadDigits(
+        options.queryParameters,
+      );
       if (converted is Map) {
         options.queryParameters = Map<String, dynamic>.from(converted);
       }
@@ -123,8 +140,9 @@ class MyInterceptor extends Interceptor {
     );
 
     if (err.response?.statusCode == 401) {
-      final isRefresh =
-          err.requestOptions.path.contains(ApiEndpoints.refreshToken);
+      final isRefresh = err.requestOptions.path.contains(
+        ApiEndpoints.refreshToken,
+      );
       final isRetry = err.requestOptions.extra['isRetry'] == true;
 
       if (!isRefresh && !isRetry) {
@@ -146,8 +164,7 @@ class MyInterceptor extends Interceptor {
 
         // 2. Perform refresh using shared lock
         final refreshToken = await SecureStorageHelper.getRefreshToken();
-        final hadAuth =
-            err.requestOptions.headers.containsKey('Authorization');
+        final hadAuth = err.requestOptions.headers.containsKey('Authorization');
 
         if (hadAuth && refreshToken != null && refreshToken.isNotEmpty) {
           try {

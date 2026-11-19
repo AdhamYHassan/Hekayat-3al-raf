@@ -124,10 +124,9 @@ class _RegisterViewState extends State<_RegisterView> {
       isValid = false;
     }
 
-    if (phone.isEmpty) {
-      _phoneError = 'auth.phone_required'.tr();
-      isValid = false;
-    } else if (!_selectedCountry.isValid(phone)) {
+    // Phone is optional per Apple Guideline 5.1.1(v)
+    // Only validate phone structure if the user actually entered one
+    if (phone.isNotEmpty && !_selectedCountry.isValid(phone)) {
       final countryName =
           isArabic ? _selectedCountry.nameAr : _selectedCountry.nameEn;
       _phoneError = 'auth.invalid_phone_for_country'.tr(args: [
@@ -174,10 +173,11 @@ class _RegisterViewState extends State<_RegisterView> {
   void _onRegisterPressed() {
     if (!_validateForm()) return;
 
+    final phoneText = _phoneController.text.trim();
     context.read<RegisterCubit>().register(
       name: _nameController.text,
-      phone: _phoneController.text,
-      phoneRegion: _selectedCountry.code,
+      phone: phoneText.isNotEmpty ? phoneText : null,
+      phoneRegion: phoneText.isNotEmpty ? _selectedCountry.code : null,
       email: _emailController.text,
       password: _passwordController.text,
       confirmPassword: _confirmPasswordController.text,

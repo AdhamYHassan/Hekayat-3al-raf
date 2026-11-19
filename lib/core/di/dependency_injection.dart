@@ -1,3 +1,7 @@
+import 'package:hekayat_3al_raf/features/splash/data/datasources/splash_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/splash/data/repositories/splash_repository_impl.dart';
+import 'package:hekayat_3al_raf/features/splash/domain/repositories/i_splash_repository.dart';
+import 'package:hekayat_3al_raf/features/splash/domain/usecases/get_app_config_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/data/datasources/i_profile_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/profile/data/repositories/profile_repository_impl.dart';
@@ -324,6 +328,19 @@ void setupDependencyInjection() {
   );
   getIt.registerFactory<MyMessagesCubit>(
     () => MyMessagesCubit(getIt<GetMyMessagesUseCase>()),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Splash & App Config DI Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<ISplashRemoteDataSource>(
+    () => SplashRemoteDataSource(getIt<InetworkHelper>()),
+  );
+  getIt.registerLazySingleton<ISplashRepository>(
+    () => SplashRepositoryImpl(getIt<ISplashRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<GetAppConfigUseCase>(
+    () => GetAppConfigUseCase(getIt<ISplashRepository>()),
   );
 
   // ---------------------------------------------------------------------------

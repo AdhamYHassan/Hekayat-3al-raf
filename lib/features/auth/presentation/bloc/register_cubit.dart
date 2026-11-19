@@ -11,26 +11,21 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> register({
     required String name,
-    required String phone,
-    String phoneRegion = 'EG',
+    String? phone,
+    String? phoneRegion,
     required String email,
     required String password,
     required String confirmPassword,
     required bool agreedToTerms,
   }) async {
     final trimmedName = name.trim();
-    final trimmedPhone = phone.trim();
+    final trimmedPhone = phone?.trim();
     final trimmedEmail = email.trim();
     final trimmedPassword = password.trim();
     final trimmedConfirmPassword = confirmPassword.trim();
 
     if (trimmedName.isEmpty) {
       emit(const RegisterFailure('يرجى إدخال الاسم بالكامل'));
-      return;
-    }
-
-    if (trimmedPhone.isEmpty) {
-      emit(const RegisterFailure('يرجى إدخال رقم الموبايل'));
       return;
     }
 
@@ -68,9 +63,13 @@ class RegisterCubit extends Cubit<RegisterState> {
 
     final request = RegisterRequestModel(
       name: trimmedName,
-      phone: trimmedPhone,
+      phone: (trimmedPhone != null && trimmedPhone.isNotEmpty)
+          ? trimmedPhone
+          : null,
       email: trimmedEmail,
-      phoneRegion: phoneRegion,
+      phoneRegion: (trimmedPhone != null && trimmedPhone.isNotEmpty)
+          ? phoneRegion
+          : null,
       password: trimmedPassword,
     );
 

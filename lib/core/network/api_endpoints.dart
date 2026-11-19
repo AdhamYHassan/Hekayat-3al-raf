@@ -4,6 +4,7 @@ class ApiEndpoints {
       'https://hekayat3alraf.com/$lang/api/v1/mobile/';
 
   static const String baseUrl = 'https://hekayat3alraf.com/ar/api/v1/mobile/';
+  static const String config = 'config/';
   static const String home = 'home/';
   static const String contact = 'contact/';
   static const String profile = 'auth/me/';

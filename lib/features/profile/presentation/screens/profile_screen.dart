@@ -6,12 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
+import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
+import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
+import 'package:hekayat_3al_raf/features/more/presentation/widgets/delete_account_dialog.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
+import 'package:hekayat_3al_raf/features/profile/domain/usecases/delete_account_usecase.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/profile_state.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/widgets/profile_shimmer_loading.dart';
@@ -107,6 +111,35 @@ class _ProfileContent extends StatelessWidget {
     final formatter = DateFormat('MMMM yyyy', isAr ? 'ar' : 'en');
     final formatted = formatter.format(dateJoined);
     return 'profile.joined_date'.tr(args: [formatted]);
+  }
+
+  Future<void> _deleteAccount(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => DeleteAccountDialog(
+        onConfirmDelete: (password) async {
+          final deleteUseCase = getIt<DeleteAccountUseCase>();
+          final result = await deleteUseCase(password);
+          if (!context.mounted) return false;
+
+          switch (result) {
+            case ApiSuccess():
+              AppSnackBar.showSuccess(
+                context,
+                message: 'settings.delete_account_success'.tr(),
+              );
+              context.go(Routes.home);
+              return true;
+            case ApiFailure(:final failure):
+              AppSnackBar.showError(
+                context,
+                message: failure.message,
+              );
+              return false;
+          }
+        },
+      ),
+    );
   }
 
   Future<void> _logout(BuildContext context) async {
@@ -469,15 +502,13 @@ class _ProfileContent extends StatelessWidget {
                     context.push(Routes.myMessages);
                   },
                 ),
-                // SizedBox(height: 8.h),
-                // _buildMenuItemCard(
-                //   icon: CupertinoIcons.gear_alt_fill,
-                //   title: 'profile.settings'.tr(),
-                //   subtitle: 'profile.settings_sub'.tr(),
-                //   onTap: () {
-                //     Navigator.of(context).pop(); // Back to More Screen
-                //   },
-                // ),
+                SizedBox(height: 8.h),
+                _buildMenuItemCard(
+                  icon: CupertinoIcons.trash_fill,
+                  title: 'settings.delete_account'.tr(),
+                  subtitle: 'settings.delete_account_sub'.tr(),
+                  onTap: () => _deleteAccount(context),
+                ),
                 SizedBox(height: 24.h),
 
                 // Logout Button

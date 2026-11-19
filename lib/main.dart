@@ -30,9 +30,7 @@ void main() async {
   final savedLocaleCode = SharedPrefsHelper.getLocaleCode();
 
   // 5. Force Global Portrait Orientation by default & White Status Bar icons
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
@@ -58,34 +56,46 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ScreenUtil Init (Mobile Standard: 375x812)
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        return MaterialApp.router(
-          key: ValueKey(context.locale.languageCode),
-          debugShowCheckedModeBanner: false,
-          title: 'Base App',
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const double tabletScaleFactor = 1.5;
+        final bool isTablet = constraints.maxWidth >= 600;
+        final Size designSize = isTablet
+            ? Size(
+                constraints.maxWidth / tabletScaleFactor,
+                constraints.maxHeight / tabletScaleFactor,
+              )
+            : const Size(375, 812);
+        return ScreenUtilInit(
+          designSize: designSize,
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp.router(
+              key: ValueKey(context.locale.languageCode),
+              debugShowCheckedModeBanner: false,
+              title: 'Hekayat 3al Raf',
 
-          // Localization
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
+              // Localization
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
 
-          theme: ThemeData(
-            useMaterial3: true,
-            // fontFamily: 'Cairo',
-            colorScheme: const ColorScheme.dark(
-              brightness: Brightness.dark,
-              surface: Color(0xFF220610),
-            ),
-            appBarTheme: const AppBarTheme(
-              systemOverlayStyle: SystemUiOverlayStyle.light,
-            ),
-          ),
+              theme: ThemeData(
+                useMaterial3: true,
+                // fontFamily: 'Cairo',
+                colorScheme: const ColorScheme.dark(
+                  brightness: Brightness.dark,
+                  surface: Color(0xFF220610),
+                ),
+                appBarTheme: const AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
+                ),
+              ),
 
-          routerConfig: AppRouter.router,
+              routerConfig: AppRouter.router,
+            );
+          },
         );
       },
     );
