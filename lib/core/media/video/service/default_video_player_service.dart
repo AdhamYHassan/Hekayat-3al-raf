@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:hekayat_3al_raf/core/helpers/app_log_store.dart';
 import 'package:hekayat_3al_raf/core/media/video/model/video_playback_state.dart';
 import 'package:hekayat_3al_raf/core/media/video/service/i_video_player_service.dart';
 import 'package:video_player/video_player.dart';
@@ -21,6 +22,7 @@ import 'package:video_player/video_player.dart';
 /// ============================================================================
 class DefaultVideoPlayerService implements IVideoPlayerService {
   VideoPlayerController? _controller;
+  String? _currentVideoUrl;
   final StreamController<VideoPlaybackState> _stateController =
       StreamController<VideoPlaybackState>.broadcast();
   VideoPlaybackState _currentState = const VideoPlaybackState();
@@ -40,8 +42,19 @@ class DefaultVideoPlayerService implements IVideoPlayerService {
 
   @override
   Future<void> initialize(String videoUrl) async {
+    // Shield Protection: If already initialized for the exact same URL, skip redundant re-initialization!
+    if (_currentVideoUrl == videoUrl &&
+        _controller != null &&
+        _controller!.value.isInitialized) {
+      AppLogStore.instance.log(
+        '[VideoPlayer] Skipped redundant initialize. Controller is active and intact.',
+      );
+      return;
+    }
+    _currentVideoUrl = videoUrl;
+
     try {
-      debugPrint('[VideoPlayer] Initializing video: $videoUrl');
+      AppLogStore.instance.log('[VideoPlayer] Initializing video: $videoUrl');
       _emitState(_currentState.copyWith(status: VideoStatus.loading));
 
       // Free previous GPU texture to prevent memory accumulation
@@ -56,7 +69,7 @@ class DefaultVideoPlayerService implements IVideoPlayerService {
       final duration = _controller!.value.duration;
       final aspect = _controller!.value.aspectRatio;
 
-      debugPrint(
+      AppLogStore.instance.log(
         '[VideoPlayer] Initialized successfully. Duration: $duration, AspectRatio: $aspect',
       );
 
@@ -68,7 +81,7 @@ class DefaultVideoPlayerService implements IVideoPlayerService {
         ),
       );
     } catch (e, stack) {
-      debugPrint('[VideoPlayer] ERROR initializing video: $e\n$stack');
+      AppLogStore.instance.log('[VideoPlayer] ERROR initializing video: $e\n$stack');
       _emitState(
         _currentState.copyWith(
           status: VideoStatus.error,
@@ -149,6 +162,7 @@ class DefaultVideoPlayerService implements IVideoPlayerService {
   }
 
   Future<void> _disposeCurrentController() async {
+    _currentVideoUrl = null;
     if (_controller != null) {
       _controller!.removeListener(_onControllerUpdate);
       await _controller!.dispose();

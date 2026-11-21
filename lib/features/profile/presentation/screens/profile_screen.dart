@@ -13,6 +13,7 @@ import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
+import 'package:hekayat_3al_raf/features/profile/presentation/screens/system_logs_screen.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/delete_account_dialog.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/usecases/delete_account_usecase.dart';
@@ -508,6 +509,19 @@ class _ProfileContent extends StatelessWidget {
                   title: 'settings.delete_account'.tr(),
                   subtitle: 'settings.delete_account_sub'.tr(),
                   onTap: () => _deleteAccount(context),
+                ),
+                SizedBox(height: 8.h),
+                _buildMenuItemCard(
+                  icon: CupertinoIcons.waveform_path_ecg,
+                  title: 'سجلات التشغيل (Debug Logs)',
+                  subtitle: 'تشخيص أداء الفيديو والنظام',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const SystemLogsScreen(),
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: 24.h),
 

@@ -3,14 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hekayat_3al_raf/core/helpers/app_log_store.dart';
 import 'package:hekayat_3al_raf/core/media/video/cubit/video_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/video/model/video_playback_state.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:video_player/video_player.dart';
 
-/// [FullScreenVideoScreen] renders the active video surface across full device landscape orientation
-/// with responsive controls, gesture hit-test isolation, and bulletproof orientation restoration.
+/// [FullScreenVideoScreen] renders an isolated, standalone Fullscreen video surface
+/// with auto-rotation support and safe system UI restoration.
 class FullScreenVideoScreen extends StatefulWidget {
   final VideoPlayerCubit cubit;
   final String title;
@@ -26,26 +28,28 @@ class FullScreenVideoScreen extends StatefulWidget {
 }
 
 class _FullScreenVideoScreenState extends State<FullScreenVideoScreen> {
+  late final bool _isLandscapeVideo;
   bool _isDragging = false;
   double _dragPositionMs = 0.0;
 
   @override
   void initState() {
     super.initState();
-    // 1. Force Landscape & Immersive Sticky System UI
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    final aspect = widget.cubit.state.aspectRatio;
+    final isLandscape = aspect > 1.0;
+
+    AppLogStore.instance.log(
+      '[FullScreenVideoScreen] Mounted. AspectRatio: $aspect, isLandscape: $isLandscape',
+    );
+
+    // The app stays portrait-locked at the OS level. Rotating the OS surface
+    // while a video texture is attached produces a black frame on iOS, so we
+    // rotate the content ourselves via RotatedBox instead (see build()).
+    _isLandscapeVideo = isLandscape;
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
-  /// Bulletproof helper to restore portrait orientation and system UI before popping
   Future<void> _restorePortraitAndExit() async {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     if (mounted) {
       Navigator.of(context).pop();
     }
@@ -53,10 +57,6 @@ class _FullScreenVideoScreenState extends State<FullScreenVideoScreen> {
 
   @override
   void dispose() {
-    // Safety fallback: ensure portrait restoration if dismissed via OS gestures
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
@@ -70,135 +70,131 @@ class _FullScreenVideoScreenState extends State<FullScreenVideoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = widget.cubit;
+    final controller = cubit.activeController;
+
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) {
-          _restorePortraitAndExit();
-        }
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _restorePortraitAndExit();
       },
       child: BlocProvider<VideoPlayerCubit>.value(
-        value: widget.cubit,
+        value: cubit,
         child: Scaffold(
           backgroundColor: Colors.black,
-          body: Directionality(
-            textDirection: TextDirection.ltr, // Enforce LTR timeline for video standards
-            child: BlocBuilder<VideoPlayerCubit, VideoPlaybackState>(
-              builder: (context, state) {
-                final cubit = widget.cubit;
-                final controller = cubit.activeController;
+          body: BlocBuilder<VideoPlayerCubit, VideoPlaybackState>(
+            builder: (context, state) {
+              if (controller == null || !controller.value.isInitialized) {
+                return const Center(
+                  child: CircularProgressIndicator(color: ColorManager.gold),
+                );
+              }
 
-                if (controller == null || !controller.value.isInitialized) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: ColorManager.gold),
-                  );
-                }
-
-                return Stack(
-                  fit: StackFit.expand,
-                  alignment: Alignment.center,
-                  children: [
-                    // 1. Video Surface (Fitted to Screen)
-                    Center(
-                      child: AspectRatio(
-                        aspectRatio: state.aspectRatio,
-                        child: VideoPlayer(controller),
+              return RotatedBox(
+                quarterTurns: _isLandscapeVideo ? 1 : 0,
+                child: Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.center,
+                children: [
+                  // 1. Native Video Surface
+                  Center(
+                    child: AspectRatio(
+                      aspectRatio: controller.value.aspectRatio > 0
+                          ? controller.value.aspectRatio
+                          : (state.aspectRatio > 0 ? state.aspectRatio : 16 / 9),
+                      child: VideoPlayer(
+                        controller,
+                        key: ObjectKey(controller),
                       ),
                     ),
+                  ),
 
-                    // 2. Background Tap Area for toggling controls
-                    Positioned.fill(
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: cubit.toggleControls,
-                        child: Container(
-                          color: state.isControlsVisible
-                              ? Colors.black.withValues(alpha: 0.4)
-                              : Colors.transparent,
-                        ),
+                  // 2. Gesture Detector for toggling overlay
+                  Positioned.fill(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: cubit.toggleControls,
+                      child: Container(
+                        color: state.isControlsVisible
+                            ? Colors.black.withValues(alpha: 0.35)
+                            : Colors.transparent,
                       ),
                     ),
+                  ),
 
-                    // 3. Overlay Controls
-                    IgnorePointer(
-                      ignoring: !state.isControlsVisible,
-                      child: AnimatedOpacity(
-                        opacity: state.isControlsVisible ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 300),
-                        child: SafeArea(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Top Bar: Back & Title
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(CupertinoIcons.back,
-                                          color: ColorManager.paper100,
-                                          size: 26),
-                                      onPressed: _restorePortraitAndExit,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        widget.title,
-                                        style: AppFonts.ibmPlexSansArabic(
-                                          color: ColorManager.paper100,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                  // 3. Fullscreen Controls Overlay
+                  IgnorePointer(
+                    ignoring: !state.isControlsVisible,
+                    child: AnimatedOpacity(
+                      opacity: state.isControlsVisible ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 300),
+                      child: SafeArea(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Top Bar: Back & Title
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20.w,
+                                vertical: 12.h,
                               ),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      CupertinoIcons.back,
+                                      color: ColorManager.paper100,
+                                      size: 26,
+                                    ),
+                                    onPressed: _restorePortraitAndExit,
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: Text(
+                                      widget.title,
+                                      style: AppFonts.ibmPlexSansArabic(
+                                        color: ColorManager.paper100,
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
 
-                              // Center Play/Pause/Replay Button (Pure Geometric Circle)
-                              Center(
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      debugPrint('[VideoPlayer] Center Play clicked');
-                                      cubit.togglePlay();
-                                    },
-                                    borderRadius: BorderRadius.circular(35),
-                                    child: ClipOval(
-                                      child: BackdropFilter(
-                                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                        child: Container(
-                                          width: 68,
-                                          height: 68,
-                                          decoration: BoxDecoration(
-                                            color: ColorManager.primaryDark.withValues(alpha: 0.7),
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: ColorManager.gold.withValues(alpha: 0.8),
-                                              width: 1.8,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: ColorManager.primaryDark.withValues(alpha: 0.6),
-                                                blurRadius: 16,
-                                                spreadRadius: 2,
-                                              ),
-                                            ],
+                            // Center Play / Pause Button
+                            Center(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: cubit.togglePlay,
+                                  borderRadius: BorderRadius.circular(35.r),
+                                  child: ClipOval(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                      child: Container(
+                                        width: 68.r,
+                                        height: 68.r,
+                                        decoration: BoxDecoration(
+                                          color: ColorManager.primaryDark.withValues(alpha: 0.7),
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: ColorManager.gold.withValues(alpha: 0.8),
+                                            width: 1.8,
                                           ),
-                                          child: Center(
-                                            child: Icon(
-                                              state.status == VideoStatus.playing
-                                                  ? CupertinoIcons.pause_fill
-                                                  : (state.status == VideoStatus.completed
-                                                      ? CupertinoIcons.restart
-                                                      : CupertinoIcons.play_arrow_solid),
-                                              color: ColorManager.goldLight,
-                                              size: 32,
-                                            ),
+                                        ),
+                                        child: Center(
+                                          child: Icon(
+                                            state.status == VideoStatus.playing
+                                                ? CupertinoIcons.pause_fill
+                                                : (state.status == VideoStatus.completed
+                                                    ? CupertinoIcons.restart
+                                                    : CupertinoIcons.play_arrow_solid),
+                                            color: ColorManager.goldLight,
+                                            size: 32.sp,
                                           ),
                                         ),
                                       ),
@@ -206,112 +202,105 @@ class _FullScreenVideoScreenState extends State<FullScreenVideoScreen> {
                                   ),
                                 ),
                               ),
+                            ),
 
-                              // Bottom Bar: Slider, Duration & Exit Fullscreen
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12),
-                                child: BlocBuilder<VideoPlayerCubit,
-                                    VideoPlaybackState>(
-                                  buildWhen: (prev, curr) =>
-                                      prev.position != curr.position ||
-                                      prev.duration != curr.duration,
-                                  builder: (context, timeState) {
-                                    final totalMs = timeState
-                                        .duration.inMilliseconds
-                                        .toDouble();
-                                    final maxVal = totalMs > 0 ? totalMs : 1.0;
-
-                                    final currentVal = _isDragging
-                                        ? _dragPositionMs.clamp(0.0, maxVal)
-                                        : timeState.position.inMilliseconds
-                                            .toDouble()
-                                            .clamp(0.0, maxVal);
-
-                                    final displayDuration = _isDragging
-                                        ? Duration(
-                                            milliseconds:
-                                                _dragPositionMs.toInt())
-                                        : timeState.position;
-
-                                    return Row(
-                                      children: [
-                                        Text(
-                                          _formatDuration(displayDuration),
-                                          style: AppFonts.ibmPlexSansArabic(
-                                              color: ColorManager.paper200,
-                                              fontSize: 13),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: SliderTheme(
-                                            data: SliderTheme.of(context).copyWith(
-                                              trackHeight: 3,
-                                              thumbShape:
-                                                  const RoundSliderThumbShape(
-                                                      enabledThumbRadius: 6),
-                                              overlayShape:
-                                                  const RoundSliderOverlayShape(
-                                                      overlayRadius: 12),
-                                              activeTrackColor: ColorManager.gold,
-                                              inactiveTrackColor: ColorManager
-                                                  .paper400
-                                                  .withValues(alpha: 0.3),
-                                              thumbColor: ColorManager.gold,
-                                            ),
-                                            child: Slider(
-                                              value: currentVal,
-                                              min: 0.0,
-                                              max: maxVal,
-                                              onChangeStart: (v) {
-                                                setState(() {
-                                                  _isDragging = true;
-                                                  _dragPositionMs = v;
-                                                });
-                                              },
-                                              onChanged: (v) {
-                                                setState(() =>
-                                                    _dragPositionMs = v);
-                                              },
-                                              onChangeEnd: (v) {
-                                                setState(
-                                                    () => _isDragging = false);
-                                                cubit.seek(Duration(
-                                                    milliseconds: v.toInt()));
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          _formatDuration(timeState.duration),
-                                          style: AppFonts.ibmPlexSansArabic(
-                                              color: ColorManager.paper400,
-                                              fontSize: 13),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        IconButton(
-                                          icon: const Icon(
-                                            CupertinoIcons.fullscreen_exit,
-                                            color: ColorManager.gold,
-                                            size: 24,
-                                          ),
-                                          onPressed: _restorePortraitAndExit,
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
+                            // Bottom Bar: Slider, Duration & Exit Fullscreen
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 24.w,
+                                vertical: 12.h,
                               ),
-                            ],
-                          ),
+                              child: BlocBuilder<VideoPlayerCubit, VideoPlaybackState>(
+                                buildWhen: (prev, curr) =>
+                                    prev.position != curr.position ||
+                                    prev.duration != curr.duration,
+                                builder: (context, timeState) {
+                                  final totalMs = timeState.duration.inMilliseconds.toDouble();
+                                  final maxVal = totalMs > 0 ? totalMs : 1.0;
+
+                                  final currentVal = _isDragging
+                                      ? _dragPositionMs.clamp(0.0, maxVal)
+                                      : timeState.position.inMilliseconds.toDouble().clamp(0.0, maxVal);
+
+                                  final displayDuration = _isDragging
+                                      ? Duration(milliseconds: _dragPositionMs.toInt())
+                                      : timeState.position;
+
+                                  return Row(
+                                    children: [
+                                      Text(
+                                        _formatDuration(displayDuration),
+                                        style: AppFonts.ibmPlexSansArabic(
+                                          color: ColorManager.paper200,
+                                          fontSize: 13.sp,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Expanded(
+                                        child: SliderTheme(
+                                          data: SliderTheme.of(context).copyWith(
+                                            trackHeight: 3.h,
+                                            thumbShape: RoundSliderThumbShape(
+                                              enabledThumbRadius: 6.r,
+                                            ),
+                                            overlayShape: RoundSliderOverlayShape(
+                                              overlayRadius: 12.r,
+                                            ),
+                                            activeTrackColor: ColorManager.gold,
+                                            inactiveTrackColor: ColorManager.paper400.withValues(alpha: 0.3),
+                                            thumbColor: ColorManager.gold,
+                                          ),
+                                          child: Slider(
+                                            value: currentVal,
+                                            min: 0.0,
+                                            max: maxVal,
+                                            onChangeStart: (v) {
+                                              setState(() {
+                                                _isDragging = true;
+                                                _dragPositionMs = v;
+                                              });
+                                            },
+                                            onChanged: (v) {
+                                              setState(() => _dragPositionMs = v);
+                                            },
+                                            onChangeEnd: (v) {
+                                              setState(() => _isDragging = false);
+                                              cubit.seek(Duration(milliseconds: v.toInt()));
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        _formatDuration(timeState.duration),
+                                        style: AppFonts.ibmPlexSansArabic(
+                                          color: ColorManager.paper400,
+                                          fontSize: 13.sp,
+                                        ),
+                                      ),
+                                      SizedBox(width: 16.w),
+                                      IconButton(
+                                        icon: const Icon(
+                                          CupertinoIcons.fullscreen_exit,
+                                          color: ColorManager.gold,
+                                          size: 24,
+                                        ),
+                                        onPressed: _restorePortraitAndExit,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
+                  ),
+                ],
+                ),
+              );
+            },
           ),
         ),
       ),

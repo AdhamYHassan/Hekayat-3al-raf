@@ -40,6 +40,12 @@ class VideoPlayerCubit extends Cubit<VideoPlaybackState> {
     }
   }
 
+  Future<void> pause() async {
+    await _videoService.pause();
+    _cancelControlsTimer();
+    _videoService.setControlsVisibility(true);
+  }
+
   Future<void> seek(Duration position) async {
     await _videoService.seek(position);
   }

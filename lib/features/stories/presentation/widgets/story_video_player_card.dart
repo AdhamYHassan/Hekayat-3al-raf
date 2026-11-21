@@ -4,17 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/media/video/cubit/video_playback_cubit.dart';
 import 'package:hekayat_3al_raf/core/media/video/model/video_playback_state.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
+import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/screens/fullscreen_video_screen.dart';
 import 'package:video_player/video_player.dart';
 
 /// [StoryVideoPlayerCard] renders a high-performance video player surface
-/// with custom auto-hiding controls, 60/120 FPS slider, and memory protection.
-class StoryVideoPlayerCard extends StatelessWidget {
+/// with custom auto-hiding controls, 60/120 FPS slider, and dedicated Fullscreen navigation.
+class StoryVideoPlayerCard extends StatefulWidget {
   final String videoUrl;
   final String title;
 
@@ -25,17 +25,44 @@ class StoryVideoPlayerCard extends StatelessWidget {
   });
 
   @override
+  State<StoryVideoPlayerCard> createState() => _StoryVideoPlayerCardState();
+}
+
+class _StoryVideoPlayerCardState extends State<StoryVideoPlayerCard> {
+  late final VideoPlayerCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = getIt<VideoPlayerCubit>()..loadVideo(widget.videoUrl);
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider<VideoPlayerCubit>(
-      create: (_) => getIt<VideoPlayerCubit>()..loadVideo(videoUrl),
-      child: _VideoPlayerCardView(title: title),
+    return BlocProvider<VideoPlayerCubit>.value(
+      value: _cubit,
+      child: _VideoPlayerCardView(
+        title: widget.title,
+        cubit: _cubit,
+      ),
     );
   }
 }
 
 class _VideoPlayerCardView extends StatefulWidget {
   final String title;
-  const _VideoPlayerCardView({required this.title});
+  final VideoPlayerCubit cubit;
+
+  const _VideoPlayerCardView({
+    required this.title,
+    required this.cubit,
+  });
 
   @override
   State<_VideoPlayerCardView> createState() => _VideoPlayerCardViewState();
@@ -69,7 +96,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
               prev.aspectRatio != curr.aspectRatio ||
               prev.isControlsVisible != curr.isControlsVisible,
           builder: (context, state) {
-            final cubit = context.read<VideoPlayerCubit>();
+            final cubit = widget.cubit;
             final controller = cubit.activeController;
 
             if (state.status == VideoStatus.error) {
@@ -116,7 +143,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                 children: [
                   // 1. Native Video Texture Surface
                   AspectRatio(
-                    aspectRatio: state.aspectRatio,
+                    aspectRatio: state.aspectRatio > 0 ? state.aspectRatio : 16 / 9,
                     child: VideoPlayer(controller),
                   ),
 
@@ -153,32 +180,25 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                             ),
                           ),
 
-                          // Center Play / Pause / Replay Button (Heritage Glassmorphic Design)
+                          // Center Play / Pause / Replay Button
                           Material(
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: cubit.togglePlay,
-                              borderRadius: BorderRadius.circular(36.r),
+                              borderRadius: BorderRadius.circular(30.r),
                               child: ClipOval(
                                 child: BackdropFilter(
                                   filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                                   child: Container(
-                                    width: 60.w,
-                                    height: 60.h,
+                                    width: 52.r,
+                                    height: 52.r,
                                     decoration: BoxDecoration(
                                       color: ColorManager.primaryDark.withValues(alpha: 0.65),
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: ColorManager.gold.withValues(alpha: 0.75),
-                                        width: 1.6,
+                                        color: ColorManager.gold.withValues(alpha: 0.8),
+                                        width: 1.5,
                                       ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: ColorManager.primaryDark.withValues(alpha: 0.5),
-                                          blurRadius: 12,
-                                          spreadRadius: 1,
-                                        ),
-                                      ],
                                     ),
                                     child: Center(
                                       child: Icon(
@@ -188,7 +208,7 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                                                 ? CupertinoIcons.restart
                                                 : CupertinoIcons.play_arrow_solid),
                                         color: ColorManager.goldLight,
-                                        size: 28.sp,
+                                        size: 24.sp,
                                       ),
                                     ),
                                   ),
@@ -197,59 +217,43 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                             ),
                           ),
 
-                          // Footer: Time & Smooth Slider
+                          // Bottom Bar: Slider, Duration & Fullscreen Icon
                           Padding(
-                            padding: EdgeInsets.fromLTRB(12.w, 0, 12.w, 6.h),
-                            child:
-                                BlocBuilder<
-                                  VideoPlayerCubit,
-                                  VideoPlaybackState
-                                >(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                BlocBuilder<VideoPlayerCubit, VideoPlaybackState>(
                                   buildWhen: (prev, curr) =>
                                       prev.position != curr.position ||
                                       prev.duration != curr.duration,
                                   builder: (context, timeState) {
-                                    final totalMs = timeState
-                                        .duration
-                                        .inMilliseconds
-                                        .toDouble();
+                                    final totalMs = timeState.duration.inMilliseconds.toDouble();
                                     final maxVal = totalMs > 0 ? totalMs : 1.0;
 
                                     final currentVal = _isDragging
                                         ? _dragPositionMs.clamp(0.0, maxVal)
-                                        : timeState.position.inMilliseconds
-                                              .toDouble()
-                                              .clamp(0.0, maxVal);
+                                        : timeState.position.inMilliseconds.toDouble().clamp(0.0, maxVal);
 
                                     final displayDuration = _isDragging
-                                        ? Duration(
-                                            milliseconds: _dragPositionMs
-                                                .toInt(),
-                                          )
+                                        ? Duration(milliseconds: _dragPositionMs.toInt())
                                         : timeState.position;
 
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         SliderTheme(
-                                          data: SliderTheme.of(context)
-                                              .copyWith(
-                                                trackHeight: 2.5.h,
-                                                thumbShape:
-                                                    RoundSliderThumbShape(
-                                                      enabledThumbRadius: 4.r,
-                                                    ),
-                                                overlayShape:
-                                                    RoundSliderOverlayShape(
-                                                      overlayRadius: 8.r,
-                                                    ),
-                                                activeTrackColor:
-                                                    ColorManager.gold,
-                                                inactiveTrackColor: ColorManager
-                                                    .paper400
-                                                    .withValues(alpha: 0.3),
-                                                thumbColor: ColorManager.gold,
-                                              ),
+                                          data: SliderTheme.of(context).copyWith(
+                                            trackHeight: 2.h,
+                                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 4.r),
+                                            overlayShape: RoundSliderOverlayShape(overlayRadius: 8.r),
+                                            activeTrackColor: ColorManager.gold,
+                                            inactiveTrackColor: ColorManager.paper400.withValues(alpha: 0.3),
+                                            thumbColor: ColorManager.gold,
+                                          ),
                                           child: Slider(
                                             value: currentVal,
                                             min: 0.0,
@@ -261,65 +265,60 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                                               });
                                             },
                                             onChanged: (v) {
-                                              setState(
-                                                () => _dragPositionMs = v,
-                                              );
+                                              setState(() => _dragPositionMs = v);
                                             },
                                             onChangeEnd: (v) {
-                                              setState(
-                                                () => _isDragging = false,
-                                              );
-                                              cubit.seek(
-                                                Duration(
-                                                  milliseconds: v.toInt(),
-                                                ),
-                                              );
+                                              setState(() => _isDragging = false);
+                                              cubit.seek(Duration(milliseconds: v.toInt()));
                                             },
                                           ),
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               _formatDuration(displayDuration),
-                                              style:
-                                                  AppFonts.ibmPlexSansArabic(
-                                                    color:
-                                                        ColorManager.paper200,
-                                                    fontSize: 10.sp,
-                                                  ),
+                                              style: AppFonts.ibmPlexSansArabic(
+                                                color: ColorManager.paper200,
+                                                fontSize: 10.sp,
+                                              ),
                                             ),
                                             Row(
                                               children: [
                                                 Text(
-                                                  _formatDuration(
-                                                    timeState.duration,
+                                                  _formatDuration(timeState.duration),
+                                                  style: AppFonts.ibmPlexSansArabic(
+                                                    color: ColorManager.paper400,
+                                                    fontSize: 10.sp,
                                                   ),
-                                                  style:
-                                                      AppFonts.ibmPlexSansArabic(
-                                                        color:
-                                                            ColorManager.paper400,
-                                                        fontSize: 10.sp,
-                                                      ),
                                                 ),
-                                                SizedBox(width: 8.w),
-                                                InkWell(
-                                                  onTap: () {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            FullScreenVideoScreen(
-                                                          cubit: cubit,
-                                                          title: widget.title,
+                                                SizedBox(width: 4.w),
+                                                Material(
+                                                  color: Colors.transparent,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      Navigator.of(
+                                                        context,
+                                                        rootNavigator: true,
+                                                      ).push(
+                                                        MaterialPageRoute(
+                                                          fullscreenDialog: true,
+                                                          builder: (_) => FullScreenVideoScreen(
+                                                            cubit: widget.cubit,
+                                                            title: widget.title,
+                                                          ),
                                                         ),
+                                                      );
+                                                    },
+                                                    borderRadius: BorderRadius.circular(20.r),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.all(6.r),
+                                                      child: Icon(
+                                                        CupertinoIcons.fullscreen,
+                                                        color: ColorManager.gold,
+                                                        size: 20.sp,
                                                       ),
-                                                    );
-                                                  },
-                                                  child: Icon(
-                                                    CupertinoIcons.fullscreen,
-                                                    color: ColorManager.gold,
-                                                    size: 16.sp,
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -330,6 +329,8 @@ class _VideoPlayerCardViewState extends State<_VideoPlayerCardView> {
                                     );
                                   },
                                 ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
