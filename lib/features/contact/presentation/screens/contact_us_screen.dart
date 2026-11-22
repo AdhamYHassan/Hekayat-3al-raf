@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_back_button.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
-import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/di/dependency_injection.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/bloc/main_cubit.dart';
@@ -102,13 +101,14 @@ class _ContactUsViewState extends State<_ContactUsView> {
           title: Builder(
             builder: (context) {
               final isArabic = context.locale.languageCode == 'ar';
-              final logoWidget = AppCachedNetworkImage(
-                imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+              final logoWidget = Image.asset(
+                'assets/images/applogo.png',
                 height: 32.h,
                 fit: BoxFit.contain,
-                memCacheHeight: 90,
-                errorWidget: Text(
-                  'حكايات على الرف',
+                cacheHeight: (32 * 2.5).toInt(),
+                filterQuality: FilterQuality.medium,
+                errorBuilder: (context, error, stackTrace) => Text(
+                  'app_name'.tr(),
                   style: AppFonts.arefRuqaa(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,

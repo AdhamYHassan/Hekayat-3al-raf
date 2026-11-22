@@ -447,10 +447,89 @@ class _SubmitStoryStep3ReviewState extends State<SubmitStoryStep3Review> {
               SizedBox(height: 20.h),
 
               // Actions: Previous + Submit
+              if (state.isSubmitting) ...[
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                  decoration: BoxDecoration(
+                    color: ColorManager.primaryLight.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(
+                      color: ColorManager.gold.withValues(alpha: 0.25),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 16.r,
+                                height: 16.r,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: ColorManager.gold,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                'submit.step3.uploading_progress'.tr(),
+                                style: AppFonts.alexandria(
+                                  fontSize: 12.5.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorManager.goldLight,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            state.uploadProgressText ??
+                                '${(state.uploadProgress * 100).toInt()}%',
+                            style: AppFonts.ibmPlexSansArabic(
+                              fontSize: 11.5.sp,
+                              fontWeight: FontWeight.w600,
+                              color: ColorManager.paper200,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(6.r),
+                        child: LinearProgressIndicator(
+                          value: state.uploadProgress > 0
+                              ? state.uploadProgress
+                              : null,
+                          minHeight: 6.h,
+                          backgroundColor:
+                              ColorManager.primaryDark.withValues(alpha: 0.6),
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            ColorManager.gold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        'submit.step3.keep_app_open'.tr(),
+                        style: AppFonts.ibmPlexSansArabic(
+                          fontSize: 10.5.sp,
+                          color: ColorManager.paper400.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 14.h),
+              ],
+
               Row(
                 children: [
                   OutlinedButton.icon(
-                    onPressed: () => cubit.setStep(2),
+                    onPressed: state.isSubmitting
+                        ? null
+                        : () => cubit.setStep(2),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(
                         color: ColorManager.paper100.withValues(alpha: 0.3),

@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hekayat_3al_raf/core/helpers/secure_storage_helper.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
@@ -179,6 +182,156 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
   }
 
   Future<bool> submitStory() async {
+    // 1. Check thumbnail file existence if specified
+    final bool isThumbnailMissing = state.coverImagePath != null &&
+        state.coverImagePath!.isNotEmpty &&
+        !File(state.coverImagePath!).existsSync();
+
+    // 2. Check attached media file existence if specified
+    final String? attachedFilePath = switch (state.selectedFormat) {
+      StorySubmissionFormat.video ||
+      StorySubmissionFormat.document =>
+        state.attachedFilePath,
+      StorySubmissionFormat.audio => state.recordedAudioPath,
+      _ => null,
+    };
+
+    final bool isMediaMissing = attachedFilePath != null &&
+        attachedFilePath.isNotEmpty &&
+        !File(attachedFilePath).existsSync();
+
+    // 3. Handle missing files with deterministic detection & UI state clearing
+    if (isThumbnailMissing || isMediaMissing) {
+      final String errorMessage;
+      if (isThumbnailMissing && isMediaMissing) {
+        errorMessage = 'submit.step3.media_and_cover_not_found'.tr();
+      } else if (isThumbnailMissing) {
+        errorMessage = 'submit.step3.cover_not_found'.tr();
+      } else {
+        errorMessage = switch (state.selectedFormat) {
+          StorySubmissionFormat.video => 'submit.step3.video_not_found'.tr(),
+          StorySubmissionFormat.audio => 'submit.step3.audio_not_found'.tr(),
+          StorySubmissionFormat.document =>
+            'submit.step3.document_not_found'.tr(),
+          _ => 'submit.step3.attached_file_not_found'.tr(),
+        };
+      }
+
+      emit(state.copyWith(
+        clearCoverImage: isThumbnailMissing,
+        clearAttachedFile: isMediaMissing &&
+            (state.selectedFormat == StorySubmissionFormat.video ||
+                state.selectedFormat == StorySubmissionFormat.document),
+        clearRecordedAudio: isMediaMissing &&
+            state.selectedFormat == StorySubmissionFormat.audio,
+        recordingDurationSeconds: (isMediaMissing &&
+                state.selectedFormat == StorySubmissionFormat.audio)
+            ? 0
+            : null,
+        errorMessage: errorMessage,
+      ));
+      return false;
+    }
+
+    // 4. Validate video format and size boundaries if video format
+    if (state.selectedFormat == StorySubmissionFormat.video &&
+        attachedFilePath != null &&
+        attachedFilePath.isNotEmpty) {
+      final videoFile = File(attachedFilePath);
+      final extension = attachedFilePath.split('.').last.toLowerCase();
+      const allowedExtensions = {'mp4', 'mov', 'webm'};
+
+      if (!allowedExtensions.contains(extension)) {
+        emit(state.copyWith(
+          clearAttachedFile: true,
+          errorMessage: 'validation.video_format_not_supported'.tr(),
+        ));
+        return false;
+      }
+
+      const maxVideoSizeBytes = 500 * 1024 * 1024;
+      final fileSizeBytes = videoFile.lengthSync();
+      final fileSizeMb = fileSizeBytes / (1024 * 1024);
+
+      debugPrint(
+        '🎬 [SubmitCubit] Video validation: ${fileSizeMb.toStringAsFixed(2)} MB ($fileSizeBytes Bytes)',
+      );
+
+      if (fileSizeBytes > maxVideoSizeBytes) {
+        emit(state.copyWith(
+          clearAttachedFile: true,
+          errorMessage: 'validation.video_size_limit_exceeded'.tr(),
+        ));
+        return false;
+      }
+    }
+
+    // 5. Validate document size boundary if document format (Max 50 MB)
+    if (state.selectedFormat == StorySubmissionFormat.document &&
+        attachedFilePath != null &&
+        attachedFilePath.isNotEmpty) {
+      final documentFile = File(attachedFilePath);
+      const maxDocumentSizeBytes = 50 * 1024 * 1024;
+      final fileSizeBytes = documentFile.lengthSync();
+      final fileSizeMb = fileSizeBytes / (1024 * 1024);
+
+      debugPrint(
+        '📄 [SubmitCubit] Document validation: ${fileSizeMb.toStringAsFixed(2)} MB ($fileSizeBytes Bytes)',
+      );
+
+      if (fileSizeBytes > maxDocumentSizeBytes) {
+        emit(state.copyWith(
+          clearAttachedFile: true,
+          errorMessage: 'validation.document_size_limit_exceeded'.tr(),
+        ));
+        return false;
+      }
+    }
+
+    // 6. Validate audio size boundary if audio format (Max 500 MB)
+    if (state.selectedFormat == StorySubmissionFormat.audio &&
+        attachedFilePath != null &&
+        attachedFilePath.isNotEmpty) {
+      final audioFile = File(attachedFilePath);
+      const maxAudioSizeBytes = 500 * 1024 * 1024;
+      final fileSizeBytes = audioFile.lengthSync();
+      final fileSizeMb = fileSizeBytes / (1024 * 1024);
+
+      debugPrint(
+        '🎙️ [SubmitCubit] Audio validation: ${fileSizeMb.toStringAsFixed(2)} MB ($fileSizeBytes Bytes)',
+      );
+
+      if (fileSizeBytes > maxAudioSizeBytes) {
+        emit(state.copyWith(
+          clearRecordedAudio: true,
+          recordingDurationSeconds: 0,
+          errorMessage: 'validation.audio_size_limit_exceeded'.tr(),
+        ));
+        return false;
+      }
+    }
+
+    // 7. Validate thumbnail size boundary (Max 15 MB)
+    if (state.coverImagePath != null &&
+        state.coverImagePath!.isNotEmpty) {
+      final thumbnailFile = File(state.coverImagePath!);
+      const maxThumbnailSizeBytes = 15 * 1024 * 1024;
+      final fileSizeBytes = thumbnailFile.lengthSync();
+      final fileSizeMb = fileSizeBytes / (1024 * 1024);
+
+      debugPrint(
+        '🖼️ [SubmitCubit] Thumbnail validation: ${fileSizeMb.toStringAsFixed(2)} MB ($fileSizeBytes Bytes)',
+      );
+
+      if (fileSizeBytes > maxThumbnailSizeBytes) {
+        emit(state.copyWith(
+          clearCoverImage: true,
+          errorMessage: 'validation.thumbnail_size_limit_exceeded'.tr(),
+        ));
+        return false;
+      }
+    }
+
     final token = await SecureStorageHelper.getToken();
     final isGuest = token == null || token.isEmpty;
 
@@ -208,9 +361,28 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
       acceptTerms: state.acceptTerms,
     );
 
-    emit(state.copyWith(isSubmitting: true, clearError: true));
+    emit(state.copyWith(
+      isSubmitting: true,
+      clearError: true,
+      clearUploadProgress: true,
+    ));
 
-    final result = await _submitStoryUseCase(params);
+    final result = await _submitStoryUseCase(
+      params,
+      onSendProgress: (sent, total) {
+        if (total > 0) {
+          final progress = (sent / total).clamp(0.0, 1.0);
+          final sentMb = (sent / (1024 * 1024)).toStringAsFixed(1);
+          final totalMb = (total / (1024 * 1024)).toStringAsFixed(1);
+          final progressText = '$sentMb / $totalMb MB';
+
+          emit(state.copyWith(
+            uploadProgress: progress,
+            uploadProgressText: progressText,
+          ));
+        }
+      },
+    );
 
     switch (result) {
       case ApiSuccess(:final data):
@@ -220,6 +392,7 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
           isSubmitting: false,
           isSubmittedSuccessfully: true,
           successMessage: message,
+          clearUploadProgress: true,
         ));
         return true;
 
@@ -227,6 +400,7 @@ class SubmitStoryCubit extends Cubit<SubmitStoryState> {
         emit(state.copyWith(
           isSubmitting: false,
           errorMessage: failure.message,
+          clearUploadProgress: true,
         ));
         return false;
     }

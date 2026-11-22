@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_back_button.dart';
-import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 
 class StoryDetailHeader extends StatelessWidget {
   final VoidCallback onBackTap;
@@ -14,13 +13,13 @@ class StoryDetailHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
-    final logoWidget = AppCachedNetworkImage(
-      imageUrl:
-          'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+    final logoWidget = Image.asset(
+      'assets/images/applogo.png',
       height: 32.h,
       fit: BoxFit.contain,
-      memCacheHeight: 90,
-      errorWidget: Text(
+      cacheHeight: (32 * 2.5).toInt(),
+      filterQuality: FilterQuality.medium,
+      errorBuilder: (context, error, stackTrace) => Text(
         'app_name'.tr(),
         style: AppFonts.arefRuqaa(
           fontSize: 18.sp,

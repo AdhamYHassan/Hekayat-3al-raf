@@ -85,11 +85,15 @@ class SubmitStoryRepositoryImpl implements ISubmitStoryRepository {
 
   @override
   Future<ApiResult<Map<String, dynamic>>> submitStory(
-    SubmitStoryParams params,
-  ) async {
+    SubmitStoryParams params, {
+    ProgressCallback? onSendProgress,
+  }) async {
     try {
       final request = SubmitStoryRequestModel(params);
-      final response = await _remoteDataSource.submitStory(request);
+      final response = await _remoteDataSource.submitStory(
+        request,
+        onSendProgress: onSendProgress,
+      );
       return ApiSuccess(response);
     } on DioException catch (e) {
       final errorMessage = e.response?.data is Map &&

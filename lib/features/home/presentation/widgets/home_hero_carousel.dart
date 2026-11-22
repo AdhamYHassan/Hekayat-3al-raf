@@ -249,12 +249,13 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 10.h),
                   child: Center(
-                    child: AppCachedNetworkImage(
-                      imageUrl: 'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                    child: Image.asset(
+                      'assets/images/applogo.png',
                       height: 38.h,
                       fit: BoxFit.contain,
-                      memCacheHeight: 100,
-                      errorWidget: Text(
+                      cacheHeight: (38 * 2.5).toInt(),
+                      filterQuality: FilterQuality.medium,
+                      errorBuilder: (context, error, stackTrace) => Text(
                         'app_name'.tr(),
                         style: AppFonts.arefRuqaa(
                           fontSize: 24.sp,

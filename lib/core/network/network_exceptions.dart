@@ -21,8 +21,13 @@ class NetworkExceptions {
       if (error.error is SocketException) {
         return NetworkFailure(message);
       }
+      if (error.error is FileSystemException) {
+        return NetworkFailure(message);
+      }
       return ServerFailure(message, statusCode: error.response?.statusCode);
     } else if (error is SocketException) {
+      return NetworkFailure(message);
+    } else if (error is FileSystemException) {
       return NetworkFailure(message);
     }
     return UnknownFailure(message);
@@ -61,6 +66,8 @@ class NetworkExceptions {
         case DioExceptionType.unknown:
           if (error.error is SocketException) {
             errorMessage = "no_internet_connection".tr();
+          } else if (error.error is FileSystemException) {
+            errorMessage = "file_not_found_error".tr();
           } else {
             errorMessage = "unknown_error".tr();
           }
@@ -71,6 +78,8 @@ class NetworkExceptions {
       }
     } else if (error is SocketException) {
       errorMessage = "no_internet_connection".tr();
+    } else if (error is FileSystemException) {
+      errorMessage = "file_not_found_error".tr();
     } else if (error is FormatException) {
       errorMessage = "bad_response_format".tr();
     } else {

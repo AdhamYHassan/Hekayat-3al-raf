@@ -200,10 +200,24 @@ class _AudioStoryRecorderBoxState extends State<AudioStoryRecorderBox> {
     final duration = _secondsNotifier.value;
 
     if (finalPath != null && File(finalPath).existsSync()) {
-      final size = File(finalPath).lengthSync();
+      final file = File(finalPath);
+      final size = file.lengthSync();
+      const maxAudioSizeBytes = 500 * 1024 * 1024; // 500 MB
+
       debugPrint(
-        'AudioStoryRecorderBox: Valid recording file found! Path: $finalPath, Size: $size bytes, Duration: ${duration}s',
+        'AudioStoryRecorderBox: Valid recording file found! Path: $finalPath, Size: $size bytes (${(size / (1024 * 1024)).toStringAsFixed(2)} MB), Duration: ${duration}s',
       );
+
+      // Keep and accept the recorded audio, but notify user if max limit was reached
+      if (size > maxAudioSizeBytes) {
+        if (mounted) {
+          AppSnackBar.showWarning(
+            context,
+            message: 'validation.audio_max_reached_stopped'.tr(),
+          );
+        }
+      }
+
       _currentAudioPath = finalPath;
       widget.onRecordingCompleted(finalPath, duration);
 

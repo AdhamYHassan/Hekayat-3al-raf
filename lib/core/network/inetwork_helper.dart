@@ -12,6 +12,8 @@ abstract class InetworkHelper {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   });
 
   Future<Response> put(

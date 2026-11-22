@@ -47,6 +47,7 @@ class LongFormStoryEditorField extends StatefulWidget {
 class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
   Timer? _debounceTimer;
   late final ValueNotifier<int> _wordCountNotifier;
+  late final ValueNotifier<int> _characterCountNotifier;
   late final ValueNotifier<bool> _isAutosavedNotifier;
 
   @override
@@ -54,6 +55,9 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
     super.initState();
     _wordCountNotifier = ValueNotifier<int>(
       _calculateWords(widget.controller.text),
+    );
+    _characterCountNotifier = ValueNotifier<int>(
+      widget.controller.text.length,
     );
     _isAutosavedNotifier = ValueNotifier<bool>(true);
     widget.controller.addListener(_handleTextChange);
@@ -64,6 +68,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
     _debounceTimer?.cancel();
     widget.controller.removeListener(_handleTextChange);
     _wordCountNotifier.dispose();
+    _characterCountNotifier.dispose();
     _isAutosavedNotifier.dispose();
     super.dispose();
   }
@@ -77,6 +82,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
   void _handleTextChange() {
     _isAutosavedNotifier.value = false;
     _wordCountNotifier.value = _calculateWords(widget.controller.text);
+    _characterCountNotifier.value = widget.controller.text.length;
 
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 1200), () {
@@ -210,7 +216,7 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                 ),
               ),
 
-              // Bottom Metrics Bar (Words & Reading Time)
+              // Bottom Metrics Bar (Characters, Words & Reading Time)
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                 decoration: BoxDecoration(
@@ -220,25 +226,35 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                     ),
                   ),
                 ),
-                child: ValueListenableBuilder<int>(
-                  valueListenable: _wordCountNotifier,
-                  builder: (context, words, _) {
-                    final readingTimeMinutes = (words / 180)
-                        .ceil(); // ~180 wpm avg
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'submit.editor.words_count'.tr(args: [words.toString()]),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ValueListenableBuilder<int>(
+                      valueListenable: _characterCountNotifier,
+                      builder: (context, characters, _) {
+                        final isOverLimit = characters > 12000;
+                        return Text(
+                          'submit.editor.characters_count'.tr(args: [characters.toString()]),
                           style: AppFonts.ibmPlexSansArabic(
                             fontSize: 11.sp,
-                            color: ColorManager.paper300.withValues(
-                              alpha: 0.75,
-                            ),
-                            fontWeight: FontWeight.w500,
+                            color: isOverLimit
+                                ? ColorManager.error
+                                : ColorManager.paper300.withValues(
+                                    alpha: 0.75,
+                                  ),
+                            fontWeight: isOverLimit
+                                ? FontWeight.bold
+                                : FontWeight.w500,
                           ),
-                        ),
-                        Text(
+                        );
+                      },
+                    ),
+                    ValueListenableBuilder<int>(
+                      valueListenable: _wordCountNotifier,
+                      builder: (context, words, _) {
+                        final readingTimeMinutes = (words / 180)
+                            .ceil(); // ~180 wpm avg
+                        return Text(
                           words > 0
                               ? 'submit.editor.reading_time'.tr(args: [readingTimeMinutes.toString()])
                               : '',
@@ -246,10 +262,10 @@ class _LongFormStoryEditorFieldState extends State<LongFormStoryEditorField> {
                             fontSize: 10.5.sp,
                             color: ColorManager.paper400.withValues(alpha: 0.6),
                           ),
-                        ),
-                      ],
-                    );
-                  },
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -21,6 +21,8 @@ class SubmitStoryState extends Equatable {
   final bool isRecording;
   final int recordingDurationSeconds;
   final bool isSubmitting;
+  final double uploadProgress; // 0.0 to 1.0 (0% to 100%)
+  final String? uploadProgressText; // e.g. "45 MB / 120 MB"
   final bool isSubmittedSuccessfully;
   final String? successMessage;
   final String? errorMessage;
@@ -53,6 +55,8 @@ class SubmitStoryState extends Equatable {
     this.isRecording = false,
     this.recordingDurationSeconds = 0,
     this.isSubmitting = false,
+    this.uploadProgress = 0.0,
+    this.uploadProgressText,
     this.isSubmittedSuccessfully = false,
     this.successMessage,
     this.errorMessage,
@@ -88,6 +92,9 @@ class SubmitStoryState extends Equatable {
     bool? isRecording,
     int? recordingDurationSeconds,
     bool? isSubmitting,
+    double? uploadProgress,
+    String? uploadProgressText,
+    bool clearUploadProgress = false,
     bool? isSubmittedSuccessfully,
     String? successMessage,
     String? errorMessage,
@@ -122,6 +129,11 @@ class SubmitStoryState extends Equatable {
       recordingDurationSeconds:
           recordingDurationSeconds ?? this.recordingDurationSeconds,
       isSubmitting: isSubmitting ?? this.isSubmitting,
+      uploadProgress:
+          clearUploadProgress ? 0.0 : (uploadProgress ?? this.uploadProgress),
+      uploadProgressText: clearUploadProgress
+          ? null
+          : (uploadProgressText ?? this.uploadProgressText),
       isSubmittedSuccessfully:
           isSubmittedSuccessfully ?? this.isSubmittedSuccessfully,
       successMessage: successMessage ?? this.successMessage,
@@ -156,6 +168,8 @@ class SubmitStoryState extends Equatable {
         isRecording,
         recordingDurationSeconds,
         isSubmitting,
+        uploadProgress,
+        uploadProgressText,
         isSubmittedSuccessfully,
         successMessage,
         errorMessage,

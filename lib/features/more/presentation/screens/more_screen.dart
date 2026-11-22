@@ -10,7 +10,6 @@ import 'package:hekayat_3al_raf/core/helpers/shared_prefs_helper.dart';
 import 'package:hekayat_3al_raf/core/network/network_result.dart';
 import 'package:hekayat_3al_raf/core/routing/routes.dart';
 import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
-import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_snack_bar.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/delete_account_dialog.dart';
 import 'package:hekayat_3al_raf/features/more/presentation/widgets/more_language_selector.dart';
@@ -40,14 +39,14 @@ class MoreScreen extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    AppCachedNetworkImage(
-                      imageUrl:
-                          'https://hekayat-ala-el-raff-m9tr.bolt.host/brand/logo-gold.webp',
+                    Image.asset(
+                      'assets/images/applogo.png',
                       height: 48.h,
                       fit: BoxFit.contain,
-                      memCacheHeight: 120,
-                      errorWidget: Text(
-                        'حكايات على الرف',
+                      cacheHeight: (48 * 2.5).toInt(),
+                      filterQuality: FilterQuality.medium,
+                      errorBuilder: (context, error, stackTrace) => Text(
+                        'app_name'.tr(),
                         style: AppFonts.arefRuqaa(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.w700,

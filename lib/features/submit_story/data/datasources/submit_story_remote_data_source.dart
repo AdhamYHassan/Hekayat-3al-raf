@@ -10,18 +10,24 @@ class SubmitStoryRemoteDataSource implements ISubmitStoryRemoteDataSource {
   const SubmitStoryRemoteDataSource(this._networkHelper);
 
   @override
-  Future<Map<String, dynamic>> submitStory(SubmitStoryRequestModel request) async {
+  Future<Map<String, dynamic>> submitStory(
+    SubmitStoryRequestModel request, {
+    ProgressCallback? onSendProgress,
+  }) async {
     final formData = await request.toFormData();
 
     final response = await _networkHelper.post(
       ApiEndpoints.submitStory,
       data: formData,
       options: Options(
+        sendTimeout: const Duration(minutes: 30),
+        receiveTimeout: const Duration(minutes: 5),
         headers: const {
           'Content-Type': 'multipart/form-data',
           'Accept': 'application/json',
         },
       ),
+      onSendProgress: onSendProgress,
     );
 
     if (response.data is Map<String, dynamic>) {
