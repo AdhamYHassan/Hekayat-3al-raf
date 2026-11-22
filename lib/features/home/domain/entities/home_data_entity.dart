@@ -11,6 +11,8 @@ class HomeDataEntity extends Equatable {
   final List<StoryFeedItem> topStories;
   final List<AmbassadorFeedItem> ambassadors;
   final List<RegionArchiveItem> regions;
+  final List<PodcastEpisodeEntity> podcastEpisodes;
+  final List<MomentFeedItemEntity> moments;
 
   const HomeDataEntity({
     required this.heroSlides,
@@ -18,6 +20,8 @@ class HomeDataEntity extends Equatable {
     required this.topStories,
     required this.ambassadors,
     required this.regions,
+    this.podcastEpisodes = const [],
+    this.moments = const [],
   });
 
   @override
@@ -27,6 +31,8 @@ class HomeDataEntity extends Equatable {
         topStories,
         ambassadors,
         regions,
+        podcastEpisodes,
+        moments,
       ];
 }
 

@@ -12,6 +12,12 @@ import 'package:hekayat_3al_raf/features/auth/presentation/screens/forgot_passwo
 import 'package:hekayat_3al_raf/features/contact/presentation/screens/contact_us_screen.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/bloc/home_cubit.dart';
 import 'package:hekayat_3al_raf/features/main/presentation/screens/main_screen.dart';
+import 'package:hekayat_3al_raf/features/home/domain/entities/home_extra_entities.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/widgets/moment_viewer_screen.dart';
+import 'package:hekayat_3al_raf/features/moments/presentation/screens/moment_details_screen.dart';
+import 'package:hekayat_3al_raf/features/moments/presentation/screens/moments_screen.dart';
+import 'package:hekayat_3al_raf/features/podcast/presentation/screens/podcast_details_screen.dart';
+import 'package:hekayat_3al_raf/features/podcast/presentation/screens/podcasts_screen.dart';
 import 'package:hekayat_3al_raf/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_messages_cubit.dart';
 import 'package:hekayat_3al_raf/features/profile/presentation/bloc/my_stories_cubit.dart';
@@ -128,6 +134,62 @@ class AppRouter {
                   ),
           );
         },
+      ),
+      GoRoute(
+        path: Routes.podcastDetails,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final podcastId = extra?['id'] as int? ?? 0;
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: PodcastDetailsScreen(podcastId: podcastId),
+          );
+        },
+      ),
+      GoRoute(
+        path: Routes.podcasts,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: const PodcastsScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.momentViewer,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final moments = extra?['moments'] as List<MomentFeedItemEntity>? ?? [];
+          final initialIndex = extra?['initialIndex'] as int? ?? 0;
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: MomentViewerScreen(
+              moments: moments,
+              initialIndex: initialIndex,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: Routes.momentDetails,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final momentId = extra?['id'] as int? ?? 0;
+          return _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: MomentDetailsScreen(momentId: momentId),
+          );
+        },
+      ),
+      GoRoute(
+        path: Routes.moments,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context: context,
+          state: state,
+          child: const MomentsScreen(),
+        ),
       ),
       GoRoute(
         path: Routes.contactUs,

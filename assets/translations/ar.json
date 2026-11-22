@@ -150,6 +150,11 @@
     "ambassadors_title": "السفراء",
     "regions_kicker": "من كل بلد",
     "regions_title": "حكايات حسب المنطقة",
+    "moments_kicker": "لحظات",
+    "moments_title": "أرشيف اللحظات",
+    "podcast_episodes_kicker": "استمع وشاهد",
+    "podcast_episodes_title": "بودكاست حكايات",
+    "podcast_tag": "بودكاست",
     "podcast_kicker": "فرصة البودكاست",
     "podcast_body": "من بين الحكايات اللي بتوصلنا، هنختار حكاية مميزة، وصاحبها هيكون ضيفنا في حلقة خاصة من البودكاست.",
     "podcast_cta": "احكي حكايتك",
@@ -160,6 +165,21 @@
     "stats_submitted": "حكاية تم إرسالها",
     "stats_published": "حكاية منشورة",
     "stats_readers": "قارئ ومستمع"
+  },
+  "podcast": {
+    "tag": "بودكاست",
+    "watch_episode": "مشاهدة الحلقة",
+    "open_youtube": "فتح على YouTube",
+    "guest_label": "الضيف",
+    "about_episode": "عن الحلقة",
+    "more_episodes": "حلقات أخرى",
+    "details_load_error": "حدث خطأ أثناء تحميل تفاصيل البودكاست"
+  },
+  "moments": {
+    "kind_photo": "صورة",
+    "kind_video": "فيديو",
+    "tap_to_view_fullscreen": "اضغط للعرض بالشاشة الكاملة",
+    "more_moments": "لحظات أخرى"
   },
   "settings": {
     "title": "الإعدادات",

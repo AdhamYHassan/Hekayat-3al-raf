@@ -150,6 +150,11 @@
     "ambassadors_title": "Trusted Voices of History",
     "regions_kicker": "Regional Archives",
     "regions_title": "Stories by Region",
+    "moments_kicker": "Moments",
+    "moments_title": "Platform Moments",
+    "podcast_episodes_kicker": "Listen & Watch",
+    "podcast_episodes_title": "Hekayat Podcast",
+    "podcast_tag": "Podcast",
     "podcast_kicker": "Oral Archive Network",
     "podcast_body": "Audio recording preserves authentic tone, raw emotions, and living memories before they fade.",
     "podcast_cta": "Record Voice Narrative",
@@ -157,6 +162,21 @@
     "share_title": "Stories kept on the shelf for years... It is time they are heard",
     "share_body": "Share a memory from your city, family history, or a milestone you lived to join the open Arab archive.",
     "share_cta": "Tell Your Story Now"
+  },
+  "podcast": {
+    "tag": "Podcast",
+    "watch_episode": "Watch Episode",
+    "open_youtube": "Open on YouTube",
+    "guest_label": "Guest",
+    "about_episode": "About Episode",
+    "more_episodes": "More Episodes",
+    "details_load_error": "Failed to load podcast episode details"
+  },
+  "moments": {
+    "kind_photo": "Photo",
+    "kind_video": "Video",
+    "tap_to_view_fullscreen": "Tap to view fullscreen",
+    "more_moments": "More Moments"
   },
   "settings": {
     "title": "Settings",

@@ -44,3 +44,84 @@ class RegionArchiveItem extends Equatable {
       ];
 }
 
+/// Entity representing podcast episode items.
+class PodcastEpisodeEntity extends Equatable {
+  final int id;
+  final int number;
+  final String title;
+  final String shortDescription;
+  final String guest;
+  final int? durationMinutes;
+  final String publishedOn;
+  final String imageUrl;
+  final String videoUrl;
+  final String? embedSrc;
+  final String webUrl;
+
+  const PodcastEpisodeEntity({
+    required this.id,
+    required this.number,
+    required this.title,
+    required this.shortDescription,
+    required this.guest,
+    this.durationMinutes,
+    required this.publishedOn,
+    required this.imageUrl,
+    required this.videoUrl,
+    this.embedSrc,
+    required this.webUrl,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        number,
+        title,
+        shortDescription,
+        guest,
+        durationMinutes,
+        publishedOn,
+        imageUrl,
+        videoUrl,
+        embedSrc,
+        webUrl,
+      ];
+}
+
+enum MomentKind { photo, video }
+
+/// Entity representing a fleeting moment (cultural snapshot or brief story).
+class MomentFeedItemEntity extends Equatable {
+  final int id;
+  final MomentKind kind;
+  final String title;
+  final String description;
+  final String? imageUrl;
+  final String? videoUrl;
+  final String webUrl;
+  final String created;
+
+  const MomentFeedItemEntity({
+    required this.id,
+    required this.kind,
+    required this.title,
+    required this.description,
+    this.imageUrl,
+    this.videoUrl,
+    required this.webUrl,
+    required this.created,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        kind,
+        title,
+        description,
+        imageUrl,
+        videoUrl,
+        webUrl,
+        created,
+      ];
+}
+

@@ -10,6 +10,11 @@ class Routes {
   static const String editProfile = '/edit-profile';
   static const String myStories = '/my-stories';
   static const String myMessages = '/my-messages';
+  static const String podcastDetails = '/podcast-details';
+  static const String podcasts = '/podcasts';
+  static const String momentViewer = '/moment-viewer';
+  static const String momentDetails = '/moment-details';
+  static const String moments = '/moments';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';

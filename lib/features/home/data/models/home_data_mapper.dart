@@ -74,12 +74,48 @@ extension HomeDataDtoMapper on HomeDataDto {
       );
     }).toList();
 
+    // 6. Map Podcast Episodes
+    final domainPodcast = podcast.map((p) {
+      return PodcastEpisodeEntity(
+        id: p.id,
+        number: p.number,
+        title: p.title,
+        shortDescription: p.shortDescription,
+        guest: p.guest,
+        durationMinutes: p.durationMinutes,
+        publishedOn: p.publishedOn,
+        imageUrl: p.image,
+        videoUrl: p.videoUrl,
+        embedSrc: p.embedSrc,
+        webUrl: p.url,
+      );
+    }).toList();
+
+    // 7. Map Moments
+    final domainMoments = moments.map((m) {
+      final kind = m.kind.toLowerCase() == 'video'
+          ? MomentKind.video
+          : MomentKind.photo;
+      return MomentFeedItemEntity(
+        id: m.id,
+        kind: kind,
+        title: m.title,
+        description: m.description,
+        imageUrl: m.image,
+        videoUrl: m.video,
+        webUrl: m.url,
+        created: m.created,
+      );
+    }).toList();
+
     return HomeDataEntity(
       heroSlides: domainSlides,
       featuredStory: featuredStory,
       topStories: domainTopStories,
       ambassadors: domainAmbassadors,
       regions: domainRegions,
+      podcastEpisodes: domainPodcast,
+      moments: domainMoments,
     );
   }
 }

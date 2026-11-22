@@ -11,6 +11,8 @@ import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_shimmer_
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_ambassadors_list.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_featured_card.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_hero_carousel.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_moments_list.dart';
+import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_podcast_list.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_section_header.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_share_cta_card.dart';
 import 'package:hekayat_3al_raf/features/home/presentation/widgets/home_top_stories_list.dart';
@@ -77,6 +79,25 @@ class HomeFeedScreen extends StatelessWidget {
                     context.push(Routes.storyDetails, extra: {'id': story.id});
                   },
                 ),
+                if (homeData.podcastEpisodes.isNotEmpty) ...[
+                  SizedBox(height: 32.h),
+                  HomeSectionHeader(
+                    kicker: 'home.podcast_episodes_kicker'.tr(),
+                    title: 'home.podcast_episodes_title'.tr(),
+                    actionLabel: 'home.all'.tr(),
+                    onActionTap: () => context.push(Routes.podcasts),
+                  ),
+                  SizedBox(height: 14.h),
+                  HomePodcastList(
+                    episodes: homeData.podcastEpisodes,
+                    onEpisodeTap: (episode) {
+                      context.push(
+                        Routes.podcastDetails,
+                        extra: {'id': episode.id},
+                      );
+                    },
+                  ),
+                ],
                 SizedBox(height: 32.h),
                 HomeSectionHeader(
                   kicker: 'home.ambassadors_kicker'.tr(),
@@ -95,6 +116,26 @@ class HomeFeedScreen extends StatelessWidget {
                     );
                   },
                 ),
+                if (homeData.moments.isNotEmpty) ...[
+                  SizedBox(height: 32.h),
+                  HomeSectionHeader(
+                    kicker: 'home.moments_kicker'.tr(),
+                    title: 'home.moments_title'.tr(),
+                    actionLabel: 'home.all'.tr(),
+                    onActionTap: () => context.push(Routes.moments),
+                  ),
+                  SizedBox(height: 14.h),
+                  HomeMomentsList(
+                    moments: homeData.moments,
+                    onMomentTap: (index) {
+                      final moment = homeData.moments[index];
+                      context.push(
+                        Routes.momentDetails,
+                        extra: {'id': moment.id},
+                      );
+                    },
+                  ),
+                ],
                 // TODO(Regions): Implement regions section when backend is ready.
                 // SizedBox(height: 32.h),
                 // HomeSectionHeader(

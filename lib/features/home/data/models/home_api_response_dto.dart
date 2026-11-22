@@ -32,6 +32,8 @@ class HomeDataDto {
   final List<RegionDto> regions;
   final List<NewsDto> news;
   final List<AmbassadorDto> ambassadors;
+  final List<PodcastDto> podcast;
+  final List<MomentDto> moments;
 
   const HomeDataDto({
     required this.slides,
@@ -40,6 +42,8 @@ class HomeDataDto {
     required this.regions,
     required this.news,
     required this.ambassadors,
+    required this.podcast,
+    required this.moments,
   });
 
   factory HomeDataDto.fromJson(Map<String, dynamic> json) {
@@ -66,6 +70,14 @@ class HomeDataDto {
           [],
       ambassadors: (json['ambassadors'] as List<dynamic>?)
               ?.map((e) => AmbassadorDto.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      podcast: (json['podcast'] as List<dynamic>?)
+              ?.map((e) => PodcastDto.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      moments: (json['moments'] as List<dynamic>?)
+              ?.map((e) => MomentDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -288,6 +300,86 @@ class AmbassadorDto {
       mainImage: json['main_image'] as String? ?? '',
       followersCount: json['followers_count'] as int? ?? 0,
       storiesCount: json['stories_count'] as int? ?? 0,
+    );
+  }
+}
+
+class PodcastDto {
+  final int id;
+  final int number;
+  final String title;
+  final String shortDescription;
+  final String guest;
+  final int? durationMinutes;
+  final String publishedOn;
+  final String image;
+  final String videoUrl;
+  final String? embedSrc;
+  final String url;
+
+  const PodcastDto({
+    required this.id,
+    required this.number,
+    required this.title,
+    required this.shortDescription,
+    required this.guest,
+    this.durationMinutes,
+    required this.publishedOn,
+    required this.image,
+    required this.videoUrl,
+    this.embedSrc,
+    required this.url,
+  });
+
+  factory PodcastDto.fromJson(Map<String, dynamic> json) {
+    final videoEmbed = json['video_embed'] as Map<String, dynamic>?;
+    return PodcastDto(
+      id: json['id'] as int? ?? 0,
+      number: json['number'] as int? ?? 0,
+      title: json['title'] as String? ?? '',
+      shortDescription: json['short_description'] as String? ?? '',
+      guest: json['guest'] as String? ?? '',
+      durationMinutes: json['duration_minutes'] as int?,
+      publishedOn: json['published_on'] as String? ?? '',
+      image: json['image'] as String? ?? '',
+      videoUrl: json['video_url'] as String? ?? '',
+      embedSrc: videoEmbed?['src'] as String?,
+      url: json['url'] as String? ?? '',
+    );
+  }
+}
+
+class MomentDto {
+  final int id;
+  final String kind;
+  final String title;
+  final String description;
+  final String? image;
+  final String? video;
+  final String url;
+  final String created;
+
+  const MomentDto({
+    required this.id,
+    required this.kind,
+    required this.title,
+    required this.description,
+    this.image,
+    this.video,
+    required this.url,
+    required this.created,
+  });
+
+  factory MomentDto.fromJson(Map<String, dynamic> json) {
+    return MomentDto(
+      id: json['id'] as int? ?? 0,
+      kind: json['kind'] as String? ?? 'photo',
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      image: json['image'] as String?,
+      video: json['video'] as String?,
+      url: json['url'] as String? ?? '',
+      created: json['created'] as String? ?? '',
     );
   }
 }

@@ -1,3 +1,19 @@
+import 'package:hekayat_3al_raf/features/moments/data/datasources/i_moments_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/moments/data/datasources/moments_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/moments/data/repositories/moments_repository_impl.dart';
+import 'package:hekayat_3al_raf/features/moments/domain/repositories/i_moments_repository.dart';
+import 'package:hekayat_3al_raf/features/moments/domain/usecases/get_moment_details_usecase.dart';
+import 'package:hekayat_3al_raf/features/moments/domain/usecases/get_moments_list_usecase.dart';
+import 'package:hekayat_3al_raf/features/moments/presentation/bloc/moment_details_cubit.dart';
+import 'package:hekayat_3al_raf/features/moments/presentation/bloc/moments_list_cubit.dart';
+import 'package:hekayat_3al_raf/features/podcast/data/datasources/i_podcast_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/podcast/data/datasources/podcast_remote_data_source.dart';
+import 'package:hekayat_3al_raf/features/podcast/data/repositories/podcast_repository_impl.dart';
+import 'package:hekayat_3al_raf/features/podcast/domain/repositories/i_podcast_repository.dart';
+import 'package:hekayat_3al_raf/features/podcast/domain/usecases/get_podcast_details_usecase.dart';
+import 'package:hekayat_3al_raf/features/podcast/domain/usecases/get_podcasts_list_usecase.dart';
+import 'package:hekayat_3al_raf/features/podcast/presentation/bloc/podcast_details_cubit.dart';
+import 'package:hekayat_3al_raf/features/podcast/presentation/bloc/podcasts_list_cubit.dart';
 import 'package:hekayat_3al_raf/features/splash/data/datasources/splash_remote_data_source.dart';
 import 'package:hekayat_3al_raf/features/splash/data/repositories/splash_repository_impl.dart';
 import 'package:hekayat_3al_raf/features/splash/domain/repositories/i_splash_repository.dart';
@@ -373,5 +389,49 @@ void setupDependencyInjection() {
       getIt<DefaultVideoPlayerService>(),
       getIt<IAudioPlayerService>(),
     ),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Podcast Feature DI Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<IPodcastRemoteDataSource>(
+    () => PodcastRemoteDataSource(getIt<InetworkHelper>()),
+  );
+  getIt.registerLazySingleton<IPodcastRepository>(
+    () => PodcastRepositoryImpl(getIt<IPodcastRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<GetPodcastDetailsUseCase>(
+    () => GetPodcastDetailsUseCase(getIt<IPodcastRepository>()),
+  );
+  getIt.registerLazySingleton<GetPodcastsListUseCase>(
+    () => GetPodcastsListUseCase(getIt<IPodcastRepository>()),
+  );
+  getIt.registerFactory<PodcastDetailsCubit>(
+    () => PodcastDetailsCubit(getIt<GetPodcastDetailsUseCase>()),
+  );
+  getIt.registerFactory<PodcastsListCubit>(
+    () => PodcastsListCubit(getIt<GetPodcastsListUseCase>()),
+  );
+
+  // ---------------------------------------------------------------------------
+  // Moments Feature DI Setup
+  // ---------------------------------------------------------------------------
+  getIt.registerLazySingleton<IMomentsRemoteDataSource>(
+    () => MomentsRemoteDataSource(getIt<InetworkHelper>()),
+  );
+  getIt.registerLazySingleton<IMomentsRepository>(
+    () => MomentsRepositoryImpl(getIt<IMomentsRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<GetMomentsListUseCase>(
+    () => GetMomentsListUseCase(getIt<IMomentsRepository>()),
+  );
+  getIt.registerLazySingleton<GetMomentDetailsUseCase>(
+    () => GetMomentDetailsUseCase(getIt<IMomentsRepository>()),
+  );
+  getIt.registerFactory<MomentsListCubit>(
+    () => MomentsListCubit(getIt<GetMomentsListUseCase>()),
+  );
+  getIt.registerFactory<MomentDetailsCubit>(
+    () => MomentDetailsCubit(getIt<GetMomentDetailsUseCase>()),
   );
 }
