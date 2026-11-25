@@ -12,15 +12,13 @@ import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_extra_entities.dart';
 import 'package:hekayat_3al_raf/features/moments/presentation/bloc/moment_details_cubit.dart';
 import 'package:hekayat_3al_raf/features/moments/presentation/bloc/moment_details_state.dart';
+import 'package:hekayat_3al_raf/features/podcast/presentation/widgets/podcast_smart_video_player_card.dart';
 import 'package:hekayat_3al_raf/features/stories/presentation/widgets/story_detail_header.dart';
 
 class MomentDetailsScreen extends StatelessWidget {
   final int momentId;
 
-  const MomentDetailsScreen({
-    super.key,
-    required this.momentId,
-  });
+  const MomentDetailsScreen({super.key, required this.momentId});
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +88,14 @@ class _MomentDetailsView extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               decoration: BoxDecoration(
-                                color: ColorManager.gold.withValues(alpha: 0.15),
+                                color: ColorManager.gold.withValues(
+                                  alpha: 0.15,
+                                ),
                                 borderRadius: BorderRadius.circular(16.r),
                                 border: Border.all(
-                                  color: ColorManager.goldLight
-                                      .withValues(alpha: 0.5),
+                                  color: ColorManager.goldLight.withValues(
+                                    alpha: 0.5,
+                                  ),
                                   width: 1,
                                 ),
                               ),
@@ -142,115 +143,132 @@ class _MomentDetailsView extends StatelessWidget {
 
                         SizedBox(height: 14.h),
 
-                        // 3. Media Card (Tap to open full viewer)
-                        InkWell(
-                          onTap: () {
-                            // Open interactive full screen viewer
-                            final feedItem = MomentFeedItemEntity(
-                              id: moment.id,
-                              kind: moment.kind,
+                        // 3. Media Card (Smart Video Player if video, or tap-to-fullscreen if photo)
+                        if (moment.kind == MomentKind.video &&
+                            moment.videoUrl != null &&
+                            moment.videoUrl!.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 4.h),
+                            child: PodcastSmartVideoPlayerCard(
+                              videoUrl: moment.videoUrl!,
                               title: moment.title,
-                              description: moment.description,
-                              imageUrl: moment.imageUrl,
-                              videoUrl: moment.videoUrl,
-                              webUrl: moment.webUrl,
-                              created: moment.created,
-                            );
-                            context.push(
-                              Routes.momentViewer,
-                              extra: {
-                                'moments': [feedItem],
-                                'initialIndex': 0,
-                              },
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(12.r),
-                          child: Container(
-                            height: 260.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: ColorManager.primaryLight,
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: ColorManager.goldLight
-                                    .withValues(alpha: 0.4),
-                                width: 1,
-                              ),
+                              thumbnailUrl: moment.imageUrl ?? '',
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(11.r),
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                  if (moment.imageUrl != null &&
-                                      moment.imageUrl!.isNotEmpty)
-                                    AppCachedNetworkImage(
-                                      imageUrl: moment.imageUrl!,
-                                      fit: BoxFit.cover,
-                                      memCacheWidth: 720,
-                                      memCacheHeight: 520,
-                                    )
-                                  else
-                                    const Center(
-                                      child: Icon(
-                                        CupertinoIcons.photo,
-                                        size: 48,
-                                        color: ColorManager.paper400,
-                                      ),
-                                    ),
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.transparent,
-                                          Color(0x99220610),
-                                        ],
-                                      ),
-                                    ),
+                          )
+                        else
+                          InkWell(
+                            onTap: () {
+                              // Open interactive full screen viewer
+                              final feedItem = MomentFeedItemEntity(
+                                id: moment.id,
+                                kind: moment.kind,
+                                title: moment.title,
+                                description: moment.description,
+                                imageUrl: moment.imageUrl,
+                                videoUrl: moment.videoUrl,
+                                webUrl: moment.webUrl,
+                                created: moment.created,
+                              );
+                              context.push(
+                                Routes.momentViewer,
+                                extra: {
+                                  'moments': [feedItem],
+                                  'initialIndex': 0,
+                                },
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: Container(
+                              height: 260.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: ColorManager.primaryLight,
+                                borderRadius: BorderRadius.circular(12.r),
+                                border: Border.all(
+                                  color: ColorManager.goldLight.withValues(
+                                    alpha: 0.4,
                                   ),
-                                  Center(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 14.w,
-                                        vertical: 8.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withValues(alpha: 0.6),
-                                        borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        border: Border.all(
-                                          color: ColorManager.goldLight,
-                                          width: 1,
+                                  width: 1,
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(11.r),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    if (moment.imageUrl != null &&
+                                        moment.imageUrl!.isNotEmpty)
+                                      AppCachedNetworkImage(
+                                        imageUrl: moment.imageUrl!,
+                                        fit: BoxFit.cover,
+                                        memCacheWidth: 720,
+                                        memCacheHeight: 520,
+                                      )
+                                    else
+                                      const Center(
+                                        child: Icon(
+                                          CupertinoIcons.photo,
+                                          size: 48,
+                                          color: ColorManager.paper400,
                                         ),
                                       ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            CupertinoIcons.viewfinder,
-                                            size: 14.sp,
-                                            color: ColorManager.goldLight,
-                                          ),
-                                          SizedBox(width: 6.w),
-                                          Text(
-                                            'moments.tap_to_view_fullscreen'.tr(),
-                                            style: AppFonts.alexandria(
-                                              fontSize: 11.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorManager.goldLight,
-                                            ),
-                                          ),
-                                        ],
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Color(0x99220610),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Center(
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 14.w,
+                                          vertical: 8.h,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withValues(
+                                            alpha: 0.6,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            20.r,
+                                          ),
+                                          border: Border.all(
+                                            color: ColorManager.goldLight,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.viewfinder,
+                                              size: 14.sp,
+                                              color: ColorManager.goldLight,
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Text(
+                                              'moments.tap_to_view_fullscreen'
+                                                  .tr(),
+                                              style: AppFonts.alexandria(
+                                                fontSize: 11.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: ColorManager.goldLight,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
 
                         // 4. Description Box
                         if (moment.description.isNotEmpty) ...[
@@ -262,8 +280,9 @@ class _MomentDetailsView extends StatelessWidget {
                               color: ColorManager.primaryLight,
                               borderRadius: BorderRadius.circular(10.r),
                               border: Border.all(
-                                color: ColorManager.goldLight
-                                    .withValues(alpha: 0.15),
+                                color: ColorManager.goldLight.withValues(
+                                  alpha: 0.15,
+                                ),
                                 width: 1,
                               ),
                             ),
@@ -275,83 +294,6 @@ class _MomentDetailsView extends StatelessWidget {
                                 height: 1.7,
                               ),
                             ),
-                          ),
-                        ],
-
-                        // 5. More moments
-                        if (moment.moreMoments.isNotEmpty) ...[
-                          SizedBox(height: 24.h),
-                          Text(
-                            'moments.more_moments'.tr(),
-                            style: AppFonts.alexandria(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w700,
-                              color: ColorManager.paper100,
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: moment.moreMoments.length,
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 10.h),
-                            itemBuilder: (context, index) {
-                              final item = moment.moreMoments[index];
-                              return InkWell(
-                                onTap: () {
-                                  context.push(
-                                    Routes.momentDetails,
-                                    extra: {'id': item.id},
-                                  );
-                                },
-                                borderRadius: BorderRadius.circular(8.r),
-                                child: Container(
-                                  padding: EdgeInsets.all(8.w),
-                                  decoration: BoxDecoration(
-                                    color: ColorManager.primaryLight,
-                                    borderRadius: BorderRadius.circular(8.r),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      if (item.imageUrl != null)
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(6.r),
-                                          child: SizedBox(
-                                            width: 70.w,
-                                            height: 50.h,
-                                            child: AppCachedNetworkImage(
-                                              imageUrl: item.imageUrl!,
-                                              fit: BoxFit.cover,
-                                              memCacheWidth: 140,
-                                              memCacheHeight: 100,
-                                            ),
-                                          ),
-                                        ),
-                                      SizedBox(width: 10.w),
-                                      Expanded(
-                                        child: Text(
-                                          item.title,
-                                          style: AppFonts.alexandria(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w700,
-                                            color: ColorManager.paper100,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Icon(
-                                        CupertinoIcons.chevron_back,
-                                        size: 14.sp,
-                                        color: ColorManager.paper400,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
                           ),
                         ],
                         SizedBox(height: 24.h),

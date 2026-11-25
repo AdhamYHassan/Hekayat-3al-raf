@@ -116,8 +116,14 @@ class _PodcastSmartVideoPlayerCardState
 
   Future<void> _openExternalLink() async {
     final uri = Uri.tryParse(widget.videoUrl);
-    if (uri != null && await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (uri != null) {
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
     }
   }
 

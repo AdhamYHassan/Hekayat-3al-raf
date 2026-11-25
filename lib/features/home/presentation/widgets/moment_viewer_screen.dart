@@ -6,6 +6,7 @@ import 'package:hekayat_3al_raf/core/theming/colors_manager.dart';
 import 'package:hekayat_3al_raf/core/theming/font_manager.dart';
 import 'package:hekayat_3al_raf/core/widgets/app_cached_network_image.dart';
 import 'package:hekayat_3al_raf/features/home/domain/entities/home_extra_entities.dart';
+import 'package:hekayat_3al_raf/features/podcast/presentation/widgets/podcast_smart_video_player_card.dart';
 
 /// Fullscreen immersive story/moment viewer for photos and videos.
 class MomentViewerScreen extends StatefulWidget {
@@ -59,7 +60,21 @@ class _MomentViewerScreenState extends State<MomentViewerScreen> {
                 return Stack(
                   fit: StackFit.expand,
                   children: [
-                    if (moment.imageUrl != null && moment.imageUrl!.isNotEmpty)
+                    if (moment.kind == MomentKind.video &&
+                        moment.videoUrl != null &&
+                        moment.videoUrl!.isNotEmpty)
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: PodcastSmartVideoPlayerCard(
+                            videoUrl: moment.videoUrl!,
+                            title: moment.title,
+                            thumbnailUrl: moment.imageUrl ?? '',
+                          ),
+                        ),
+                      )
+                    else if (moment.imageUrl != null &&
+                        moment.imageUrl!.isNotEmpty)
                       InteractiveViewer(
                         minScale: 0.8,
                         maxScale: 3.5,
@@ -153,11 +168,14 @@ class _MomentViewerScreenState extends State<MomentViewerScreen> {
                                     vertical: 3.h,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: ColorManager.gold.withValues(alpha: 0.2),
+                                    color: ColorManager.gold.withValues(
+                                      alpha: 0.2,
+                                    ),
                                     borderRadius: BorderRadius.circular(12.r),
                                     border: Border.all(
-                                      color: ColorManager.goldLight
-                                          .withValues(alpha: 0.6),
+                                      color: ColorManager.goldLight.withValues(
+                                        alpha: 0.6,
+                                      ),
                                       width: 0.8,
                                     ),
                                   ),

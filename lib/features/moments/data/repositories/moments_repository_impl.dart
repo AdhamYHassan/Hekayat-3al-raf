@@ -9,7 +9,8 @@ class MomentsRepositoryImpl implements IMomentsRepository {
   final IMomentsRemoteDataSource _remoteDataSource;
 
   // In-Memory cache with 5-minute TTL
-  final Map<int, (MomentDetailsEntity, DateTime)> _cache = {};
+  final Map<int, (MomentDetailsEntity, DateTime)> _detailsCache = {};
+  (PaginatedMomentsEntity, DateTime)? _listInitialPageCache;
   static const Duration _cacheTtl = Duration(minutes: 5);
 
   MomentsRepositoryImpl(this._remoteDataSource);
@@ -18,8 +19,8 @@ class MomentsRepositoryImpl implements IMomentsRepository {
   Future<ApiResult<MomentDetailsEntity>> getMomentDetails(int id) async {
     final now = DateTime.now();
 
-    if (_cache.containsKey(id)) {
-      final (cachedEntity, timestamp) = _cache[id]!;
+    if (_detailsCache.containsKey(id)) {
+      final (cachedEntity, timestamp) = _detailsCache[id]!;
       if (now.difference(timestamp) < _cacheTtl) {
         return ApiSuccess(cachedEntity);
       }
@@ -28,11 +29,11 @@ class MomentsRepositoryImpl implements IMomentsRepository {
     try {
       final responseDto = await _remoteDataSource.getMomentDetails(id);
       final entity = responseDto.data.toDomain();
-      _cache[id] = (entity, now);
+      _detailsCache[id] = (entity, now);
       return ApiSuccess(entity);
     } catch (e) {
-      if (_cache.containsKey(id)) {
-        return ApiSuccess(_cache[id]!.$1);
+      if (_detailsCache.containsKey(id)) {
+        return ApiSuccess(_detailsCache[id]!.$1);
       }
       return ApiFailure(NetworkExceptions.getFailure(e));
     }
@@ -43,13 +44,30 @@ class MomentsRepositoryImpl implements IMomentsRepository {
     int limit = 10,
     int offset = 0,
   }) async {
+    final now = DateTime.now();
+
+    // Cache initial page (offset == 0) to provide instant load and offline resilience
+    if (offset == 0 && _listInitialPageCache != null) {
+      final (cachedEntity, timestamp) = _listInitialPageCache!;
+      if (now.difference(timestamp) < _cacheTtl) {
+        return ApiSuccess(cachedEntity);
+      }
+    }
+
     try {
       final responseDto = await _remoteDataSource.getMomentsList(
         limit: limit,
         offset: offset,
       );
-      return ApiSuccess(responseDto.data.toDomain());
+      final entity = responseDto.data.toDomain();
+      if (offset == 0) {
+        _listInitialPageCache = (entity, now);
+      }
+      return ApiSuccess(entity);
     } catch (e) {
+      if (offset == 0 && _listInitialPageCache != null) {
+        return ApiSuccess(_listInitialPageCache!.$1);
+      }
       return ApiFailure(NetworkExceptions.getFailure(e));
     }
   }

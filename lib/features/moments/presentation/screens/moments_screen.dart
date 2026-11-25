@@ -71,8 +71,7 @@ class _MomentsView extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              state.errorMessage ??
-                                  'common.server_error'.tr(),
+                              state.errorMessage ?? 'common.server_error'.tr(),
                               textAlign: TextAlign.center,
                               style: AppFonts.ibmPlexSansArabic(
                                 color: ColorManager.paper200,
@@ -122,14 +121,14 @@ class _MomentsView extends StatelessWidget {
                           horizontal: 16.w,
                           vertical: 12.h,
                         ),
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 12.w,
                           mainAxisSpacing: 12.h,
                           childAspectRatio: 0.72,
                         ),
-                        itemCount: state.moments.length +
+                        itemCount:
+                            state.moments.length +
                             (state.isLoadingMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index >= state.moments.length) {
@@ -154,8 +153,9 @@ class _MomentsView extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
-                                  color: ColorManager.goldLight
-                                      .withValues(alpha: 0.6),
+                                  color: ColorManager.goldLight.withValues(
+                                    alpha: 0.6,
+                                  ),
                                   width: 1.2,
                                 ),
                               ),
@@ -198,8 +198,9 @@ class _MomentsView extends StatelessWidget {
                                       child: Container(
                                         padding: EdgeInsets.all(5.w),
                                         decoration: BoxDecoration(
-                                          color: Colors.black
-                                              .withValues(alpha: 0.5),
+                                          color: Colors.black.withValues(
+                                            alpha: 0.5,
+                                          ),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
@@ -235,8 +236,7 @@ class _MomentsView extends StatelessWidget {
                                             SizedBox(height: 4.h),
                                             Text(
                                               moment.created.split('T').first,
-                                              style:
-                                                  AppFonts.ibmPlexSansArabic(
+                                              style: AppFonts.ibmPlexSansArabic(
                                                 fontSize: 10.sp,
                                                 color: ColorManager.paper400,
                                               ),

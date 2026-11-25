@@ -79,10 +79,25 @@ class HomeFeaturedCard extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(CupertinoIcons.headphones, size: 12.sp, color: ColorManager.goldLight),
+                            Icon(
+                              switch (story.contentType) {
+                                StoryContentType.audio => CupertinoIcons.headphones,
+                                StoryContentType.video => CupertinoIcons.video_camera_solid,
+                                StoryContentType.document => CupertinoIcons.doc_text,
+                                StoryContentType.text => CupertinoIcons.book,
+                              },
+                              size: 12.sp,
+                              color: ColorManager.goldLight,
+                            ),
                             SizedBox(width: 4.w),
                             Text(
-                              'stories.type_audio'.tr(),
+                              story.submissionTypeLabel.isNotEmpty
+                                  ? story.submissionTypeLabel
+                                  : (story.contentType == StoryContentType.audio
+                                      ? 'stories.type_audio'.tr()
+                                      : (story.contentType == StoryContentType.video
+                                          ? 'stories.type_video'.tr()
+                                          : 'stories.type_text'.tr())),
                               style: AppFonts.ibmPlexSansArabic(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w500,
@@ -140,32 +155,49 @@ class HomeFeaturedCard extends StatelessWidget {
                                   Icon(CupertinoIcons.eye, size: 13.sp, color: ColorManager.paper400),
                                   SizedBox(width: 4.w),
                                   Text(
-                                    '48.2 ${'stories.thousand'.tr()}',
+                                    story.viewsCount >= 1000
+                                        ? '${(story.viewsCount / 1000).toStringAsFixed(1)} ${'stories.thousand'.tr()}'
+                                        : '${story.viewsCount}',
                                     style: AppFonts.ibmPlexSansArabic(
                                       fontSize: 11.sp,
                                       color: ColorManager.paper400,
                                     ),
                                   ),
-                                  SizedBox(width: 10.w),
-                                  Icon(CupertinoIcons.star_fill, size: 13.sp, color: ColorManager.gold),
-                                  SizedBox(width: 4.w),
-                                  Text(
-                                    '4.6',
-                                    style: AppFonts.ibmPlexSansArabic(
-                                      fontSize: 11.sp,
-                                      color: ColorManager.paper400,
+                                  if (story.rating != null) ...[
+                                    SizedBox(width: 10.w),
+                                    Icon(CupertinoIcons.star_fill, size: 13.sp, color: ColorManager.gold),
+                                    SizedBox(width: 4.w),
+                                    Text(
+                                      '${story.rating}',
+                                      style: AppFonts.ibmPlexSansArabic(
+                                        fontSize: 11.sp,
+                                        color: ColorManager.paper400,
+                                      ),
                                     ),
-                                  ),
+                                  ] else if (story.likes > 0) ...[
+                                    SizedBox(width: 10.w),
+                                    Icon(CupertinoIcons.heart_fill, size: 13.sp, color: ColorManager.gold),
+                                    SizedBox(width: 4.w),
+                                    Text(
+                                      '${story.likes}',
+                                      style: AppFonts.ibmPlexSansArabic(
+                                        fontSize: 11.sp,
+                                        color: ColorManager.paper400,
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
-                              SizedBox(width: 12.w),
-                              Text(
-                                story.authorName,
-                                style: AppFonts.ibmPlexSansArabic(
-                                  fontSize: 11.sp,
-                                  color: ColorManager.paper400,
+                              if (story.authorName.isNotEmpty) ...[
+                                SizedBox(width: 12.w),
+                                Text(
+                                  story.authorName,
+                                  style: AppFonts.ibmPlexSansArabic(
+                                    fontSize: 11.sp,
+                                    color: ColorManager.paper400,
+                                  ),
                                 ),
-                              ),
+                              ],
                             ],
                           ),
                         ],
